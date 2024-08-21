@@ -4,8 +4,8 @@
   "sideEffects": false,
   "license": "MIT",
   "epic-stack": {
-    "head": "5ca0933befa8e9aa83cb99e0faaeb83fc55e710e",
-    "date": "2024-08-21T03:25:58Z"
+    "head": "751e679550d0527a379a914c9c41abc6881961dc",
+    "date": "2024-08-21T04:13:18Z"
   },
   "author": "Donnie <ellemment@outlook.com> (https://ellemment.com/)",
   "type": "module",
