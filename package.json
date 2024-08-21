@@ -3,10 +3,10 @@
   "private": true,
   "sideEffects": false,
   "license": "MIT",
-"epic-stack": {
-  "head": "4b27312198479f92f2b8c7b7367b6c37c172a170",
-  "date": "2024-08-21T03:49:10Z"
-},
+  "epic-stack": {
+    "head": "751e679550d0527a379a914c9c41abc6881961dc",
+    "date": "2024-08-21T04:13:18Z"
+  },
   "author": "Donnie <ellemment@outlook.com> (https://ellemment.com/)",
   "type": "module",
   "imports": {
