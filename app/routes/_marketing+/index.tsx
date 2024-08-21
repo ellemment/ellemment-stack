@@ -33,7 +33,7 @@ export default function Index() {
 			<div className="grid place-items-center px-4 py-16 xl:grid-cols-2 xl:gap-24">
 				<div className="flex max-w-md flex-col items-center text-center xl:order-2 xl:items-start xl:text-left">
 					<a
-						href="https://www.epicweb.dev/stack"
+						href="https://github.com/ellemment/ellemment-stack"
 						className="animate-slide-top [animation-fill-mode:backwards] xl:animate-slide-left xl:[animation-delay:0.5s] xl:[animation-fill-mode:backwards]"
 					>
 						<svg
@@ -52,7 +52,7 @@ export default function Index() {
 						data-heading
 						className="mt-8 animate-slide-top text-4xl font-medium text-foreground [animation-delay:0.3s] [animation-fill-mode:backwards] md:text-5xl xl:mt-4 xl:animate-slide-left xl:text-6xl xl:[animation-delay:0.8s] xl:[animation-fill-mode:backwards]"
 					>
-						<a href="https://www.epicweb.dev/stack">The Epic Stack</a>
+						<a href="https://github.com/ellemment/ellemment-stack">ellemment STACK</a>
 					</h1>
 					<p
 						data-paragraph
@@ -61,7 +61,7 @@ export default function Index() {
 						Check the{' '}
 						<a
 							className="underline hover:no-underline"
-							href="https://github.com/epicweb-dev/epic-stack/blob/main/docs/getting-started.md"
+							href="https://github.com/ellemment/ellemment-stack"
 						>
 							Getting Started guide
 						</a>{' '}
