@@ -1,3 +1,5 @@
+// ellemment-stack/tests/mocks/resend.ts
+
 import { faker } from '@faker-js/faker'
 import { HttpResponse, http, type HttpHandler } from 'msw'
 import { requireHeader, writeEmail } from './utils.ts'

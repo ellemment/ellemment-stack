@@ -1,3 +1,5 @@
+// ellemment-stack/tests/e2e/error-boundary.test.ts
+
 import { expect, test } from '#tests/playwright-utils.ts'
 
 test('Test root error boundary caught', async ({ page }) => {

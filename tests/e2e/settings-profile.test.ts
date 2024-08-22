@@ -1,3 +1,5 @@
+// ellemment-stack/tests/e2e/settings-profile.test.ts
+
 import { invariant } from '@epic-web/invariant'
 import { faker } from '@faker-js/faker'
 import { verifyUserPassword } from '#app/utils/auth.server.ts'
