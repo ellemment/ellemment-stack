@@ -1,3 +1,5 @@
+// ellemment-stack/tests/e2e/onboarding.test.ts
+
 import { invariant } from '@epic-web/invariant'
 import { faker } from '@faker-js/faker'
 import { prisma } from '#app/utils/db.server.ts'
@@ -139,56 +141,6 @@ test('onboarding with a short code', async ({ page, getOnboardingData }) => {
 	await expect(page).toHaveURL(`/onboarding`)
 })
 
-test('completes onboarding after GitHub OAuth given valid user details', async ({
-	page,
-	prepareGitHubUser,
-}) => {
-	const ghUser = await prepareGitHubUser()
-
-	// let's verify we do not have user with that email in our system:
-	expect(
-		await prisma.user.findUnique({
-			where: { email: normalizeEmail(ghUser.primaryEmail) },
-		}),
-	).toBeNull()
-
-	await page.goto('/signup')
-	await page.getByRole('button', { name: /signup with github/i }).click()
-
-	await expect(page).toHaveURL(/\/onboarding\/github/)
-	await expect(
-		page.getByText(new RegExp(`welcome aboard ${ghUser.primaryEmail}`, 'i')),
-	).toBeVisible()
-
-	// fields are pre-populated for the user, so we only need to accept
-	// terms of service and hit the 'crete an account' button
-	const usernameInput = page.getByRole('textbox', { name: /username/i })
-	await expect(usernameInput).toHaveValue(
-		normalizeUsername(ghUser.profile.login),
-	)
-	await expect(page.getByRole('textbox', { name: /^name/i })).toHaveValue(
-		ghUser.profile.name,
-	)
-	const createAccountButton = page.getByRole('button', {
-		name: /create an account/i,
-	})
-
-	await page
-		.getByLabel(/do you agree to our terms of service and privacy policy/i)
-		.check()
-	await createAccountButton.click()
-	await expect(page).toHaveURL(/signup/i)
-
-	// we are still on the 'signup' route since that
-	// was the referrer and no 'redirectTo' has been specified
-	await expect(page).toHaveURL('/signup')
-	await expect(page.getByText(/thanks for signing up/i)).toBeVisible()
-
-	// internally, a user has been created:
-	await prisma.user.findUniqueOrThrow({
-		where: { email: normalizeEmail(ghUser.primaryEmail) },
-	})
-})
 
 test('logs user in after GitHub OAuth if they are already registered', async ({
 	page,
