@@ -2,6 +2,7 @@ import { type Config } from 'tailwindcss'
 import animatePlugin from 'tailwindcss-animate'
 import radixPlugin from 'tailwindcss-radix'
 import { marketingPreset } from './app/routes/_marketing+/tailwind-preset'
+import { ellemmentPreset } from './app/ellemment-ui/styles/ellemment-theme.ts'
 import { extendedTheme } from './app/utils/extended-theme.ts'
 
 export default {
@@ -17,6 +18,6 @@ export default {
 		},
 		extend: extendedTheme,
 	},
-	presets: [marketingPreset],
+	presets: [marketingPreset, ellemmentPreset],
 	plugins: [animatePlugin, radixPlugin],
 } satisfies Config
