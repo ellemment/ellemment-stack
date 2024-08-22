@@ -2,6 +2,7 @@ import { createCookieSessionStorage } from '@remix-run/node'
 import { type ProviderName } from './connections.tsx'
 import { GitHubProvider } from './providers/github.server.ts'
 import { type AuthProvider } from './providers/provider.ts'
+import { GoogleProvider } from './providers/google.server.ts'
 import { type Timings } from './timing.server.ts'
 
 export const connectionSessionStorage = createCookieSessionStorage({
@@ -17,6 +18,7 @@ export const connectionSessionStorage = createCookieSessionStorage({
 })
 
 export const providers: Record<ProviderName, AuthProvider> = {
+	google: new GoogleProvider(),
 	github: new GitHubProvider(),
 }
 
