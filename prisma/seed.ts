@@ -1,16 +1,15 @@
-import { faker } from '@faker-js/faker'
 import { promiseHash } from 'remix-utils/promise'
 import { prisma } from '#app/utils/db.server.ts'
-import { MOCK_CODE_GITHUB } from '#app/utils/providers/constants'
+import { MOCK_CODE_GITHUB, MOCK_CODE_GOOGLE } from '#app/utils/providers/constants'
 import {
 	cleanupDb,
 	createPassword,
-	createUser,
 	getNoteImages,
 	getUserImages,
 	img,
 } from '#tests/db-utils.ts'
 import { insertGitHubUser } from '#tests/mocks/github.ts'
+import { insertGoogleUser } from '#tests/mocks/google.ts'
 
 async function seed() {
 	console.log('🌱 Seeding...')
@@ -67,34 +66,37 @@ async function seed() {
 	const userImages = await getUserImages()
 
 	for (let index = 0; index < totalUsers; index++) {
-		const userData = createUser()
+		const username = `ellemment_${index + 1}`
+		const name = `Ellemment ${index + 1}`
+		const noteImage = noteImages[index % noteImages.length]
 		await prisma.user
 			.create({
 				select: { id: true },
 				data: {
-					...userData,
-					password: { create: createPassword(userData.username) },
+					email: `${username}@example.com`,
+					username,
+					name,
+					password: { create: createPassword(username) },
 					image: { create: userImages[index % userImages.length] },
 					roles: { connect: { name: 'user' } },
 					notes: {
-						create: Array.from({
-							length: faker.number.int({ min: 1, max: 3 }),
-						}).map(() => ({
-							title: faker.lorem.sentence(),
-							content: faker.lorem.paragraphs(),
-							images: {
-								create: Array.from({
-									length: faker.number.int({ min: 1, max: 3 }),
-								}).map(() => {
-									const imgNumber = faker.number.int({ min: 0, max: 9 })
-									const img = noteImages[imgNumber]
-									if (!img) {
-										throw new Error(`Could not find image #${imgNumber}`)
+						create: [
+							{
+								title: `${name}'s First Note`,
+								content: `This is the first note for ${name}.`,
+								images: noteImage
+									? {
+										create: [
+											{
+												altText: noteImage.altText,
+												contentType: noteImage.contentType,
+												blob: noteImage.blob,
+											},
+										],
 									}
-									return img
-								}),
+									: undefined,
 							},
-						})),
+						],
 					},
 				},
 			})
@@ -105,10 +107,10 @@ async function seed() {
 	}
 	console.timeEnd(`👤 Created ${totalUsers} users...`)
 
-	console.time(`🐨 Created admin user "kody"`)
+	console.time(`🧑‍💻 Created admin user "ellemmentdev"`)
 
-	const kodyImages = await promiseHash({
-		kodyUser: img({ filepath: './tests/fixtures/images/user/kody.png' }),
+	const ellemmentImages = await promiseHash({
+		ellemmentdevUser: img({ filepath: './tests/fixtures/images/user/kody.png' }),
 		cuteKoala: img({
 			altText: 'an adorable koala cartoon illustration',
 			filepath: './tests/fixtures/images/kody-notes/cute-koala.png',
@@ -141,121 +143,125 @@ async function seed() {
 	})
 
 	const githubUser = await insertGitHubUser(MOCK_CODE_GITHUB)
+	const googleUser = await insertGoogleUser(MOCK_CODE_GOOGLE)
+
 
 	await prisma.user.create({
 		select: { id: true },
 		data: {
-			email: 'kody@kcd.dev',
-			username: 'kody',
-			name: 'Kody',
-			image: { create: kodyImages.kodyUser },
-			password: { create: createPassword('kodylovesyou') },
+			email: 'ellemmentdev@ellemment.com',
+			username: 'ellemmentdev',
+			name: 'ellemment',
+			image: { create: ellemmentImages.ellemmentdevUser },
+			password: { create: createPassword('ellemmentdev') },
 			connections: {
-				create: { providerName: 'github', providerId: githubUser.profile.id },
+				create: [
+					{ providerName: 'github', providerId: githubUser.profile.id },
+					{ providerName: 'google', providerId: googleUser.profile.sub },
+				],
 			},
 			roles: { connect: [{ name: 'admin' }, { name: 'user' }] },
 			notes: {
 				create: [
 					{
 						id: 'd27a197e',
-						title: 'Basic Koala Facts',
+						title: 'Introduction to System Dynamics',
 						content:
-							'Koalas are found in the eucalyptus forests of eastern Australia. They have grey fur with a cream-coloured chest, and strong, clawed feet, perfect for living in the branches of trees!',
-						images: { create: [kodyImages.cuteKoala, kodyImages.koalaEating] },
+							'System dynamics is an approach to understanding the nonlinear behavior of complex systems over time using stocks, flows, internal feedback loops, and time delays.',
+						images: { create: [ellemmentImages.cuteKoala, ellemmentImages.koalaEating] },
 					},
 					{
 						id: '414f0c09',
-						title: 'Koalas like to cuddle',
+						title: 'Feedback Loops in Systems',
 						content:
-							'Cuddly critters, koalas measure about 60cm to 85cm long, and weigh about 14kg.',
+							'Feedback loops are central to system dynamics. They can be reinforcing (positive) or balancing (negative), and they play a crucial role in determining system behavior.',
 						images: {
-							create: [kodyImages.koalaCuddle],
+							create: [ellemmentImages.koalaCuddle],
 						},
 					},
 					{
 						id: '260366b1',
-						title: 'Not bears',
+						title: 'Stock and Flow Diagrams',
 						content:
-							"Although you may have heard people call them koala 'bears', these awesome animals aren’t bears at all – they are in fact marsupials. A group of mammals, most marsupials have pouches where their newborns develop.",
+							'Stock and flow diagrams are a fundamental tool in system dynamics. Stocks represent the state of the system, while flows represent the rate of change in stocks.',
 					},
 					{
 						id: 'bb79cf45',
-						title: 'Snowboarding Adventure',
+						title: 'Causal Loop Diagrams',
 						content:
-							"Today was an epic day on the slopes! Shredded fresh powder with my friends, caught some sick air, and even attempted a backflip. Can't wait for the next snowy adventure!",
+							'Causal loop diagrams are another important tool in system dynamics. They help visualize how different variables in a system are interrelated.',
 						images: {
-							create: [kodyImages.mountain],
+							create: [ellemmentImages.mountain],
 						},
 					},
 					{
 						id: '9f4308be',
-						title: 'Onewheel Tricks',
+						title: 'System Archetypes',
 						content:
-							"Mastered a new trick on my Onewheel today called '180 Spin'. It's exhilarating to carve through the streets while pulling off these rad moves. Time to level up and learn more!",
+							'System archetypes are common patterns of behavior in systems. Understanding these archetypes can help in identifying and solving complex problems.',
 					},
 					{
 						id: '306021fb',
-						title: 'Coding Dilemma',
+						title: 'Modeling Complex Systems',
 						content:
-							"Stuck on a bug in my latest coding project. Need to figure out why my function isn't returning the expected output. Time to dig deep, debug, and conquer this challenge!",
+							'Building models is a key part of system dynamics. It involves identifying key variables, mapping their relationships, and simulating system behavior over time.',
 						images: {
-							create: [kodyImages.koalaCoder],
+							create: [ellemmentImages.koalaCoder],
 						},
 					},
 					{
 						id: '16d4912a',
-						title: 'Coding Mentorship',
+						title: 'Applications of System Dynamics',
 						content:
-							"Had a fantastic coding mentoring session today with Sarah. Helped her understand the concept of recursion, and she made great progress. It's incredibly fulfilling to help others improve their coding skills.",
+							'System dynamics has wide-ranging applications, from business management and urban planning to environmental studies and social sciences.',
 						images: {
-							create: [kodyImages.koalaMentor],
+							create: [ellemmentImages.koalaMentor],
 						},
 					},
 					{
 						id: '3199199e',
-						title: 'Koala Fun Facts',
+						title: 'The Importance of Time Delays',
 						content:
-							"Did you know that koalas sleep for up to 20 hours a day? It's because their diet of eucalyptus leaves doesn't provide much energy. But when I'm awake, I enjoy munching on leaves, chilling in trees, and being the cuddliest koala around!",
+							'Time delays are crucial in system dynamics. They can lead to oscillations, overshooting, and other complex behaviors in systems.',
 					},
 					{
 						id: '2030ffd3',
-						title: 'Skiing Adventure',
+						title: 'System Dynamics in Policy Making',
 						content:
-							'Spent the day hitting the slopes on my skis. The fresh powder made for some incredible runs and breathtaking views. Skiing down the mountain at top speed is an adrenaline rush like no other!',
+							'System dynamics can be a powerful tool for policy makers. It allows for the simulation of different policy options and their potential long-term effects.',
 						images: {
-							create: [kodyImages.mountain],
+							create: [ellemmentImages.mountain],
 						},
 					},
 					{
 						id: 'f375a804',
-						title: 'Code Jam Success',
+						title: 'Learning from System Dynamics',
 						content:
-							'Participated in a coding competition today and secured the first place! The adrenaline, the challenging problems, and the satisfaction of finding optimal solutions—it was an amazing experience. Feeling proud and motivated to keep pushing my coding skills further!',
+							'One of the key benefits of system dynamics is its ability to enhance our understanding of complex systems. It challenges our mental models and helps us see the bigger picture.',
 						images: {
-							create: [kodyImages.koalaCoder],
+							create: [ellemmentImages.koalaCoder],
 						},
 					},
 					{
 						id: '562c541b',
-						title: 'Koala Conservation Efforts',
+						title: 'The Future of System Dynamics',
 						content:
-							"Joined a local conservation group to protect koalas and their habitats. Together, we're planting more eucalyptus trees, raising awareness about their endangered status, and working towards a sustainable future for these adorable creatures. Every small step counts!",
+							'As our world becomes increasingly complex and interconnected, the principles of system dynamics are more relevant than ever. The field continues to evolve, incorporating new technologies and methodologies.',
 					},
-					// extra long note to test scrolling
 					{
 						id: 'f67ca40b',
-						title: 'Game day',
+						title: 'Reflections on a System Dynamics Project',
 						content:
-							"Just got back from the most amazing game. I've been playing soccer for a long time, but I've not once scored a goal. Well, today all that changed! I finally scored my first ever goal.\n\nI'm in an indoor league, and my team's not the best, but we're pretty good and I have fun, that's all that really matters. Anyway, I found myself at the other end of the field with the ball. It was just me and the goalie. I normally just kick the ball and hope it goes in, but the ball was already rolling toward the goal. The goalie was about to get the ball, so I had to charge. I managed to get possession of the ball just before the goalie got it. I brought it around the goalie and had a perfect shot. I screamed so loud in excitement. After all these years playing, I finally scored a goal!\n\nI know it's not a lot for most folks, but it meant a lot to me. We did end up winning the game by one. It makes me feel great that I had a part to play in that.\n\nIn this team, I'm the captain. I'm constantly cheering my team on. Even after getting injured, I continued to come and watch from the side-lines. I enjoy yelling (encouragingly) at my team mates and helping them be the best they can. I'm definitely not the best player by a long stretch. But I really enjoy the game. It's a great way to get exercise and have good social interactions once a week.\n\nThat said, it can be hard to keep people coming and paying dues and stuff. If people don't show up it can be really hard to find subs. I have a list of people I can text, but sometimes I can't find anyone.\n\nBut yeah, today was awesome. I felt like more than just a player that gets in the way of the opposition, but an actual asset to the team. Really great feeling.\n\nAnyway, I'm rambling at this point and really this is just so we can have a note that's pretty long to test things out. I think it's long enough now... Cheers!",
+							"Just completed a fascinating system dynamics project modeling the impact of renewable energy adoption on a city's power grid. The process was challenging but incredibly rewarding.\n\nWe started by identifying the key variables: renewable energy production, traditional energy production, energy demand, storage capacity, and grid stability. Then, we mapped out the relationships between these variables, including several important feedback loops.\n\nOne of the most interesting aspects was modeling the delays in the system. For example, there's a significant delay between the decision to increase renewable energy capacity and the actual increase in production. This led to some unexpected behaviors in our model.\n\nWe ran several simulations with different policy interventions. It was fascinating to see how small changes could have big impacts over time. For instance, a modest increase in energy storage capacity had a surprisingly large effect on grid stability.\n\nThe project really drove home the importance of taking a systems view. What seemed like straightforward cause-and-effect relationships often turned out to be much more complex when viewed in the context of the entire system.\n\nPerhaps the most valuable outcome was how the model challenged our assumptions. Several times, the system behaved in ways we didn't expect, forcing us to revisit and refine our understanding.\n\nOverall, this project reinforced my belief in the power of system dynamics as a tool for understanding and managing complex systems. It's not just about predicting outcomes, but about building a deeper, more nuanced understanding of how systems work.\n\nI'm excited to apply these insights to future projects. The principles of system dynamics have applications far beyond energy systems - I can see potential uses in areas from urban planning to ecosystem management.\n\nAnyway, I'm rambling at this point, but I'm just so energized by this work. It's amazing how a relatively simple set of tools can provide such profound insights into complex problems. Here's to many more system dynamics adventures!",
 						images: {
-							create: [kodyImages.koalaSoccer],
+							create: [ellemmentImages.koalaSoccer],
 						},
 					},
 				],
 			},
 		},
 	})
-	console.timeEnd(`🐨 Created admin user "kody"`)
+	console.timeEnd(`🧑‍💻 Created admin user "ellemmentdev"`)
 
 	console.timeEnd(`🌱 Database has been seeded`)
 }
