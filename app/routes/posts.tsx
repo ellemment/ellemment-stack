@@ -16,7 +16,7 @@ export const loader = async () => {
   return { initial, query: POSTS_QUERY, params: {} }
 }
 
-export default function Index() {
+export default function Posts() {
   const { initial, query, params } = useLoaderData<typeof loader>()
   const { data, loading, error, encodeDataAttribute } = useQuery<
     typeof initial.data

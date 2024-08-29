@@ -104,9 +104,9 @@ export function GlobalHeader({ userPreference }: { userPreference: Theme | null 
                                 <HoveredLink href="/product">API</HoveredLink>
                             </div>
                         </MenuItem>
-                        <MenuItem href="/product" setActive={setActive} active={active} item="Insights">
+                        <MenuItem href="/posts" setActive={setActive} active={active} item="Insights">
                         </MenuItem>
-                        <MenuItem href="/product" setActive={setActive} active={active} item="Store">
+                        <MenuItem href="/posts" setActive={setActive} active={active} item="Store">
                         </MenuItem>
                     </Menu>
                     <div className="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
