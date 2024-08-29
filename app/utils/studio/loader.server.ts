@@ -15,8 +15,8 @@ async function initializeServerClient() {
   }
 }
 
-// Use an IIFE to immediately invoke the async function and handle the promise
-(async () => {
+// Use void to explicitly mark the promise as ignored
+void (async () => {
   try {
     await initializeServerClient();
   } catch (error) {
