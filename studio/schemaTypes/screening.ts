@@ -1,13 +1,12 @@
 // studio/schemaTypes/screening.ts
 
 import {defineField, defineType} from 'sanity'
-import {MdLocalPlay as icon} from 'react-icons/md'
+
 
 export default defineType({
   name: 'screening',
   title: 'Screening',
   type: 'document',
-  icon,
   fields: [
     defineField({
       name: 'title',

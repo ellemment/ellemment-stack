@@ -1,13 +1,12 @@
 // studio/schemaTypes/movie.ts
 
 import {defineField, defineType} from 'sanity'
-import {MdLocalMovies as icon} from 'react-icons/md'
+
 
 export default defineType({
   name: 'movie',
   title: 'Movie',
   type: 'document',
-  icon,
   fields: [
     defineField({
       name: 'title',
