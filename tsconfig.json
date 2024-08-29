@@ -1,5 +1,5 @@
 {
-	"include": ["**/*.ts", "**/*.tsx", "studio/**/*"],
+	"include": ["**/*.ts", "**/*.tsx", "studio/**/*", "app/routes/posts+/.$slug.tsx", "app/routes/_content+/.$slug.tsx"],
 	"extends": ["@epic-web/config/typescript"],
 	"compilerOptions": {
 		"paths": {
