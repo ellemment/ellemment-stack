@@ -20,11 +20,16 @@ const schema = z.object({
 	GOOGLE_CLIENT_ID: z.string().default('MOCK_GOOGLE_CLIENT_ID'),
 	GOOGLE_CLIENT_SECRET: z.string().default('MOCK_GOOGLE_CLIENT_SECRET'),
 	ALLOW_INDEXING: z.enum(['true', 'false']).optional(),
+	SANITY_STUDIO_PROJECT_ID: z.string(),
+	SANITY_STUDIO_DATASET: z.string(),
+	SANITY_STUDIO_URL: z.string(),
+	SANITY_STUDIO_STEGA_ENABLED: z.string(),
+	SANITY_STUDIO_API_VERSION: z.string(),
 })
 
 declare global {
 	namespace NodeJS {
-		interface ProcessEnv extends z.infer<typeof schema> {}
+		interface ProcessEnv extends z.infer<typeof schema> { }
 	}
 }
 
@@ -55,14 +60,20 @@ export function getEnv() {
 		MODE: process.env.NODE_ENV,
 		SENTRY_DSN: process.env.SENTRY_DSN,
 		ALLOW_INDEXING: process.env.ALLOW_INDEXING,
+		SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
+		SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET,
+		SANITY_STUDIO_URL: process.env.SANITY_STUDIO_URL,
+		SANITY_STUDIO_STEGA_ENABLED: process.env.SANITY_STUDIO_STEGA_ENABLED,
+		SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION,
 	}
 }
+
 
 type ENV = ReturnType<typeof getEnv>
 
 declare global {
-	var ENV: ENV
-	interface Window {
-		ENV: ENV
-	}
+  var ENV: ENV
+  interface Window {
+    ENV: ENV
+  }
 }
