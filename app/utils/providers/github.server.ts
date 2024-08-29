@@ -1,3 +1,5 @@
+// app/utils/providers/github.server.ts
+
 import { createId as cuid } from '@paralleldrive/cuid2'
 import { redirect } from '@remix-run/node'
 import { GitHubStrategy } from 'remix-auth-github'

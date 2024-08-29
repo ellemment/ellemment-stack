@@ -42,6 +42,7 @@ import { useOptionalUser, useUser } from './utils/user.ts'
 import { Button } from './components/ui/button'
 import { GlobalHeader } from '#app/ellemment-ui/components/navigation/global-header'
 
+const LiveVisualEditing = lazy(() => import('#app/components/studio-content/visual-editing'))
 
 export const links: LinksFunction = () => {
 	return [
@@ -81,26 +82,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 	const user = userId
 		? await time(
-				() =>
-					prisma.user.findUniqueOrThrow({
-						select: {
-							id: true,
-							name: true,
-							username: true,
-							image: { select: { id: true } },
-							roles: {
-								select: {
-									name: true,
-									permissions: {
-										select: { entity: true, action: true, access: true },
-									},
+			() =>
+				prisma.user.findUniqueOrThrow({
+					select: {
+						id: true,
+						name: true,
+						username: true,
+						image: { select: { id: true } },
+						roles: {
+							select: {
+								name: true,
+								permissions: {
+									select: { entity: true, action: true, access: true },
 								},
 							},
 						},
-						where: { id: userId },
-					}),
-				{ timings, type: 'find user', desc: 'find user in root' },
-			)
+					},
+					where: { id: userId },
+				}),
+			{ timings, type: 'find user', desc: 'find user in root' },
+		)
 		: null
 	if (userId && !user) {
 		console.info('something weird happened')
@@ -176,6 +177,11 @@ function Document({
 						__html: `window.ENV = ${JSON.stringify(env)}`,
 					}}
 				/>
+				{ENV.SANITY_STUDIO_STEGA_ENABLED ? (
+					<Suspense>
+						<LiveVisualEditing />
+					</Suspense>
+				) : null}
 				<ScrollRestoration nonce={nonce} />
 				<Scripts nonce={nonce} />
 			</body>
@@ -205,29 +211,29 @@ function App() {
 	})();
 
 	return (
-	  <Document
-		nonce={nonce}
-		theme={theme}
-		allowIndexing={allowIndexing}
-		env={data.ENV}
-	  >
-		<div className="flex h-screen flex-col justify-between">
-		  {showHeader && (
-			<GlobalHeader userPreference={data.requestInfo.userPrefs.theme} />
-		  )}
+		<Document
+			nonce={nonce}
+			theme={theme}
+			allowIndexing={allowIndexing}
+			env={data.ENV}
+		>
+			<div className="flex h-screen flex-col justify-between">
+				{showHeader && (
+					<GlobalHeader userPreference={data.requestInfo.userPrefs.theme} />
+				)}
 
-		  <div className="flex-1">
-			<Outlet />
-		  </div>
+				<div className="flex-1">
+					<Outlet />
+				</div>
 
-		  <footer className="container flex justify-between pb-5">
-		  </footer>
-		</div>
-		<EpicToaster closeButton position="top-center" theme={theme} />
-		<EpicProgress />
-	  </Document>
+				<footer className="container flex justify-between pb-5">
+				</footer>
+			</div>
+			<EpicToaster closeButton position="top-center" theme={theme} />
+			<EpicProgress />
+		</Document>
 	);
-  }
+}
 
 
 function AppWithProviders() {

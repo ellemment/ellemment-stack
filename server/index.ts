@@ -1,3 +1,5 @@
+// server/index.ts
+
 import crypto from 'crypto'
 import { createRequestHandler } from '@remix-run/express'
 import { type ServerBuild } from '@remix-run/node'
