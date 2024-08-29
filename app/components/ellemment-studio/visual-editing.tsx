@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { VisualEditing } from '@sanity/visual-editing/remix';
 import { initializeClient } from "#app/utils/studio/client";
@@ -25,7 +26,7 @@ export default function LiveVisualEditing() {
       }
     };
 
-    initClient();
+    void initClient();
 
     return () => {
       isMounted = false;
