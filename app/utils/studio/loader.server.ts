@@ -1,6 +1,6 @@
 // app/utils/studio/loader.server.ts
-import { queryStore } from "./loader";
 import { initializeClient } from "./client";
+import { queryStore } from "./loader";
 
 export const { loadQuery } = queryStore;
 

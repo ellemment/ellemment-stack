@@ -1,12 +1,31 @@
 // app/components/ellemment-studio/visual-editing.tsx
-
-import { VisualEditing } from '@sanity/visual-editing/remix'
-
-import { client } from "#app/utils/studio/client";
+import { useState, useEffect } from 'react';
+import { VisualEditing } from '@sanity/visual-editing/remix';
+import { initializeClient, getClient } from "#app/utils/studio/client";
 import { useLiveMode } from '#app/utils/studio/loader';
 
 export default function LiveVisualEditing() {
-  useLiveMode({ client })
+  const [isClientReady, setIsClientReady] = useState(false);
 
-  return <VisualEditing />
+  useEffect(() => {
+    async function initClient() {
+      try {
+        await initializeClient();
+        setIsClientReady(true);
+      } catch (error) {
+        console.error("Failed to initialize Sanity client:", error);
+      }
+    }
+
+    initClient();
+  }, []);
+
+  if (!isClientReady) {
+    return null; // Or a loading indicator
+  }
+
+  const client = getClient();
+  useLiveMode({ client });
+
+  return <VisualEditing />;
 }
