@@ -24,7 +24,7 @@ const schema = z.object({
 
 declare global {
 	namespace NodeJS {
-		interface ProcessEnv extends z.infer<typeof schema> {}
+		interface ProcessEnv extends z.infer<typeof schema> { }
 	}
 }
 
@@ -55,6 +55,11 @@ export function getEnv() {
 		MODE: process.env.NODE_ENV,
 		SENTRY_DSN: process.env.SENTRY_DSN,
 		ALLOW_INDEXING: process.env.ALLOW_INDEXING,
+		SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
+		SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET,
+		SANITY_STUDIO_URL: process.env.SANITY_STUDIO_URL,
+		SANITY_STUDIO_STEGA_ENABLED: process.env.SANITY_STUDIO_STEGA_ENABLED,
+		SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION,
 	}
 }
 

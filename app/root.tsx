@@ -17,6 +17,7 @@ import {
 	useLocation,
 } from '@remix-run/react'
 import { withSentry } from '@sentry/remix'
+import { Suspense, lazy } from "react"
 import { useRef } from 'react'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
@@ -40,6 +41,7 @@ import { getToast } from './utils/toast.server.ts'
 import { useOptionalUser, useUser } from './utils/user.ts'
 import { Button } from './components/ui/button'
 import { GlobalHeader } from '#app/ellemment-ui/components/navigation/global-header'
+
 
 export const links: LinksFunction = () => {
 	return [
@@ -108,6 +110,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	}
 	const { toast, headers: toastHeaders } = await getToast(request)
 	const honeyProps = honeypot.getInputProps()
+
 
 	return json(
 		{

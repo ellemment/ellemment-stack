@@ -93,7 +93,7 @@ export function GlobalHeader({ userPreference }: { userPreference: Theme | null 
             <div className="container mx-auto max-w-5xl px-4">
                 <nav className="grid grid-cols-[auto_1fr_auto] gap-4 items-center h-16">
                     <Logo />
-                    <Menu setActive={setActive} className="justify-self-end">
+                    <Menu setActive={setActive} className="justify-self-center">
                     <MenuItem href="/product" setActive={setActive} active={active} item="Info">
                     </MenuItem>
                         <MenuItem setActive={setActive} active={active} item="Projects">
