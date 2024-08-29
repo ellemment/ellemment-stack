@@ -3,17 +3,30 @@
 import { createClient } from "@sanity/client";
 import { projectId, dataset, studioUrl, stegaEnabled, apiVersion, initEnv } from "./project-details";
 
-// Initialize the environment variables before creating the client
-await initEnv();
+let client: ReturnType<typeof createClient> | null = null;
 
-// Do not import this into client-side components unless lazy-loaded
-export const client = createClient({
-  projectId: projectId(),
-  dataset: dataset(),
-  useCdn: true,
-  apiVersion: apiVersion(),
-  stega: {
-    enabled: stegaEnabled(),
-    studioUrl: studioUrl(),
-  },
-});
+export async function initializeClient() {
+  if (client) return client;
+
+  await initEnv();
+
+  client = createClient({
+    projectId: projectId(),
+    dataset: dataset(),
+    useCdn: true,
+    apiVersion: apiVersion(),
+    stega: {
+      enabled: stegaEnabled(),
+      studioUrl: studioUrl(),
+    },
+  });
+
+  return client;
+}
+
+export function getClient() {
+  if (!client) {
+    throw new Error("Sanity client has not been initialized. Call initializeClient() first.");
+  }
+  return client;
+}

@@ -20,11 +20,6 @@ const schema = z.object({
 	GOOGLE_CLIENT_ID: z.string().default('MOCK_GOOGLE_CLIENT_ID'),
 	GOOGLE_CLIENT_SECRET: z.string().default('MOCK_GOOGLE_CLIENT_SECRET'),
 	ALLOW_INDEXING: z.enum(['true', 'false']).optional(),
-	SANITY_STUDIO_PROJECT_ID: z.string(),
-	SANITY_STUDIO_DATASET: z.string(),
-	SANITY_STUDIO_URL: z.string(),
-	SANITY_STUDIO_STEGA_ENABLED: z.string(),
-	SANITY_STUDIO_API_VERSION: z.string(),
 })
 
 declare global {
@@ -68,12 +63,11 @@ export function getEnv() {
 	}
 }
 
-
 type ENV = ReturnType<typeof getEnv>
 
 declare global {
-  var ENV: ENV
-  interface Window {
-    ENV: ENV
-  }
+	var ENV: ENV
+	interface Window {
+		ENV: ENV
+	}
 }
