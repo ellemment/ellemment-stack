@@ -1,3 +1,5 @@
+// app/root.tsx
+
 import {
 	json,
 	type LoaderFunctionArgs,
@@ -42,7 +44,7 @@ import { useOptionalUser, useUser } from './utils/user.ts'
 import { Button } from './components/ui/button'
 import { GlobalHeader } from '#app/ellemment-ui/components/navigation/global-header'
 
-const LiveVisualEditing = lazy(() => import('#app/components/studio-content/visual-editing'))
+
 
 export const links: LinksFunction = () => {
 	return [
@@ -177,11 +179,6 @@ function Document({
 						__html: `window.ENV = ${JSON.stringify(env)}`,
 					}}
 				/>
-				{ENV.SANITY_STUDIO_STEGA_ENABLED ? (
-					<Suspense>
-						<LiveVisualEditing />
-					</Suspense>
-				) : null}
 				<ScrollRestoration nonce={nonce} />
 				<Scripts nonce={nonce} />
 			</body>
