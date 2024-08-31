@@ -1,34 +1,32 @@
-// app/components/creemson/roadmap.tsx
-
-// app/components/creemson/roadmap.tsx
+// app/components/creemson/research.tsx
 import React from 'react';
 import { BentoGrid, BentoGridItem } from '#app/ellemment-ui/components/layout/bento-grid';
-import { IconRoad, IconTargetArrow, IconChartLine } from "@tabler/icons-react";
+import { IconClipboardCopy, IconFileBroken, IconSignature } from "@tabler/icons-react";
 
-const Roadmap: React.FC = () => {
-  const roadmapData = [
+const Discover: React.FC = () => {
+  const discoverData = [
     {
-      title: "Implementation Plan",
-      description: "Current stage of development and short/medium-term goals",
-      icon: <IconRoad className="h-4 w-4 text-neutral-500" />
+      title: "Problem Statement",
+      description: "Clear definition of the problem and key pain points",
+      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />
     },
     {
-      title: "Future Milestones",
-      description: "Long-term vision and potential expansions",
-      icon: <IconTargetArrow className="h-4 w-4 text-neutral-500" />
+      title: "Product Fit",
+      description: "Target market size and growth potential",
+      icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />
     },
     {
-      title: "Traction and Metrics",
-      description: "Key performance indicators and growth targets",
-      icon: <IconChartLine className="h-4 w-4 text-neutral-500" />
+      title: "Customer Insights",
+      description: "Key customer segments and user needs",
+      icon: <IconSignature className="h-4 w-4 text-neutral-500" />
     }
   ];
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="max-w-5xl mx-auto text-3xl font-semi-bold mb-10 text-start">Roadmap</h2>
+      <h2 className="max-w-5xl mx-auto text-3xl font-semi-bold mb-10 text-start">Discover</h2>
       <BentoGrid className="max-w-5xl mx-auto grid-cols-4">
-        {roadmapData.map((item, index) => {
+        {discoverData.map((item, index) => {
           const config = getItemConfig(index, 3);
           return (
             <BentoGridItem
@@ -62,4 +60,4 @@ const getItemConfig = (index: number, total: number) => {
   return (configs[total as keyof typeof configs] || [])[index] || defaultConfig;
 };
 
-export default Roadmap;
+export default Discover;

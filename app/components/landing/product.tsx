@@ -25,7 +25,7 @@ const Product: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="max-w-5xl mx-auto text-3xl font-semi-bold mb-10 text-start">Product</h2>
+      <h2 className="max-w-5xl mx-auto text-3xl font-semi-bold mb-10 text-start">Design</h2>
       <BentoGrid className="max-w-5xl mx-auto grid-cols-4">
         {productData.map((item, index) => {
           const config = getItemConfig(index, 3);

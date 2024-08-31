@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from '#app/components/ui/button.tsx'
 
-const Creemson: React.FC = () => {
+const Hero: React.FC = () => {
   return (
     <div className="grid place-items-center max-w-5xl py-16 xl:grid-cols-2 xl:gap-24">
       <div className="flex max-w-md flex-col items-center text-center xl:order-2 xl:items-start xl:text-left">
@@ -32,4 +32,4 @@ const Creemson: React.FC = () => {
   );
 };
 
-export default Creemson;
+export default Hero;
