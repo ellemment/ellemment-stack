@@ -1,3 +1,5 @@
+// app/utils/client-hints.tsx
+
 /**
  * This file contains utilities for using client hints for user preference which
  * are needed by the server, but are only known by the browser.

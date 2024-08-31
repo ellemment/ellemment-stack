@@ -16,17 +16,17 @@ export const MenuItem = ({
   active,
   item,
   children,
-  href,
+  to,
 }: {
   setActive: (item: string) => void;
   active: string | null;
   item: string;
   children?: React.ReactNode;
-  href?: string;
+  to?: string;
 }) => {
-  if (href) {
+  if (to) {
     return (
-      <Link to={href} className="text-[13px] text-black hover:opacity-[0.9] dark:text-white">
+      <Link to={to} className="text-[13px] text-black hover:opacity-[0.9] dark:text-white">
         {item}
       </Link>
     );
@@ -80,7 +80,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)}
-      className={`relative shadow-input font-light flex justify-center space-x-4 py-6 ${className || ''}`}
+      className={`relative shadow-input font-light flex justify-center space-x-8 py-6 ${className || ''}`}
     >
       {children}
     </nav>
@@ -90,16 +90,16 @@ export const Menu = ({
 export const ProductItem = ({
   title,
   description,
-  href,
+  to,
   src,
 }: {
   title: string;
   description: string;
-  href: string;
+  to: string;
   src: string;
 }) => {
   return (
-    <Link to={href} className="flex space-x-2">
+    <Link to={to} className="flex space-x-2">
       <img
         src={src}
         width={140}
