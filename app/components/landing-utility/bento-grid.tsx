@@ -41,7 +41,7 @@ const icons = [
   <IconTableColumn className="h-4 w-4 text-neutral-500" />,
 ];
 
-const ProductGrid = ({ cardCount = 4 }: { cardCount?: number }) => {
+const Grid = ({ cardCount = 4 }: { cardCount?: number }) => {
   return (
     <div className="container mx-auto px-4 py-8">
       <BentoGrid className="max-w-5xl mx-auto px-4 grid-cols-4">
@@ -63,4 +63,4 @@ const ProductGrid = ({ cardCount = 4 }: { cardCount?: number }) => {
   );
 };
 
-export default ProductGrid;
+export default Grid;
