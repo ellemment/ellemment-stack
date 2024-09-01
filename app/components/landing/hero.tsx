@@ -11,17 +11,17 @@ const Hero: React.FC = () => {
           data-heading
           className="mt-8 animate-slide-top text-4xl font-medium text-foreground [animation-delay:0.3s] [animation-fill-mode:backwards] md:text-5xl xl:mt-4 xl:animate-slide-left xl:text-6xl xl:[animation-delay:0.8s] xl:[animation-fill-mode:backwards]"
         >
-          <a href="/">meet ellemment</a>
+          <a href="/">ellemment STACK</a>
         </h1>
         <p
           data-paragraph
           className="mt-6 animate-slide-top text-xl/7 text-muted-foreground [animation-delay:0.8s] [animation-fill-mode:backwards] xl:mt-8 xl:animate-slide-left xl:text-xl/6 xl:leading-10 xl:[animation-delay:1s] xl:[animation-fill-mode:backwards]"
         >
-          ellemment STACK
+          meet ellemments
         </p>
         <div className="mt-8 flex gap-4">
           <Button variant="default" size="default">
-            Try Formatica
+            Get Started
           </Button>
           <Button variant="outline" size="default">
             Get API access

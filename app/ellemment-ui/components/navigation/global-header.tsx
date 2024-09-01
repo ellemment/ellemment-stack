@@ -40,6 +40,7 @@ function Logo() {
       ]},
       { to: "/", label: "Develop" },
       { to: user ? `/users/${user.username}` : "/login", label: "Account" },
+      { to: "/", label: "Store" },
     ];
   
     return (
@@ -83,7 +84,6 @@ function Logo() {
                       {item.label}
                     </MobileMenuItem>
                   ))}
-                  <MobileMenuItem to="/store">Store</MobileMenuItem>
                 </NavbarSm>
               </div>
             </div>
