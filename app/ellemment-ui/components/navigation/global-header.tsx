@@ -9,16 +9,9 @@ import { Icon } from '#app/components/ui/icon';
 import { Menu, MenuItem, HoveredLink } from './navbar-md';
 import { type Theme } from '#app/utils/theme.server';
 import { NavbarSm } from './navbar-sm';
+import Logo from '#app/components/logo'
 
 
-function Logo() {
-    return (
-      <Link to="/" className="font-medium text-black dark:text-white">
-        ellemment
-      </Link>
-    );
-  }
-  
   const MobileMenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
     <Link
       to={to}
@@ -47,7 +40,7 @@ function Logo() {
       <header className="bg-background">
         <div className="container mx-auto max-w-5xl px-4">
           <nav className="flex justify-between items-center h-16">
-            <Logo />
+          <Logo /> 
             
             {/* Desktop menu */}
             <div className="hidden md:block">
