@@ -1,63 +1,60 @@
-// app/components/creemson/research.tsx
-import React from 'react';
-import { BentoGrid, BentoGridItem } from '#app/ellemment-ui/components/layout/bento-grid';
-import { IconClipboardCopy, IconFileBroken, IconSignature } from "@tabler/icons-react";
+import { cn } from "#app/ellemment-ui/lib/utils";
+import React from "react";
+import { BentoGrid, BentoGridItem } from "#app/components/landing-utility/bento-grid";
+import {
+  IconClipboardCopy,
+  IconFileBroken,
+  IconSignature,
+  IconTableColumn,
+} from "@tabler/icons-react";
 
-const Discover: React.FC = () => {
-  const discoverData = [
-    {
-      title: "Problem Statement",
-      description: "Clear definition of the problem and key pain points",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />
-    },
-    {
-      title: "Product Fit",
-      description: "Target market size and growth potential",
-      icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />
-    },
-    {
-      title: "Customer Insights",
-      description: "Key customer segments and user needs",
-      icon: <IconSignature className="h-4 w-4 text-neutral-500" />
-    }
-  ];
-
+export default function Discover() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="max-w-5xl mx-auto text-3xl font-semi-bold mb-10 text-start">Discover</h2>
-      <BentoGrid className="max-w-5xl mx-auto grid-cols-4">
-        {discoverData.map((item, index) => {
-          const config = getItemConfig(index, 3);
-          return (
-            <BentoGridItem
-              key={index}
-              title={item.title}
-              description={item.description}
-              header={<Skeleton />}
-              icon={item.icon}
-              className={config.className}
-            />
-          );
-        })}
-      </BentoGrid>
-    </div>
+    <BentoGrid className="container mx-auto max-w-5xl px-4 md:auto-rows-[20rem]">
+      {items.map((item, i) => (
+        <BentoGridItem
+          key={i}
+          title={item.title}
+          description={item.description}
+          header={item.header}
+          className={item.className}
+          icon={item.icon}
+        />
+      ))}
+    </BentoGrid>
   );
-};
-
+}
 const Skeleton = () => (
-  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)] border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
+  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
 );
-
-const getItemConfig = (index: number, total: number) => {
-  const configs = {
-    3: [
-      { className: "md:col-span-4" },
-      { className: "md:col-span-2" },
-      { className: "md:col-span-2" },
-    ],
-  };
-  const defaultConfig = { className: "" };
-  return (configs[total as keyof typeof configs] || [])[index] || defaultConfig;
-};
-
-export default Discover;
+const items = [
+  {
+    title: "The Dawn of Innovation",
+    description: "Explore the birth of groundbreaking ideas and inventions.",
+    header: <Skeleton />,
+    className: "md:col-span-2",
+    icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "The Digital Revolution",
+    description: "Dive into the transformative power of technology.",
+    header: <Skeleton />,
+    className: "md:col-span-1",
+    icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "The Art of Design",
+    description: "Discover the beauty of thoughtful and functional design.",
+    header: <Skeleton />,
+    className: "md:col-span-1",
+    icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "The Power of Communication",
+    description:
+      "Understand the impact of effective communication in our lives.",
+    header: <Skeleton />,
+    className: "md:col-span-2",
+    icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+  },
+];
