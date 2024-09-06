@@ -4,7 +4,7 @@ import { MOCK_CODE_GITHUB, MOCK_CODE_GOOGLE } from '#app/utils/providers/constan
 import {
 	cleanupDb,
 	createPassword,
-	getNoteImages,
+	getContentImages,
 	getUserImages,
 	img,
 } from '#tests/db-utils.ts'
@@ -20,7 +20,7 @@ async function seed() {
 	console.timeEnd('🧹 Cleaned up the database...')
 
 	console.time('🔑 Created permissions...')
-	const entities = ['user', 'note']
+	const entities = ['user', 'content']
 	const actions = ['create', 'read', 'update', 'delete']
 	const accesses = ['own', 'any'] as const
 
@@ -62,13 +62,13 @@ async function seed() {
 
 	const totalUsers = 5
 	console.time(`👤 Created ${totalUsers} users...`)
-	const noteImages = await getNoteImages()
+	const contentImages = await getContentImages()
 	const userImages = await getUserImages()
 
 	for (let index = 0; index < totalUsers; index++) {
 		const username = `ellemment_${index + 1}`
 		const name = `Ellemment ${index + 1}`
-		const noteImage = noteImages[index % noteImages.length]
+		const contentImage = contentImages[index % contentImages.length]
 		await prisma.user
 			.create({
 				select: { id: true },
@@ -79,18 +79,18 @@ async function seed() {
 					password: { create: createPassword(username) },
 					image: { create: userImages[index % userImages.length] },
 					roles: { connect: { name: 'user' } },
-					notes: {
+					content: {
 						create: [
 							{
-								title: `${name}'s First Note`,
-								content: `This is the first note for ${name}.`,
-								images: noteImage
+								title: `${name}'s First Content`,
+								content: `This is the first content for ${name}.`,
+								images: contentImage
 									? {
 										create: [
 											{
-												altText: noteImage.altText,
-												contentType: noteImage.contentType,
-												blob: noteImage.blob,
+												altText: contentImage.altText,
+												contentType: contentImage.contentType,
+												blob: contentImage.blob,
 											},
 										],
 									}
@@ -113,32 +113,32 @@ async function seed() {
 		ellemmentdevUser: img({ filepath: './tests/fixtures/images/user/kody.png' }),
 		cuteKoala: img({
 			altText: 'an adorable koala cartoon illustration',
-			filepath: './tests/fixtures/images/kody-notes/cute-koala.png',
+			filepath: './tests/fixtures/images/kody-content/cute-koala.png',
 		}),
 		koalaEating: img({
 			altText: 'a cartoon illustration of a koala in a tree eating',
-			filepath: './tests/fixtures/images/kody-notes/koala-eating.png',
+			filepath: './tests/fixtures/images/kody-content/koala-eating.png',
 		}),
 		koalaCuddle: img({
 			altText: 'a cartoon illustration of koalas cuddling',
-			filepath: './tests/fixtures/images/kody-notes/koala-cuddle.png',
+			filepath: './tests/fixtures/images/kody-content/koala-cuddle.png',
 		}),
 		mountain: img({
 			altText: 'a beautiful mountain covered in snow',
-			filepath: './tests/fixtures/images/kody-notes/mountain.png',
+			filepath: './tests/fixtures/images/kody-content/mountain.png',
 		}),
 		koalaCoder: img({
 			altText: 'a koala coding at the computer',
-			filepath: './tests/fixtures/images/kody-notes/koala-coder.png',
+			filepath: './tests/fixtures/images/kody-content/koala-coder.png',
 		}),
 		koalaMentor: img({
 			altText:
 				'a koala in a friendly and helpful posture. The Koala is standing next to and teaching a woman who is coding on a computer and shows positive signs of learning and understanding what is being explained.',
-			filepath: './tests/fixtures/images/kody-notes/koala-mentor.png',
+			filepath: './tests/fixtures/images/kody-content/koala-mentor.png',
 		}),
 		koalaSoccer: img({
 			altText: 'a cute cartoon koala kicking a soccer ball on a soccer field ',
-			filepath: './tests/fixtures/images/kody-notes/koala-soccer.png',
+			filepath: './tests/fixtures/images/kody-content/koala-soccer.png',
 		}),
 	})
 
@@ -161,7 +161,7 @@ async function seed() {
 				],
 			},
 			roles: { connect: [{ name: 'admin' }, { name: 'user' }] },
-			notes: {
+			content: {
 				create: [
 					{
 						id: 'd27a197e',

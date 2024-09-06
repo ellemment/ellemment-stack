@@ -8,7 +8,7 @@ import {
 	type FieldMetadata,
 } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
-import { type Note, type NoteImage } from '@prisma/client'
+import { type Content, type ContentImage } from '@prisma/client'
 import { type SerializeFrom } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import { useState } from 'react'
@@ -21,8 +21,8 @@ import { Icon } from '#app/components/ui/icon.tsx'
 import { Label } from '#app/components/ui/label.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { Textarea } from '#app/components/ui/textarea.tsx'
-import { cn, getNoteImgSrc, useIsPending } from '#app/utils/misc.tsx'
-import { type action } from './__note-editor.server'
+import { cn, getContentImgSrc, useIsPending } from '#app/utils/misc.tsx'
+import { type action } from './__content-editor.server'
 
 const titleMinLength = 1
 const titleMaxLength = 100
@@ -44,19 +44,19 @@ const ImageFieldsetSchema = z.object({
 
 export type ImageFieldset = z.infer<typeof ImageFieldsetSchema>
 
-export const NoteEditorSchema = z.object({
+export const ContentEditorSchema = z.object({
 	id: z.string().optional(),
 	title: z.string().min(titleMinLength).max(titleMaxLength),
 	content: z.string().min(contentMinLength).max(contentMaxLength),
 	images: z.array(ImageFieldsetSchema).max(5).optional(),
 })
 
-export function NoteEditor({
-	note,
+export function ContentEditor({
+	content,
 }: {
-	note?: SerializeFrom<
-		Pick<Note, 'id' | 'title' | 'content'> & {
-			images: Array<Pick<NoteImage, 'id' | 'altText'>>
+	content?: SerializeFrom<
+		Pick<Content, 'id' | 'title' | 'content'> & {
+			images: Array<Pick<ContentImage, 'id' | 'altText'>>
 		}
 	>
 }) {
@@ -64,15 +64,15 @@ export function NoteEditor({
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'note-editor',
-		constraint: getZodConstraint(NoteEditorSchema),
+		id: 'content-editor',
+		constraint: getZodConstraint(ContentEditorSchema),
 		lastResult: actionData?.result,
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: NoteEditorSchema })
+			return parseWithZod(formData, { schema: ContentEditorSchema })
 		},
 		defaultValue: {
-			...note,
-			images: note?.images ?? [{}],
+			...content,
+			images: content?.images ?? [{}],
 		},
 		shouldRevalidate: 'onBlur',
 	})
@@ -93,7 +93,7 @@ export function NoteEditor({
 					rather than the first button in the form (which is delete/add image).
 				*/}
 					<button type="submit" className="hidden" />
-					{note ? <input type="hidden" name="id" value={note.id} /> : null}
+					{content ? <input type="hidden" name="id" value={content.id} /> : null}
 					<div className="flex flex-col gap-1">
 						<Field
 							labelProps={{ children: 'Title' }}
@@ -174,7 +174,7 @@ function ImageChooser({ meta }: { meta: FieldMetadata<ImageFieldset> }) {
 	const fields = meta.getFieldset()
 	const existingImage = Boolean(fields.id.initialValue)
 	const [previewImage, setPreviewImage] = useState<string | null>(
-		fields.id.initialValue ? getNoteImgSrc(fields.id.initialValue) : null,
+		fields.id.initialValue ? getContentImgSrc(fields.id.initialValue) : null,
 	)
 	const [altText, setAltText] = useState(fields.altText.initialValue ?? '')
 
@@ -263,7 +263,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No note with the id "{params.noteId}" exists</p>
+					<p>No content with the id "{params.contentId}" exists</p>
 				),
 			}}
 		/>

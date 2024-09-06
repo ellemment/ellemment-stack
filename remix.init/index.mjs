@@ -64,7 +64,7 @@ export default async function main({ rootDirectory }) {
 		fs.rm(path.join(rootDirectory, 'LICENSE.md')),
 		fs.rm(path.join(rootDirectory, 'CONTRIBUTING.md')),
 		fs.rm(path.join(rootDirectory, 'docs'), { recursive: true }),
-		fs.rm(path.join(rootDirectory, 'tests/e2e/notes.test.ts')),
+		fs.rm(path.join(rootDirectory, 'tests/e2e/content.test.ts')),
 		fs.rm(path.join(rootDirectory, 'tests/e2e/search.test.ts')),
 		fs.rm(path.join(rootDirectory, '.github/workflows/version.yml')),
 	]
