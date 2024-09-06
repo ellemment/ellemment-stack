@@ -6,9 +6,9 @@ import { SearchBar } from '#app/components/search-bar';
 import { ThemeSwitch, useTheme } from '#app/routes/resources+/theme-switch';
 import { useOptionalUser, useUser } from '#app/utils/user';
 import { Icon } from '#app/components/ui/icon';
-import { Menu, MenuItem, HoveredLink } from './navbar-md';
+import { Menu, MenuItem, HoveredLink } from './navbar-global-md';
 import { type Theme } from '#app/utils/theme.server';
-import { NavbarSm } from './navbar-sm';
+import { NavbarSm } from './navbar-global-sm';
 import Logo from '#app/components/logo'
 
 

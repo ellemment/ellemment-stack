@@ -42,7 +42,7 @@ import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
 import { useOptionalUser, useUser } from './utils/user.ts'
 import { Button } from './components/ui/button'
-import { GlobalHeader } from '#app/ellemment-ui/components/navigation/global-header'
+import { GlobalHeader } from '#app/ellemment-ui/components/navigation/header-global'
 
 
 
