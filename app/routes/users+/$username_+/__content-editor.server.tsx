@@ -12,9 +12,9 @@ import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import {
 	MAX_UPLOAD_SIZE,
-	NoteEditorSchema,
+	ContentEditorSchema,
 	type ImageFieldset,
-} from './__note-editor'
+} from './__content-editor'
 
 function imageHasFile(
 	image: ImageFieldset,
@@ -37,17 +37,17 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 
 	const submission = await parseWithZod(formData, {
-		schema: NoteEditorSchema.superRefine(async (data, ctx) => {
+		schema: ContentEditorSchema.superRefine(async (data, ctx) => {
 			if (!data.id) return
 
-			const note = await prisma.note.findUnique({
+			const content = await prisma.content.findUnique({
 				select: { id: true },
 				where: { id: data.id, ownerId: userId },
 			})
-			if (!note) {
+			if (!content) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					message: 'Note not found',
+					message: 'Content not found',
 				})
 			}
 		}).transform(async ({ images = [], ...data }) => {
@@ -95,16 +95,16 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	const {
-		id: noteId,
+		id: contentId,
 		title,
 		content,
 		imageUpdates = [],
 		newImages = [],
 	} = submission.value
 
-	const updatedNote = await prisma.note.upsert({
+	const updatedContent = await prisma.content.upsert({
 		select: { id: true, owner: { select: { username: true } } },
-		where: { id: noteId ?? '__new_note__' },
+		where: { id: contentId ?? '__new_content__' },
 		create: {
 			ownerId: userId,
 			title,
@@ -126,6 +126,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	})
 
 	return redirect(
-		`/users/${updatedNote.owner.username}/notes/${updatedNote.id}`,
+		`/users/${updatedContent.owner.username}/content/${updatedContent.id}`,
 	)
 }

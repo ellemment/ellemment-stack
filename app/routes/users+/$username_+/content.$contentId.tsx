@@ -23,15 +23,15 @@ import { Icon } from '#app/components/ui/icon.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { getNoteImgSrc, useIsPending } from '#app/utils/misc.tsx'
+import { getContentImgSrc, useIsPending } from '#app/utils/misc.tsx'
 import { requireUserWithPermission } from '#app/utils/permissions.server.ts'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { userHasPermission, useOptionalUser } from '#app/utils/user.ts'
-import { type loader as notesLoader } from './notes.tsx'
+import { type loader as contentLoader } from './content.tsx'
 
 export async function loader({ params }: LoaderFunctionArgs) {
-	const note = await prisma.note.findUnique({
-		where: { id: params.noteId },
+	const content = await prisma.content.findUnique({
+		where: { id: params.contentId },
 		select: {
 			id: true,
 			title: true,
@@ -47,20 +47,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		},
 	})
 
-	invariantResponse(note, 'Not found', { status: 404 })
+	invariantResponse(content, 'Not found', { status: 404 })
 
-	const date = new Date(note.updatedAt)
+	const date = new Date(content.updatedAt)
 	const timeAgo = formatDistanceToNow(date)
 
 	return json({
-		note,
+		content,
 		timeAgo,
 	})
 }
 
 const DeleteFormSchema = z.object({
-	intent: z.literal('delete-note'),
-	noteId: z.string(),
+	intent: z.literal('delete-content'),
+	contentId: z.string(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -76,49 +76,49 @@ export async function action({ request }: ActionFunctionArgs) {
 		)
 	}
 
-	const { noteId } = submission.value
+	const { contentId } = submission.value
 
-	const note = await prisma.note.findFirst({
+	const content = await prisma.content.findFirst({
 		select: { id: true, ownerId: true, owner: { select: { username: true } } },
-		where: { id: noteId },
+		where: { id: contentId },
 	})
-	invariantResponse(note, 'Not found', { status: 404 })
+	invariantResponse(content, 'Not found', { status: 404 })
 
-	const isOwner = note.ownerId === userId
+	const isOwner = content.ownerId === userId
 	await requireUserWithPermission(
 		request,
-		isOwner ? `delete:note:own` : `delete:note:any`,
+		isOwner ? `delete:content:own` : `delete:content:any`,
 	)
 
-	await prisma.note.delete({ where: { id: note.id } })
+	await prisma.content.delete({ where: { id: content.id } })
 
-	return redirectWithToast(`/users/${note.owner.username}/notes`, {
+	return redirectWithToast(`/users/${content.owner.username}/content`, {
 		type: 'success',
 		title: 'Success',
-		description: 'Your note has been deleted.',
+		description: 'Your content has been deleted.',
 	})
 }
 
-export default function NoteRoute() {
+export default function ContentRoute() {
 	const data = useLoaderData<typeof loader>()
 	const user = useOptionalUser()
-	const isOwner = user?.id === data.note.ownerId
+	const isOwner = user?.id === data.content.ownerId
 	const canDelete = userHasPermission(
 		user,
-		isOwner ? `delete:note:own` : `delete:note:any`,
+		isOwner ? `delete:content:own` : `delete:content:any`,
 	)
 	const displayBar = canDelete || isOwner
 
 	return (
 		<div className="absolute inset-0 flex flex-col px-10">
-			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">{data.note.title}</h2>
+			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">{data.content.title}</h2>
 			<div className={`${displayBar ? 'pb-24' : 'pb-12'} overflow-y-auto`}>
 				<ul className="flex flex-wrap gap-5 py-5">
-					{data.note.images.map((image) => (
+					{data.content.images.map((image) => (
 						<li key={image.id}>
-							<a href={getNoteImgSrc(image.id)}>
+							<a href={getContentImgSrc(image.id)}>
 								<img
-									src={getNoteImgSrc(image.id)}
+									src={getContentImgSrc(image.id)}
 									alt={image.altText ?? ''}
 									className="h-32 w-32 rounded-lg object-cover"
 								/>
@@ -127,7 +127,7 @@ export default function NoteRoute() {
 					))}
 				</ul>
 				<p className="whitespace-break-spaces text-sm md:text-lg">
-					{data.note.content}
+					{data.content.content}
 				</p>
 			</div>
 			{displayBar ? (
@@ -138,7 +138,7 @@ export default function NoteRoute() {
 						</Icon>
 					</span>
 					<div className="grid flex-1 grid-cols-2 justify-end gap-2 min-[525px]:flex md:gap-4">
-						{canDelete ? <DeleteNote id={data.note.id} /> : null}
+						{canDelete ? <DeleteContent id={data.content.id} /> : null}
 						<Button
 							asChild
 							className="min-[525px]:max-md:aspect-square min-[525px]:max-md:px-0"
@@ -156,21 +156,21 @@ export default function NoteRoute() {
 	)
 }
 
-export function DeleteNote({ id }: { id: string }) {
+export function DeleteContent({ id }: { id: string }) {
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 	const [form] = useForm({
-		id: 'delete-note',
+		id: 'delete-content',
 		lastResult: actionData?.result,
 	})
 
 	return (
 		<Form method="POST" {...getFormProps(form)}>
-			<input type="hidden" name="noteId" value={id} />
+			<input type="hidden" name="contentId" value={id} />
 			<StatusButton
 				type="submit"
 				name="intent"
-				value="delete-note"
+				value="delete-content"
 				variant="destructive"
 				status={isPending ? 'pending' : form.status ?? 'idle'}
 				disabled={isPending}
@@ -187,22 +187,22 @@ export function DeleteNote({ id }: { id: string }) {
 
 export const meta: MetaFunction<
 	typeof loader,
-	{ 'routes/users+/$username_+/notes': typeof notesLoader }
+	{ 'routes/users+/$username_+/content': typeof contentLoader }
 > = ({ data, params, matches }) => {
-	const notesMatch = matches.find(
-		(m) => m.id === 'routes/users+/$username_+/notes',
+	const contentMatch = matches.find(
+		(m) => m.id === 'routes/users+/$username_+/content',
 	)
-	const displayName = notesMatch?.data?.owner.name ?? params.username
-	const noteTitle = data?.note.title ?? 'Note'
-	const noteContentsSummary =
-		data && data.note.content.length > 100
-			? data?.note.content.slice(0, 97) + '...'
+	const displayName = contentMatch?.data?.owner.name ?? params.username
+	const contentTitle = data?.content.title ?? 'Content'
+	const contentContentSummary =
+		data && data.content.content.length > 100
+			? data?.content.content.slice(0, 97) + '...'
 			: 'No content'
 	return [
-		{ title: `${noteTitle} | ${displayName}'s Notes | ellemment` },
+		{ title: `${contentTitle} | ${displayName}'s Content | ellemment` },
 		{
 			name: 'description',
-			content: noteContentsSummary,
+			content: contentContentSummary,
 		},
 	]
 }
@@ -213,7 +213,7 @@ export function ErrorBoundary() {
 			statusHandlers={{
 				403: () => <p>You are not allowed to do that</p>,
 				404: ({ params }) => (
-					<p>No note with the id "{params.noteId}" exists</p>
+					<p>No content with the id "{params.contentId}" exists</p>
 				),
 			}}
 		/>
