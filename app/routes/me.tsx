@@ -1,3 +1,5 @@
+// app/routes/me.tsx
+
 import { redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { requireUserId, logout } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'

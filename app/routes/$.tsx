@@ -1,3 +1,5 @@
+// app/routes/$.tsx
+
 // This is called a "splat route" and as it's in the root `/app/routes/`
 // directory, it's a catchall. If no other routes match, this one will and we
 // can know that the user is hitting a URL that doesn't exist. By throwing a
