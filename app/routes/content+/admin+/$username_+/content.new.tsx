@@ -1,4 +1,5 @@
-// app/routes/users+/$username_+/content.new.tsx
+// app/routes/content+/admin+/$username_+/content.new.tsx
+
 
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server.ts'

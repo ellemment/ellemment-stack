@@ -1,4 +1,5 @@
-// app/routes/users+/$username_+/__content-editor.server.tsx
+// app/routes/content+/admin+/$username_+/__content-editor.server.tsx
+
 
 import { parseWithZod } from '@conform-to/zod'
 import { createId as cuid } from '@paralleldrive/cuid2'

@@ -1,4 +1,4 @@
-// app/routes/content+/index.tsx
+// app/routes/content+/admin+/index.tsx
 
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
