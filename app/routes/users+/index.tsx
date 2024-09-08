@@ -1,3 +1,5 @@
+// app/routes/users+/index.tsx
+
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
