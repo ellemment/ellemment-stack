@@ -39,7 +39,7 @@ export default function ContentRoute() {
 				<div className="relative col-span-1">
 					<div className="absolute inset-0 flex flex-col">
 						<Link
-							to={`/users/${data.owner.username}`}
+							to={`/admin/content/${data.owner.username}`}
 							className="flex flex-col items-center justify-center gap-2 bg-muted pb-4 pl-8 pr-4 pt-12 lg:flex-row lg:justify-start lg:gap-4"
 						>
 							<img

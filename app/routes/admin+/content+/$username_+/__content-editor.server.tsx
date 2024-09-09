@@ -128,6 +128,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	})
 
 	return redirect(
-		`/users/${updatedContent.owner.username}/content/${updatedContent.id}`,
+		`/admin/content/${updatedContent.owner.username}/content/${updatedContent.id}`,
 	)
 }
