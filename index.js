@@ -1,3 +1,5 @@
+// index.js
+
 import 'dotenv/config'
 import * as fs from 'fs'
 import chalk from 'chalk'
