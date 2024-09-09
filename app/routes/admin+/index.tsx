@@ -1,3 +1,5 @@
+// app/routes/admin+/index.tsx
+
 import { json, redirect, type LoaderFunctionArgs, type ActionFunctionArgs } from '@remix-run/node'
 import { useLoaderData, Form, Link } from '@remix-run/react'
 import { AdminType } from '#app/utils/admin-types'

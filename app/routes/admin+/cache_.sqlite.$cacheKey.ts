@@ -2,6 +2,7 @@
 
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { AdminType } from '#app/utils/admin-types'
 import { cache } from '#app/utils/cache.server.ts'
 import {
 	getAllInstances,
@@ -11,7 +12,7 @@ import {
 import { requireUserWithRole } from '#app/utils/permissions.server.ts'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-	await requireUserWithRole(request, 'admin')
+	await requireUserWithRole(request, AdminType.SUPER_ADMIN)
 	const searchParams = new URL(request.url).searchParams
 	const currentInstanceInfo = await getInstanceInfo()
 	const allInstances = await getAllInstances()
