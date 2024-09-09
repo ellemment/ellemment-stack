@@ -20,6 +20,7 @@ import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { Field } from '#app/components/forms.tsx'
 import { Spacer } from '#app/components/spacer.tsx'
 import { Button } from '#app/components/ui/button.tsx'
+import { AdminType } from '#app/utils/admin-types'
 import {
 	cache,
 	getAllCacheKeys,
@@ -34,12 +35,13 @@ import {
 import { useDebounce, useDoubleCheck } from '#app/utils/misc.tsx'
 import { requireUserWithRole } from '#app/utils/permissions.server.ts'
 
+
 export const handle: SEOHandle = {
 	getSitemapEntries: () => null,
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserWithRole(request, 'admin')
+	await requireUserWithRole(request, AdminType.SUPER_ADMIN)
 	const searchParams = new URL(request.url).searchParams
 	const query = searchParams.get('query')
 	if (query === '') {
@@ -64,7 +66,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-	await requireUserWithRole(request, 'admin')
+	await requireUserWithRole(request, AdminType.SUPER_ADMIN)
 	const formData = await request.formData()
 	const key = formData.get('cacheKey')
 	const { currentInstance } = await getInstanceInfo()
