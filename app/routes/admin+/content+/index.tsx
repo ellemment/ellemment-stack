@@ -1,113 +1,91 @@
-// app/routes/admin+/content+/index.tsx
-
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-import { ErrorList } from '#app/components/forms.tsx'
+import { getUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { cn, getUserImgSrc, useDelayedIsPending } from '#app/utils/misc.tsx'
-
-const UserSearchResultSchema = z.object({
-	id: z.string(),
-	username: z.string(),
-	name: z.string().nullable(),
-	imageId: z.string().nullable(),
-})
-
-const UserSearchResultsSchema = z.array(UserSearchResultSchema)
+import { requireUserWithRole } from '#app/utils/permissions.server.ts'
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	const searchTerm = new URL(request.url).searchParams.get('search')
-	if (searchTerm === '') {
-		return redirect('/users')
-	}
+  const userId = await getUserId(request)
+  
+  // If user is not logged in, redirect to login page
+  if (!userId) {
+    return redirect('/login?redirectTo=/admin/content')
+  }
 
-	const like = `%${searchTerm ?? ''}%`
-	const rawUsers = await prisma.$queryRaw`
-		SELECT User.id, User.username, User.name, UserImage.id AS imageId
-		FROM User
-		LEFT JOIN UserImage ON User.id = UserImage.userId
-		WHERE User.username LIKE ${like}
-		OR User.name LIKE ${like}
-		ORDER BY (
-			SELECT Content.updatedAt
-			FROM Content
-			WHERE Content.ownerId = User.id
-			ORDER BY Content.updatedAt DESC
-			LIMIT 1
-		) DESC
-		LIMIT 50
-	`
+  try {
+    // Check if the user has admin role
+    await requireUserWithRole(request, 'admin')
+    
+    // Fetch the username for the admin user
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { username: true }
+    })
 
-	const result = UserSearchResultsSchema.safeParse(rawUsers)
-	if (!result.success) {
-		return json({ status: 'error', error: result.error.message } as const, {
-			status: 400,
-		})
-	}
-	return json({ status: 'idle', users: result.data } as const)
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    // If user is admin, redirect to their admin content page using username
+    return redirect(`/admin/content/${user.username}`)
+  } catch (error: unknown) {
+    // If user is logged in but not an admin, or if there's any other error
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred'
+    return json(
+      { status: 'error', message: 'Insufficient permissions', error: errorMessage },
+      { status: 403 }
+    )
+  }
 }
 
-export default function UsersRoute() {
-	const data = useLoaderData<typeof loader>()
-	const isPending = useDelayedIsPending({
-		formMethod: 'GET',
-		formAction: '/users',
-	})
+export default function AdminContentIndexRoute() {
+  const data = useLoaderData<typeof loader>()
 
-	if (data.status === 'error') {
-		console.error(data.error)
-	}
+  if (data?.status === 'error') {
+    return (
+      <div className="container flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-h1 mb-4">Access Denied</h1>
+        <p className="text-body-md mb-4">{data.message}</p>
+        <Link to="/" className="text-blue-600 hover:underline">
+          Return to Home
+        </Link>
+      </div>
+    )
+  }
 
-	return (
-		<div className="container mb-48 mt-36 flex flex-col items-center justify-center gap-6">
-			<h1 className="text-h1">ellemment Users</h1>
-			<div className="w-full max-w-[700px]">
-			</div>
-			<main>
-				{data.status === 'idle' ? (
-					data.users.length ? (
-						<ul
-							className={cn(
-								'flex w-full flex-wrap items-center justify-center gap-4 delay-200',
-								{ 'opacity-50': isPending },
-							)}
-						>
-							{data.users.map((user) => (
-								<li key={user.id}>
-									<Link
-										to={user.username}
-										className="flex h-36 w-44 flex-col items-center justify-center rounded-lg bg-muted px-5 py-3"
-									>
-										<img
-											alt={user.name ?? user.username}
-											src={getUserImgSrc(user.imageId)}
-											className="h-16 w-16 rounded-full"
-										/>
-										{user.name ? (
-											<span className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-body-md">
-												{user.name}
-											</span>
-										) : null}
-										<span className="w-full overflow-hidden text-ellipsis text-center text-body-sm text-muted-foreground">
-											{user.username}
-										</span>
-									</Link>
-								</li>
-							))}
-						</ul>
-					) : (
-						<p>No users found</p>
-					)
-				) : data.status === 'error' ? (
-					<ErrorList errors={['There was an error parsing the results']} />
-				) : null}
-			</main>
-		</div>
-	)
+  // This shouldn't be reached due to redirects, but including for completeness
+  return (
+    <div className="container flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-h1 mb-4">Admin Content</h1>
+      <p className="text-body-md">Loading admin content...</p>
+    </div>
+  )
 }
 
 export function ErrorBoundary() {
-	return <GeneralErrorBoundary />
+  return (
+    <GeneralErrorBoundary
+      statusHandlers={{
+        403: () => (
+          <div className="container flex flex-col items-center justify-center min-h-screen">
+            <h1 className="text-h1 mb-4">Access Denied</h1>
+            <p className="text-body-md mb-4">You do not have permission to access this page.</p>
+            <Link to="/" className="text-blue-600 hover:underline">
+              Return to Home
+            </Link>
+          </div>
+        ),
+        404: () => (
+          <div className="container flex flex-col items-center justify-center min-h-screen">
+            <h1 className="text-h1 mb-4">Page Not Found</h1>
+            <p className="text-body-md mb-4">The page you're looking for doesn't exist.</p>
+            <Link to="/" className="text-blue-600 hover:underline">
+              Return to Home
+            </Link>
+          </div>
+        ),
+      }}
+    />
+  )
 }
