@@ -1,4 +1,4 @@
-// app/routes/users+/$username_+/content.$contentId.tsx
+// app/routes/admin+/content+/$username_+/content.$contentId.tsx
 
 import { getFormProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
