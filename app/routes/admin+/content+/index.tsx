@@ -1,11 +1,10 @@
-// app/routes/content+/admin+/index.tsx
+// app/routes/admin+/content+/index.tsx
 
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { ErrorList } from '#app/components/forms.tsx'
-import { SearchBar } from '#app/components/search-bar.tsx'
 import { prisma } from '#app/utils/db.server.ts'
 import { cn, getUserImgSrc, useDelayedIsPending } from '#app/utils/misc.tsx'
 
@@ -65,7 +64,6 @@ export default function UsersRoute() {
 		<div className="container mb-48 mt-36 flex flex-col items-center justify-center gap-6">
 			<h1 className="text-h1">ellemment Users</h1>
 			<div className="w-full max-w-[700px]">
-				<SearchBar status={data.status} autoFocus autoSubmit />
 			</div>
 			<main>
 				{data.status === 'idle' ? (

@@ -1,4 +1,4 @@
-// app/routes/content+/admin+/$username_+/__content-editor.tsx
+// app/routes/admin+/content+/$username_+/__content-editor.tsx
 
 import {
 	FormProvider,

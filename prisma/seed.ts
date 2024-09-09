@@ -76,7 +76,7 @@ async function seed() {
 					email: `${username}@example.com`,
 					username,
 					name,
-					password: { create: createPassword(username) },
+					password: { create: createPassword('ellemment') },
 					image: { create: userImages[index % userImages.length] },
 					roles: { connect: { name: 'user' } },
 					content: {

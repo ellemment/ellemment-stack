@@ -1,3 +1,5 @@
+// app/routes/admin+/cache_.sqlite.server.ts
+
 import { json, redirect, type ActionFunctionArgs } from '@remix-run/node'
 import { z } from 'zod'
 import { cache } from '#app/utils/cache.server.ts'
