@@ -12,6 +12,7 @@ import rateLimit from 'express-rate-limit'
 import getPort, { portNumbers } from 'get-port'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import { setupInitialAdmins } from '../app/utils/admin-setup.server'
 
 const MODE = process.env.NODE_ENV ?? 'development'
 const IS_PROD = MODE === 'production'
@@ -238,14 +239,23 @@ if (!portAvailable && !IS_DEV) {
 	process.exit(1)
 }
 
-const server = app.listen(portToUse, () => {
+const server = app.listen(portToUse, async () => {
 	if (!portAvailable) {
-		console.warn(
-			chalk.yellow(
-				`⚠️  Port ${desiredPort} is not available, using ${portToUse} instead.`,
-			),
-		)
+	  console.warn(
+		chalk.yellow(
+		  `⚠️  Port ${desiredPort} is not available, using ${portToUse} instead.`,
+		),
+	  )
 	}
+	
+	// Call setupInitialAdmins here
+	try {
+	  await setupInitialAdmins()
+	  console.log('🔑 Initial admin setup completed')
+	} catch (error) {
+	  console.error('❌ Error during initial admin setup:', error)
+	}
+  
 	console.log(`🚀  We have liftoff!`)
 	const localUrl = `http://localhost:${portToUse}`
 	let lanUrl: string | null = null

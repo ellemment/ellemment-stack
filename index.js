@@ -4,6 +4,7 @@ import chalk from 'chalk'
 import closeWithGrace from 'close-with-grace'
 import sourceMapSupport from 'source-map-support'
 
+
 sourceMapSupport.install({
 	retrieveSourceMap: function (source) {
 		// get source file without the `file://` prefix or `?t=...` suffix
