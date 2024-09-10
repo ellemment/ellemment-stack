@@ -1,6 +1,5 @@
 // prisma/seed.ts
 import { promiseHash } from 'remix-utils/promise'
-import { AdminType } from '#app/utils/admin-types'
 import { prisma } from '#app/utils/db.server.ts'
 import { MOCK_CODE_GITHUB, MOCK_CODE_GOOGLE } from '#app/utils/providers/constants'
 import {
@@ -164,9 +163,6 @@ async function seed() {
 				],
 			},
 			roles: { connect: [{ name: 'admin' }, { name: 'user' }] },
-			adminRoles: {
-				create: Object.values(AdminType).map(type => ({ type }))
-			},
 			content: {
 				create: [
 					{

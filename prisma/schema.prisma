@@ -10,16 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model AdminRole {
-  id        String   @id @default(cuid())
-  type      String   
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, type])
-}
 
 model User {
   id       String  @id @default(cuid())
@@ -36,7 +26,6 @@ model User {
   roles       Role[]
   sessions    Session[]
   connections Connection[]
-  adminRoles AdminRole[]
 }
 
 model Content {

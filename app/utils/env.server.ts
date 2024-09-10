@@ -22,7 +22,6 @@ const schema = z.object({
 	GOOGLE_CLIENT_ID: z.string().default('MOCK_GOOGLE_CLIENT_ID'),
 	GOOGLE_CLIENT_SECRET: z.string().default('MOCK_GOOGLE_CLIENT_SECRET'),
 	ALLOW_INDEXING: z.enum(['true', 'false']).optional(),
-	SUPER_ADMIN_EMAIL: z.string().email(),
 })
 
 declare global {
