@@ -34,7 +34,9 @@
     "test:e2e:run": "cross-env CI=true playwright test",
     "test:e2e:install": "npx playwright install --with-deps chromium",
     "typecheck": "tsc",
-    "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run"
+    "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run",
+    "add-admin:dev": "ts-node scripts/add-admin.ts",
+    "add-admin:prod": "node scripts/add-admin.js"
   },
   "eslintIgnore": [
     "/node_modules",
