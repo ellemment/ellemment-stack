@@ -1,4 +1,4 @@
-
+// app/routes/admin+/cache.tsx
 
 import { invariantResponse } from '@epic-web/invariant'
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
