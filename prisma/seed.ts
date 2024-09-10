@@ -250,15 +250,6 @@ async function seed() {
 						content:
 							'As our world becomes increasingly complex and interconnected, the principles of system dynamics are more relevant than ever. The field continues to evolve, incorporating new technologies and methodologies.',
 					},
-					{
-						id: 'f67ca40b',
-						title: 'Reflections on a System Dynamics Project',
-						content:
-							"Just completed a fascinating system dynamics project modeling the impact of renewable energy adoption on a city's power grid. The process was challenging but incredibly rewarding.\n\nWe started by identifying the key variables: renewable energy production, traditional energy production, energy demand, storage capacity, and grid stability. Then, we mapped out the relationships between these variables, including several important feedback loops.\n\nOne of the most interesting aspects was modeling the delays in the system. For example, there's a significant delay between the decision to increase renewable energy capacity and the actual increase in production. This led to some unexpected behaviors in our model.\n\nWe ran several simulations with different policy interventions. It was fascinating to see how small changes could have big impacts over time. For instance, a modest increase in energy storage capacity had a surprisingly large effect on grid stability.\n\nThe project really drove home the importance of taking a systems view. What seemed like straightforward cause-and-effect relationships often turned out to be much more complex when viewed in the context of the entire system.\n\nPerhaps the most valuable outcome was how the model challenged our assumptions. Several times, the system behaved in ways we didn't expect, forcing us to revisit and refine our understanding.\n\nOverall, this project reinforced my belief in the power of system dynamics as a tool for understanding and managing complex systems. It's not just about predicting outcomes, but about building a deeper, more nuanced understanding of how systems work.\n\nI'm excited to apply these insights to future projects. The principles of system dynamics have applications far beyond energy systems - I can see potential uses in areas from urban planning to ecosystem management.\n\nAnyway, I'm rambling at this point, but I'm just so energized by this work. It's amazing how a relatively simple set of tools can provide such profound insights into complex problems. Here's to many more system dynamics adventures!",
-						images: {
-							create: [ellemmentImages.koalaSoccer],
-						},
-					},
 				],
 			},
 		},

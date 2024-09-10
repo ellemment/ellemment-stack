@@ -1,3 +1,5 @@
+// app/routes/admin+/cache_.sqlite.$cacheKey.ts
+
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { cache } from '#app/utils/cache.server.ts'

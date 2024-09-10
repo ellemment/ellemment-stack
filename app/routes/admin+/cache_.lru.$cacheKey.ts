@@ -1,3 +1,4 @@
+// app/routes/admin+/cache_.lru.$cacheKey.ts
 
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
