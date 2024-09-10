@@ -1,3 +1,4 @@
+// app/utils/permissions.server.ts
 
 import { json } from '@remix-run/node'
 import { requireUserId } from './auth.server.ts'
