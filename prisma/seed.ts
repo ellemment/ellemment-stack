@@ -1,3 +1,4 @@
+// prisma/seed.ts
 import { promiseHash } from 'remix-utils/promise'
 import { prisma } from '#app/utils/db.server.ts'
 import { MOCK_CODE_GITHUB, MOCK_CODE_GOOGLE } from '#app/utils/providers/constants'
@@ -10,6 +11,7 @@ import {
 } from '#tests/db-utils.ts'
 import { insertGitHubUser } from '#tests/mocks/github.ts'
 import { insertGoogleUser } from '#tests/mocks/google.ts'
+
 
 async function seed() {
 	console.log('🌱 Seeding...')
@@ -149,11 +151,11 @@ async function seed() {
 	await prisma.user.create({
 		select: { id: true },
 		data: {
-			email: 'ellemmentdev@ellemment.com',
-			username: 'ellemmentdev',
+			email: 'admin@ellemment.com',
+			username: 'ellemmentadmin',
 			name: 'ellemment',
 			image: { create: ellemmentImages.ellemmentdevUser },
-			password: { create: createPassword('ellemmentdev') },
+			password: { create: createPassword('ellemmentadmin') },
 			connections: {
 				create: [
 					{ providerName: 'github', providerId: githubUser.profile.id },

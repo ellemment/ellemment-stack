@@ -1,4 +1,3 @@
-// app/utils/permissions.server.ts
 
 import { json } from '@remix-run/node'
 import { requireUserId } from './auth.server.ts'
@@ -41,7 +40,6 @@ export async function requireUserWithPermission(
 	}
 	return user.id
 }
-
 
 export async function requireUserWithRole(request: Request, name: string) {
 	const userId = await requireUserId(request)
