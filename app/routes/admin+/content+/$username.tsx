@@ -1,4 +1,4 @@
-// aapp/routes/admin+/content+/$username.tsx
+// app/routes/admin+/content+/$username.tsx
 
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'

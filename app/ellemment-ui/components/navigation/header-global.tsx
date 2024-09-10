@@ -27,7 +27,7 @@ import Logo from '#app/components/logo'
   
     const menuItems = [
       { to: "/", label: "Discover" },
-      { to: "/product", label: "Design", submenu: [
+      { to: "/admin/content", label: "Design", submenu: [
         { to: "/product", label: "ellemment UI" },
         { to: "/product", label: "ellemment UX" },
       ]},
