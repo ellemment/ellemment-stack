@@ -8,8 +8,6 @@ import {
 	type MetaFunction,
 } from '@remix-run/node'
 import {
-	Form,
-	Link,
 	Links,
 	Meta,
 	Outlet,
@@ -19,31 +17,25 @@ import {
 	useLocation,
 } from '@remix-run/react'
 import { withSentry } from '@sentry/remix'
-import { Suspense, lazy } from "react"
-import { useRef } from 'react'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
+import { GlobalHeader } from '#app/ellemment-ui/components/navigation/header-global'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
 import { EpicProgress } from './components/progress-bar.tsx'
-import { SearchBar } from './components/search-bar.tsx'
 import { useToast } from './components/toaster.tsx'
-import { Icon, href as iconsHref } from './components/ui/icon.tsx'
+import { href as iconsHref } from './components/ui/icon.tsx'
 import { EpicToaster } from './components/ui/sonner.tsx'
-import { ThemeSwitch, useTheme } from './routes/resources+/theme-switch.tsx'
+import { useTheme } from './routes/resources+/theme-switch.tsx'
 import tailwindStyleSheetUrl from './styles/tailwind.css?url'
 import { getUserId, logout } from './utils/auth.server.ts'
 import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
 import { prisma } from './utils/db.server.ts'
 import { getEnv } from './utils/env.server.ts'
 import { honeypot } from './utils/honeypot.server.ts'
-import { combineHeaders, getDomainUrl, getUserImgSrc } from './utils/misc.tsx'
+import { combineHeaders, getDomainUrl } from './utils/misc.tsx'
 import { useNonce } from './utils/nonce-provider.ts'
 import { type Theme, getTheme } from './utils/theme.server.ts'
 import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
-import { useOptionalUser, useUser } from './utils/user.ts'
-import { Button } from './components/ui/button'
-import { GlobalHeader } from '#app/ellemment-ui/components/navigation/header-global'
-
 
 
 export const links: LinksFunction = () => {
@@ -193,45 +185,46 @@ function App() {
 	const allowIndexing = data.ENV.ALLOW_INDEXING !== 'false';
 	useToast(data.toast);
 	const location = useLocation();
-
+  
 	const showHeader = (() => {
-		// Hide header for all routes starting with "/keystatic"
-		if (location.pathname.startsWith('/keystatic')) {
-			return false;
-		}
-		// Hide header only for exact "/formateco" route
-		if (location.pathname === '/formateco') {
-			return false;
-		}
-		// Show header for all other routes, including "/formateco/updates"
-		return true;
+	  if (
+		location.pathname.startsWith('/admin') ||
+		location.pathname.startsWith('/login')
+	  ) {
+		return false;
+	  }
+	  // Hide header for exact "/formateco" route
+	  if (location.pathname === '/formateco') {
+		return false;
+	  }
+	  // Show header for all other routes
+	  return true;
 	})();
-
+  
 	return (
-		<Document
-			nonce={nonce}
-			theme={theme}
-			allowIndexing={allowIndexing}
-			env={data.ENV}
-		>
-			<div className="flex h-screen flex-col justify-between">
-				{showHeader && (
-					<GlobalHeader userPreference={data.requestInfo.userPrefs.theme} />
-				)}
-
-				<div className="flex-1">
-					<Outlet />
-				</div>
-
-				<footer className="container flex justify-between pb-5">
-				</footer>
-			</div>
-			<EpicToaster closeButton position="top-center" theme={theme} />
-			<EpicProgress />
-		</Document>
+	  <Document
+		nonce={nonce}
+		theme={theme}
+		allowIndexing={allowIndexing}
+		env={data.ENV}
+	  >
+		<div className="flex h-screen flex-col justify-between">
+		  {showHeader && (
+			<GlobalHeader userPreference={data.requestInfo.userPrefs.theme} />
+		  )}
+  
+		  <div className="flex-1">
+			<Outlet />
+		  </div>
+  
+		  <footer className="container flex justify-between pb-5">
+		  </footer>
+		</div>
+		<EpicToaster closeButton position="top-center" theme={theme} />
+		<EpicProgress />
+	  </Document>
 	);
-}
-
+  }
 
 function AppWithProviders() {
 	const data = useLoaderData<typeof loader>()
