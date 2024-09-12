@@ -32,8 +32,8 @@ import Logo from '#app/components/logo'
         { to: "/admin", label: "ellemment UX" },
       ]},
       { to: "/admin/", label: "Develop" },
-      { to: user ? `/users/${user.username}` : "/login", label: "Account" },
-      { to: "/admin/docs", label: "Store" },
+      { to: user ? `/account/${user.username}` : "/login", label: "Account" },
+      { to: "/admin/", label: "Store" },
     ];
   
     return (

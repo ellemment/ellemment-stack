@@ -50,13 +50,7 @@ export default function AdminUserLayout() {
                 Content
               </Link>
             </li>
-            {isAdmin && (
-              <li>
-                <Link to="/settings/profile" className="block py-2 text-foreground hover:text-primary">
-                  Admin Settings
-                </Link>
-              </li>
-            )}
+        
           </ul>
         </nav>
       </aside>
@@ -69,6 +63,11 @@ export default function AdminUserLayout() {
             <div className="flex items-center gap-4">
               {isOwner && <span className="mr-4">Owner</span>}
               {isAdmin && <span className="mr-4">Admin</span>}
+              {isAdmin && (
+                <Link to="/account/settings" className="mr-4">
+                  Account
+                </Link>
+            )}
               <Form action="/logout" method="POST">
                 <Button type="submit" variant="outline" size="sm">
                   <Icon name="exit" className="mr-2 h-4 w-4" />

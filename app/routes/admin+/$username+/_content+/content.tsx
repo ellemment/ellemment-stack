@@ -37,8 +37,8 @@ export default function ContentRoute() {
     'line-clamp-2 block rounded-l-full py-2 pl-8 pr-6 text-base lg:text-xl'
 
   return (
-    <main className="container flex h-full min-h-[400px] px-0 pb-12 md:px-8">
-      <div className="grid w-full grid-cols-4 pl-2 md:container md:rounded-3xl md:pr-0">
+    <main className="flex h-full min-h-[400px] px-0 pb-12">
+      <div className="grid w-full grid-cols-4 md:rounded-3xl md:pr-0">
         <div className="relative col-span-1">
           <div className="absolute inset-0 flex flex-col">
             <ul className="overflow-y-auto overflow-x-hidden pb-12">
@@ -71,7 +71,7 @@ export default function ContentRoute() {
             </ul>
           </div>
         </div>
-        <div className="relative col-span-3 bg-accent md:rounded-r-3xl">
+        <div className="relative col-span-3">
           <Outlet />
         </div>
       </div>

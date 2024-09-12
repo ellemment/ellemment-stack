@@ -29,7 +29,7 @@ import {
 	useDoubleCheck,
 	useIsPending,
 } from '#app/utils/misc.tsx'
-import { type BreadcrumbHandle } from './profile.tsx'
+import { type BreadcrumbHandle } from './settings.tsx'
 
 export const handle: BreadcrumbHandle & SEOHandle = {
 	breadcrumb: <Icon name="avatar">Photo</Icon>,
@@ -106,7 +106,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	if (intent === 'delete') {
 		await prisma.userImage.deleteMany({ where: { userId } })
-		return redirect('/settings/profile')
+		return redirect('/account/settings')
 	}
 
 	await prisma.$transaction(async ($prisma) => {
@@ -117,7 +117,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		})
 	})
 
-	return redirect('/settings/profile')
+	return redirect('/account/settings')
 }
 
 export default function PhotoRoute() {

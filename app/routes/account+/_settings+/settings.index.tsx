@@ -19,7 +19,7 @@ import { getUserImgSrc, useDoubleCheck } from '#app/utils/misc.tsx'
 import { authSessionStorage } from '#app/utils/session.server.ts'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { NameSchema, UsernameSchema } from '#app/utils/user-validation.ts'
-import { twoFAVerificationType } from './profile.two-factor.tsx'
+import { twoFAVerificationType } from './settings.two-factor.tsx'
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => null,

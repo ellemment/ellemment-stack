@@ -79,7 +79,7 @@ export default function UsersRoute() {
 							{data.users.map((user) => (
 								<li key={user.id}>
 									<Link
-										to={user.username}
+										to={(`/account/${user.username}`)}
 										className="flex h-36 w-44 flex-col items-center justify-center rounded-lg bg-muted px-5 py-3"
 									>
 										<img

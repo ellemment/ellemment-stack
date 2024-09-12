@@ -11,8 +11,8 @@ import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { generateTOTP } from '#app/utils/totp.server.ts'
-import { twoFAVerificationType } from './profile.two-factor.tsx'
-import { twoFAVerifyVerificationType } from './profile.two-factor.verify.tsx'
+import { twoFAVerificationType } from './settings.two-factor.tsx'
+import { twoFAVerifyVerificationType } from './settings.two-factor.verify.tsx'
 
 export const handle: SEOHandle = {
 	getSitemapEntries: () => null,
@@ -42,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		create: verificationData,
 		update: verificationData,
 	})
-	return redirect('/settings/profile/two-factor/verify')
+	return redirect('/account/settings/two-factor/verify')
 }
 
 export default function TwoFactorRoute() {

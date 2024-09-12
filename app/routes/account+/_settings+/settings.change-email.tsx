@@ -22,8 +22,8 @@ import { sendEmail } from '#app/utils/email.server.ts'
 import { useIsPending } from '#app/utils/misc.tsx'
 import { EmailSchema } from '#app/utils/user-validation.ts'
 import { verifySessionStorage } from '#app/utils/verification.server.ts'
-import { EmailChangeEmail } from './profile.change-email.server.tsx'
-import { type BreadcrumbHandle } from './profile.tsx'
+import { EmailChangeEmail } from './settings.change-email.server.tsx'
+import { type BreadcrumbHandle } from './settings.tsx'
 
 export const handle: BreadcrumbHandle & SEOHandle = {
 	breadcrumb: <Icon name="envelope-closed">Change Email</Icon>,

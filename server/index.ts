@@ -178,7 +178,7 @@ app.use((req, res, next) => {
 		'/admin',
 		'/onboarding',
 		'/reset-password',
-		'/settings/profile',
+		'/account/settings',
 		'/resources/login',
 		'/resources/verify',
 	]
