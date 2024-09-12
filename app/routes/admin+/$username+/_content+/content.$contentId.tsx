@@ -98,7 +98,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   await prisma.content.delete({ where: { id: content.id } })
 
-  return redirectWithToast(`/admin/content/${content.owner.username}/content`, {
+  return redirectWithToast(`/admin/${content.owner.username}/content`, {
     type: 'success',
     title: 'Success',
     description: 'Your content has been deleted.',

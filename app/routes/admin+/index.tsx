@@ -1,4 +1,4 @@
-// app/routes/admin+/content+/index.tsx
+// app/routes/admin+/index.tsx
 
 import { redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
@@ -9,7 +9,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (isAdmin) {
     // If user is admin, redirect to their admin content page
-    return redirect(`/admin/content/${user.username}`)
+    return redirect(`/admin/${user.username}`)
   } else {
     // If user is logged in but not an admin, redirect to their user page
     return redirect(`/users/${user.username}`)

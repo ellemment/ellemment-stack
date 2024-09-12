@@ -16,7 +16,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const { isAdmin, user: loggedInUser } = await checkAdminStatus(request)
 
   if (isAdmin && loggedInUser.username === params.username) {
-    return redirect(`/admin/content/${params.username}`)
+    return redirect(`/admin/${params.username}`)
   }
 
   const user = await prisma.user.findFirst({

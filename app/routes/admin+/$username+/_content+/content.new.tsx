@@ -25,7 +25,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     await requireAdminAccess(request, owner.id)
   } catch {
     // If requireAdminAccess throws, redirect to the user's content page
-    return redirect(`/admin/content/${params.username}`)
+    return redirect(`/admin/${params.username}`)
   }
 
   const { isAdmin } = await checkAdminStatus(request)

@@ -27,13 +27,13 @@ import Logo from '#app/components/logo'
   
     const menuItems = [
       { to: "/", label: "Discover" },
-      { to: "/admin/content", label: "Design", submenu: [
-        { to: "/product", label: "ellemment UI" },
-        { to: "/product", label: "ellemment UX" },
+      { to: "/admin", label: "Design", submenu: [
+        { to: "/admin", label: "ellemment UI" },
+        { to: "/admin", label: "ellemment UX" },
       ]},
-      { to: "/", label: "Develop" },
+      { to: "/admin/", label: "Develop" },
       { to: user ? `/users/${user.username}` : "/login", label: "Account" },
-      { to: "/", label: "Store" },
+      { to: "/admin/docs", label: "Store" },
     ];
   
     return (

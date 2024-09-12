@@ -38,22 +38,9 @@ export default function ContentRoute() {
 
   return (
     <main className="container flex h-full min-h-[400px] px-0 pb-12 md:px-8">
-      <div className="grid w-full grid-cols-4 bg-muted pl-2 md:container md:rounded-3xl md:pr-0">
+      <div className="grid w-full grid-cols-4 pl-2 md:container md:rounded-3xl md:pr-0">
         <div className="relative col-span-1">
           <div className="absolute inset-0 flex flex-col">
-            <Link
-              to={`/admin/content/${data.owner.username}`}
-              className="flex flex-col items-center justify-center gap-2 bg-muted pb-4 pl-8 pr-4 pt-12 lg:flex-row lg:justify-start lg:gap-4"
-            >
-              <img
-                src={getUserImgSrc(data.owner.image?.id)}
-                alt={ownerDisplayName}
-                className="h-16 w-16 rounded-full object-cover lg:h-24 lg:w-24"
-              />
-              <h1 className="text-center text-base font-bold md:text-lg lg:text-left lg:text-2xl">
-                {ownerDisplayName}'s Content
-              </h1>
-            </Link>
             <ul className="overflow-y-auto overflow-x-hidden pb-12">
               {(data.isAdmin || (data.isOwner && data.isAdmin)) && (
                 <li className="p-1 pr-0">
