@@ -8,9 +8,8 @@ import {
   type ActionFunctionArgs,
 } from '@remix-run/node'
 import { z } from 'zod'
-import { requireUserId } from '#app/utils/auth.server.ts'
+import { checkAdminStatus, checkOwnerStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { requireUserWithRole } from '#app/utils/permissions.server.ts'
 import {
   MAX_UPLOAD_SIZE,
   ContentEditorSchema,
@@ -30,15 +29,7 @@ function imageHasId(
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const userId = await requireUserId(request)
-  
-  let isAdmin = false
-  try {
-    await requireUserWithRole(request, 'admin')
-    isAdmin = true
-  } catch {
-    // User is not an admin
-  }
+  const { userId, isAdmin } = await checkAdminStatus(request)
 
   const formData = await parseMultipartFormData(
     request,
@@ -57,11 +48,14 @@ export async function action({ request }: ActionFunctionArgs) {
           code: z.ZodIssueCode.custom,
           message: 'Content not found',
         })
-      } else if (!isAdmin && content.ownerId !== userId) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'You do not have permission to edit this content',
-        })
+      } else {
+        const { isOwner } = await checkOwnerStatus(request, content.ownerId)
+        if (!isAdmin && !isOwner) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'You do not have permission to edit this content',
+          })
+        }
       }
     }).transform(async ({ images = [], ...data }) => {
       return {
@@ -116,11 +110,17 @@ export async function action({ request }: ActionFunctionArgs) {
   } = submission.value
 
   // Check if the user is allowed to create/edit content
-  if (!isAdmin && (contentId && !(await isContentOwner(contentId, userId)))) {
-    return json(
-      { error: 'You do not have permission to edit this content' },
-      { status: 403 },
-    )
+  if (contentId) {
+    const contentOwnerId = await getContentOwnerId(contentId)
+    if (contentOwnerId) {
+      const { isOwner } = await checkOwnerStatus(request, contentOwnerId)
+      if (!isAdmin && !isOwner) {
+        return json(
+          { error: 'You do not have permission to edit this content' },
+          { status: 403 },
+        )
+      }
+    }
   }
 
   const updatedContent = await prisma.content.upsert({
@@ -151,10 +151,10 @@ export async function action({ request }: ActionFunctionArgs) {
   )
 }
 
-async function isContentOwner(contentId: string, userId: string): Promise<boolean> {
+async function getContentOwnerId(contentId: string): Promise<string | null> {
   const content = await prisma.content.findUnique({
     where: { id: contentId },
     select: { ownerId: true },
   })
-  return content?.ownerId === userId
+  return content?.ownerId ?? null
 }

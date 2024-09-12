@@ -1,9 +1,10 @@
+// app/routes/admin+/content+/$username_+/content.$contentId.tsx
+
 import { getFormProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { invariantResponse } from '@epic-web/invariant'
 import {
   json,
-  redirect,
   type LoaderFunctionArgs,
   type ActionFunctionArgs,
 } from '@remix-run/node'
@@ -22,15 +23,14 @@ import { ErrorList } from '#app/components/forms.tsx'
 import { Button } from '#app/components/ui/button.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
-import { requireUserId } from '#app/utils/auth.server.ts'
+import { checkAdminStatus, requireAdminAccess, checkOwnerStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { getContentImgSrc, useIsPending } from '#app/utils/misc.tsx'
-import { requireUserWithRole } from '#app/utils/permissions.server.ts'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { type loader as contentLoader } from './content.tsx'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  const userId = await requireUserId(request)
+  const { isAdmin } = await checkAdminStatus(request)
 
   const content = await prisma.content.findUnique({
     where: { id: params.contentId },
@@ -54,20 +54,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const date = new Date(content.updatedAt)
   const timeAgo = formatDistanceToNow(date)
 
-  const isOwner = content.ownerId === userId
-  let isAdmin = false
+  const { isOwner } = await checkOwnerStatus(request, content.ownerId)
 
-  try {
-    await requireUserWithRole(request, 'admin')
-    isAdmin = true
-  } catch {
-    // User is not an admin
-  }
-
-  // Only allow access if user is an admin or if they are both the owner and an admin
-  if (!isAdmin && !(isOwner && isAdmin)) {
-    return redirect(`/admin/content/${params.username}`)
-  }
+  // This will throw a redirect if the user doesn't have access
+  await requireAdminAccess(request, content.ownerId)
 
   return json({
     content,
@@ -83,7 +73,7 @@ const DeleteFormSchema = z.object({
 })
 
 export async function action({ request }: ActionFunctionArgs) {
-  const userId = await requireUserId(request)
+  await checkAdminStatus(request)
   const formData = await request.formData()
   const submission = parseWithZod(formData, {
     schema: DeleteFormSchema,
@@ -103,23 +93,8 @@ export async function action({ request }: ActionFunctionArgs) {
   })
   invariantResponse(content, 'Not found', { status: 404 })
 
-  const isOwner = content.ownerId === userId
-  let isAdmin = false
-
-  try {
-    await requireUserWithRole(request, 'admin')
-    isAdmin = true
-  } catch {
-    // User is not an admin
-  }
-
-  // Only allow deletion if user is an admin or if they are both the owner and an admin
-  if (!isAdmin && !(isOwner && isAdmin)) {
-    throw json(
-      { error: 'Unauthorized', message: 'You do not have permission to delete this content' },
-      { status: 403 },
-    )
-  }
+  // This will throw a redirect if the user doesn't have access
+  await requireAdminAccess(request, content.ownerId)
 
   await prisma.content.delete({ where: { id: content.id } })
 

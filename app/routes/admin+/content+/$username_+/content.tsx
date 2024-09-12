@@ -1,18 +1,17 @@
-
-
+// app/routes/admin+/content+/$username_+/content.tsx
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
-import { requireUserId } from '#app/utils/auth.server.ts'
+import { checkAdminStatus, checkOwnerStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { cn, getUserImgSrc } from '#app/utils/misc.tsx'
-import { requireUserWithRole } from '#app/utils/permissions.server.ts'
+
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  const userId = await requireUserId(request)
-  
+await checkAdminStatus(request)
+
   const owner = await prisma.user.findFirst({
     select: {
       id: true,
@@ -23,17 +22,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     },
     where: { username: params.username },
   })
+
   invariantResponse(owner, 'Owner not found', { status: 404 })
 
-  let isAdmin = false
-  try {
-    await requireUserWithRole(request, 'admin')
-    isAdmin = true
-  } catch {
-    // User is not an admin
-  }
-
-  const isOwner = userId === owner.id
+  const { isAdmin, isOwner } = await checkOwnerStatus(request, owner.id)
 
   return json({ owner, isAdmin, isOwner })
 }

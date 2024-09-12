@@ -1,3 +1,5 @@
+// app/routes/admin+/content+/$username_+/__content-editor.tsx
+
 import {
 	FormProvider,
 	getFieldsetProps,
@@ -68,7 +70,6 @@ import {
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
   
-	// Add this type guard function
 	function isActionDataWithResult(
 	  data: typeof actionData
 	): data is { result: SubmissionResult } {
