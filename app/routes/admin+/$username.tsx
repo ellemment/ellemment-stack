@@ -78,7 +78,7 @@ export default function ProfileRoute() {
           <div className="mt-10 flex gap-4">
             {data.isAdmin ? (
               <Button asChild>
-                <Link to={`/admin/content/${data.user.username}/content`} prefetch="intent">
+                <Link to={`/admin/${data.user.username}/content`} prefetch="intent">
                   Admin Dashboard
                 </Link>
               </Button>

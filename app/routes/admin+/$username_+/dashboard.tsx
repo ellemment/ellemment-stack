@@ -1,36 +1,32 @@
-// app/routes/admin+/content+/$username_+/content.tsx
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-import { Icon } from '#app/components/ui/icon.tsx'
+
 import { checkAdminStatus, checkOwnerStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { cn, getUserImgSrc } from '#app/utils/misc.tsx'
 
-
 export async function loader({ params, request }: LoaderFunctionArgs) {
-await checkAdminStatus(request)
+  const { isAdmin } = await checkAdminStatus(request)
+  invariantResponse(isAdmin, 'Not authorized', { status: 403 })
 
-  const owner = await prisma.user.findFirst({
+  const owner = await prisma.user.findUnique({
     select: {
       id: true,
       name: true,
       username: true,
       image: { select: { id: true } },
-      content: { select: { id: true, title: true } },
     },
     where: { username: params.username },
   })
-
   invariantResponse(owner, 'Owner not found', { status: 404 })
 
-  const { isAdmin, isOwner } = await checkOwnerStatus(request, owner.id)
-
+  const { isOwner } = await checkOwnerStatus(request, owner.id)
   return json({ owner, isAdmin, isOwner })
 }
 
-export default function ContentRoute() {
+export default function DashboardIndexRoute() {
   const data = useLoaderData<typeof loader>()
   const ownerDisplayName = data.owner.name ?? data.owner.username
   const navLinkDefaultClassName =
@@ -42,7 +38,7 @@ export default function ContentRoute() {
         <div className="relative col-span-1">
           <div className="absolute inset-0 flex flex-col">
             <Link
-              to={`/admin/content/${data.owner.username}`}
+              to={`/admin/${data.owner.username}/dashboard`}
               className="flex flex-col items-center justify-center gap-2 bg-muted pb-4 pl-8 pr-4 pt-12 lg:flex-row lg:justify-start lg:gap-4"
             >
               <img
@@ -51,33 +47,19 @@ export default function ContentRoute() {
                 className="h-16 w-16 rounded-full object-cover lg:h-24 lg:w-24"
               />
               <h1 className="text-center text-base font-bold md:text-lg lg:text-left lg:text-2xl">
-                {ownerDisplayName}'s Content
+                {ownerDisplayName}'s Dashboard
               </h1>
             </Link>
             <ul className="overflow-y-auto overflow-x-hidden pb-12">
-              {(data.isAdmin || (data.isOwner && data.isAdmin)) && (
-                <li className="p-1 pr-0">
+              {['content', 'docs', 'store', 'spaces'].map((item) => (
+                <li key={item} className="p-1 pr-0">
                   <NavLink
-                    to="new"
+                    to={item}
                     className={({ isActive }) =>
                       cn(navLinkDefaultClassName, isActive && 'bg-accent')
                     }
                   >
-                    <Icon name="plus">New Content</Icon>
-                  </NavLink>
-                </li>
-              )}
-              {data.owner.content.map((content) => (
-                <li key={content.id} className="p-1 pr-0">
-                  <NavLink
-                    to={content.id}
-                    preventScrollReset
-                    prefetch="intent"
-                    className={({ isActive }) =>
-                      cn(navLinkDefaultClassName, isActive && 'bg-accent')
-                    }
-                  >
-                    {content.title}
+                  
                   </NavLink>
                 </li>
               ))}
@@ -96,6 +78,7 @@ export function ErrorBoundary() {
   return (
     <GeneralErrorBoundary
       statusHandlers={{
+        403: () => <p>You do not have permission to view this page</p>,
         404: ({ params }) => (
           <p>No user with the username "{params.username}" exists</p>
         ),

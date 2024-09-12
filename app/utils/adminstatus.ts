@@ -8,7 +8,7 @@ import { requireUserWithRole } from './permissions.server.ts'
 export async function checkAdminStatus(request: Request) {
   const userId = await getUserId(request)
   if (!userId) {
-    throw redirect('/login?redirectTo=/admin/content')
+    throw redirect('/login?redirectTo=/admin')
   }
 
   const user = await prisma.user.findUnique({
