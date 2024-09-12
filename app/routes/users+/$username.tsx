@@ -1,19 +1,24 @@
 // app/routes/users+/$username.tsx
 
 import { invariantResponse } from '@epic-web/invariant'
-import { json,  type LoaderFunctionArgs } from '@remix-run/node'
+import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Form, Link, useLoaderData, type MetaFunction } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Spacer } from '#app/components/spacer.tsx'
 import { Button } from '#app/components/ui/button.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
+import { checkAdminStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { getUserImgSrc } from '#app/utils/misc.tsx'
-import { requireUserWithRole } from '#app/utils/permissions.server.ts'
 import { useOptionalUser } from '#app/utils/user.ts'
 
-
 export async function loader({ params, request }: LoaderFunctionArgs) {
+  const { isAdmin, user: loggedInUser } = await checkAdminStatus(request)
+
+  if (isAdmin && loggedInUser.username === params.username) {
+    return redirect(`/admin/content/${params.username}`)
+  }
+
   const user = await prisma.user.findFirst({
     select: {
       id: true,
@@ -26,17 +31,13 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       username: params.username,
     },
   })
+
   invariantResponse(user, 'User not found', { status: 404 })
 
-  let isAdmin = false
-  try {
-    await requireUserWithRole(request, 'admin')
-    isAdmin = true
-  } catch {
-    // User is not an admin
-  }
-
-  return json({ user, userJoinedDisplay: user.createdAt.toLocaleDateString(), isAdmin })
+  return json({ 
+    user, 
+    userJoinedDisplay: user.createdAt.toLocaleDateString(),
+  })
 }
 
 export default function ProfileRoute() {
@@ -79,13 +80,6 @@ export default function ProfileRoute() {
             </Form>
           ) : null}
           <div className="mt-10 flex gap-4">
-            {data.isAdmin ? (
-              <Button asChild>
-                <Link to="/admin/content" prefetch="intent">
-                  My content
-                </Link>
-              </Button>
-            ) : null}
             {isLoggedInUser ? (
               <Button asChild>
                 <Link to="/settings/profile" prefetch="intent">
