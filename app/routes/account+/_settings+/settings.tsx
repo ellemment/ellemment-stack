@@ -1,3 +1,5 @@
+// app/routes/account+/_settings+/settings.tsx
+
 import { invariantResponse } from '@epic-web/invariant'
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
@@ -35,7 +37,7 @@ export default function EditUserProfile() {
 				
 			</div>
 			<Spacer size="xs" />
-			<main className="mx-auto bg-muted px-6 py-8 md:container md:rounded-3xl">
+			<main className="mx-auto px-6 py-8 md:container md:rounded-3xl">
 				<Outlet />
 			</main>
 		</div>

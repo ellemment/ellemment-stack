@@ -63,7 +63,7 @@ export default function UsersRoute() {
 
 	return (
 		<div className="container mb-48 mt-36 flex flex-col items-center justify-center gap-6">
-			<h1 className="text-h1">ellemment Users</h1>
+			<h1 className="text-h1 pb-10 text-red-600">Ravshan Epic Search Engine</h1>
 			<div className="w-full max-w-[700px]">
 				<SearchBar status={data.status} autoFocus autoSubmit />
 			</div>

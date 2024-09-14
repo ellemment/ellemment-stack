@@ -1,3 +1,5 @@
+// app/routes/account+/_settings+/settings.two-factor.index.tsx
+
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
 import {
 	json,
