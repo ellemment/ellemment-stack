@@ -28,12 +28,12 @@ import { NavbarSm } from './navbar-global-sm';
         { to: "/admin", label: "ellemment UX" },
       ]},
       { to: "/admin/", label: "Develop" },
-      { to: user ? `/account/${user.username}` : "/login", label: "Account" },
+      { to: user ? `/account` : "/login", label: "Account" },
     ];
   
     return (
       <header className="bg-background">
-        <div className="container mx-auto max-w-5xl px-4">
+        <div className="container mx-auto max-w-7xl px-4">
           <nav className="flex justify-between items-center h-16">
           <div className='flex flex-1 items-center gap-2'>
           <Logo /> 
