@@ -1,10 +1,14 @@
-import { Outlet, NavLink, useLoaderData } from '@remix-run/react';
+// app/routes/account+/_layout.tsx
+
+
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { Outlet, NavLink, useLoaderData } from '@remix-run/react';
+import { Button } from '#app/components/ui/button.tsx'
 import { Icon } from '#app/components/ui/icon.tsx';
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { getUserImgSrc } from '#app/utils/misc.tsx'
-import { Button } from '#app/components/ui/button.tsx'
+
 
 type IconName = 'avatar' | 'pencil-1' | 'camera' | 'envelope-closed' | 'lock-closed' | 'lock-open-1' | 'dots-horizontal' | 'laptop' | 'link-2' | 'download' | 'trash' | 'exit';
 
@@ -62,8 +66,7 @@ function NavSection({ section }: { section: NavSection }) {
             <NavLink
               to={item.to}
               className={({ isActive }) =>
-                `flex items-center p-2 rounded-lg ${
-                  isActive ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/80'
+                `flex items-center p-2 rounded-lg ${isActive ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/80'
                 }`
               }
             >
@@ -98,10 +101,10 @@ export default function AccountLayout() {
   const { user } = data
 
   return (
-    <div className="mx-auto max-w-7xl p-4">
-      <div className="flex flex-col md:flex-row md:gap-8">
-        <aside className="w-full md:w-64 mb-8 md:mb-0">
-          <div className="bg-muted rounded-lg p-4 mb-6">
+    <div className="mx-auto max-w-6xl p-4">
+      <div className="flex flex-col md:flex-row md:gap-4">
+        <aside className="w-full md:w-72 mb-4 md:mb-0">
+          <div className="bg-muted rounded-lg p-4 mb-4">
             <div className="flex items-center space-x-4 mb-4">
               <img
                 src={getUserImgSrc(user.image?.id)}
@@ -113,23 +116,20 @@ export default function AccountLayout() {
                 <p className="text-sm text-muted-foreground">{user.email}</p>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Joined {new Date(user.createdAt).toLocaleDateString()}
-            </p>
           </div>
           <nav className="bg-muted rounded-lg p-4">
             {navSections.map((section) => (
               <NavSection key={section.title} section={section} />
             ))}
-            <div className="mt-6 pt-6 border-t border-muted-foreground/20">
-              <Button asChild variant="ghost" className="w-full justify-start">
-                <NavLink to="/logout" className="flex items-center">
-                  <Icon name="exit" className="mr-2 h-4 w-4" />
-                  <span className="text-sm">Log out</span>
-                </NavLink>
-              </Button>
-            </div>
           </nav>
+          <div className="mt-4 p-4 bg-muted rounded-lg">
+            <Button asChild variant="ghost" className="w-full justify-start">
+              <NavLink to="/logout" className="flex items-center">
+                <Icon name="exit" className="mr-2 h-4 w-4" />
+                <span className="text-sm">Log out</span>
+              </NavLink>
+            </Button>
+          </div>
         </aside>
         <main className="flex-grow bg-muted rounded-lg p-6">
           <Outlet />

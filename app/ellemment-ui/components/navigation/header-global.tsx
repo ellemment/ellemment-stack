@@ -33,7 +33,7 @@ import { NavbarSm } from './navbar-global-sm';
   
     return (
       <header className="bg-background">
-        <div className="container mx-auto max-w-7xl px-4">
+        <div className="container mx-auto max-w-6xl px-4">
           <nav className="flex justify-between items-center h-16">
           <div className='flex flex-1 items-center gap-2'>
           <Logo /> 
