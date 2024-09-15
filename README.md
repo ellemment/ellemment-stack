@@ -120,7 +120,7 @@ We also want to express our gratitude to the open-source community and the creat
 
 ## Contact
 
-For any questions or concerns, please open an issue in this repository or contact us at [your-email@example.com].
+For any questions or concerns, please open an issue in this repository or contact us at [donnie@ellemment.com].
 
 ---
 
