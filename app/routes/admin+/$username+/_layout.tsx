@@ -1,18 +1,22 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { Outlet, useLoaderData, Link, Form } from '@remix-run/react'
-import { Button } from '#app/components/ui/button.tsx'
-import { Icon } from '#app/components/ui/icon.tsx'
+import { Outlet, useLoaderData, NavLink } from '@remix-run/react'
 import { checkAdminStatus, checkOwnerStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { getUserImgSrc } from '#app/utils/misc.tsx'
-
+import { getUserImgSrc, cn } from '#app/utils/misc.tsx'
+import { Icon } from '#app/components/ui/icon.tsx'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { isAdmin } = await checkAdminStatus(request)
   const owner = await prisma.user.findUnique({
     where: { username: params.username },
-    select: { id: true, name: true, username: true, image: { select: { id: true } } },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      image: { select: { id: true } },
+      content: { select: { id: true, title: true } },
+    },
   })
   invariantResponse(owner, 'Owner not found', { status: 404 })
   const { isOwner } = await checkOwnerStatus(request, owner.id)
@@ -24,60 +28,45 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 export default function AdminUserLayout() {
   const data = useLoaderData<typeof loader>()
-  const { owner, isAdmin, isOwner } = data
+  const navLinkDefaultClassName =
+    'block py-2 text-foreground hover:text-primary'
 
   return (
-    <div className="flex h-screen bg-background">
+ 
+    <div className="flex h-screen bg-background max-w-5xl mx-auto">
       {/* Sidebar */}
-      <aside className="w-64 bg-muted p-4">
-        <div className="mb-4 flex items-center">
-          <img
-            src={getUserImgSrc(owner.image?.id)}
-            alt={owner.name ?? owner.username}
-            className="mr-2 h-8 w-8 rounded-full"
-          />
-          <span className="font-semibold">{owner.name ?? owner.username}</span>
-        </div>
+      <aside className="w-64 p-4">
         <nav>
           <ul className="space-y-2">
-            <li>
-              <Link to="." className="block py-2 text-foreground hover:text-primary">
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link to="content" className="block py-2 text-foreground hover:text-primary">
-                Content
-              </Link>
-            </li>
-            {isAdmin && (
+            {(data.isAdmin || (data.isOwner && data.isAdmin)) && (
               <li>
-                <Link to="/settings/profile" className="block py-2 text-foreground hover:text-primary">
-                  Admin Settings
-                </Link>
+                <NavLink
+                  to="content/new"
+                  className={({ isActive }) =>
+                    cn(navLinkDefaultClassName, isActive && 'text-primary')
+                  }
+                >
+                  <Icon name="plus">New Content</Icon>
+                </NavLink>
               </li>
             )}
+            {data.owner.content.map((content) => (
+              <li key={content.id}>
+                <NavLink
+                  to={`content/${content.id}`}
+                  className={({ isActive }) =>
+                    cn(navLinkDefaultClassName, isActive && 'text-primary')
+                  }
+                >
+                  {content.title}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </nav>
       </aside>
       {/* Main content */}
       <div className="flex flex-1 flex-col">
-        {/* Header */}
-        <header className="bg-muted p-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <div className="flex items-center gap-4">
-              {isOwner && <span className="mr-4">Owner</span>}
-              {isAdmin && <span className="mr-4">Admin</span>}
-              <Form action="/logout" method="POST">
-                <Button type="submit" variant="outline" size="sm">
-                  <Icon name="exit" className="mr-2 h-4 w-4" />
-                  Logout
-                </Button>
-              </Form>
-            </div>
-          </div>
-        </header>
         {/* Page content */}
         <main className="flex-1 overflow-auto p-6">
           <Outlet />

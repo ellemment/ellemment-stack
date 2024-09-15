@@ -1,3 +1,5 @@
+// app/routes/account+/_settings+/settings.password.tsx
+
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
@@ -22,7 +24,7 @@ import { prisma } from '#app/utils/db.server.ts'
 import { useIsPending } from '#app/utils/misc.tsx'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { PasswordSchema } from '#app/utils/user-validation.ts'
-import { type BreadcrumbHandle } from './profile.tsx'
+import { type BreadcrumbHandle } from './settings.tsx'
 
 export const handle: BreadcrumbHandle & SEOHandle = {
 	breadcrumb: <Icon name="dots-horizontal">Password</Icon>,
@@ -51,7 +53,7 @@ async function requirePassword(userId: string) {
 		where: { userId },
 	})
 	if (!password) {
-		throw redirect('/settings/profile/password/create')
+		throw redirect('/account/settings/password/create')
 	}
 }
 
@@ -108,7 +110,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	})
 
 	return redirectWithToast(
-		`/settings/profile`,
+		`/account/settings`,
 		{
 			type: 'success',
 			title: 'Password Changed',

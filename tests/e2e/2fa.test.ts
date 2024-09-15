@@ -10,11 +10,11 @@ test('Users can add 2FA to their account and use it when logging in', async ({
 }) => {
 	const password = faker.internet.password()
 	const user = await login({ password })
-	await page.goto('/settings/profile')
+	await page.goto('/account/settings')
 
 	await page.getByRole('link', { name: /enable 2fa/i }).click()
 
-	await expect(page).toHaveURL(`/settings/profile/two-factor`)
+	await expect(page).toHaveURL(`/account/settings/two-factor`)
 	const main = page.getByRole('main')
 	await main.getByRole('button', { name: /enable 2fa/i }).click()
 	const otpUriString = await main

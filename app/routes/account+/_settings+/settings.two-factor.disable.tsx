@@ -1,3 +1,5 @@
+// app/routes/account+/_settings+/settings.two-factor.index.tsx
+
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
 import {
 	json,
@@ -12,8 +14,8 @@ import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { useDoubleCheck } from '#app/utils/misc.tsx'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
-import { type BreadcrumbHandle } from './profile.tsx'
-import { twoFAVerificationType } from './profile.two-factor.tsx'
+import { type BreadcrumbHandle } from './settings.tsx'
+import { twoFAVerificationType } from './settings.two-factor.tsx'
 
 export const handle: BreadcrumbHandle & SEOHandle = {
 	breadcrumb: <Icon name="lock-open-1">Disable</Icon>,
@@ -31,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	await prisma.verification.delete({
 		where: { target_type: { target: userId, type: twoFAVerificationType } },
 	})
-	return redirectWithToast('/settings/profile/two-factor', {
+	return redirectWithToast('/account/settings/two-factor', {
 		title: '2FA Disabled',
 		description: 'Two factor authentication has been disabled.',
 	})

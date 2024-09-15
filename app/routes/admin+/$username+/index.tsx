@@ -1,7 +1,6 @@
 
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData, Link, type MetaFunction } from '@remix-run/react'
-import { Button } from '#app/components/ui/button.tsx'
+import { Outlet, useLoaderData, type MetaFunction } from '@remix-run/react'
 import { checkAdminStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
 
@@ -27,30 +26,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return json({ user })
   }
   
-  export default function AdminDashboardIndex() {
-    const data = useLoaderData<typeof loader>()
-    const { user } = data
-  
+  export default function AdminDashboardIndex() {  
     return (
       <div className="space-y-8">
-        <h2 className="text-3xl font-bold">Dashboard Overview</h2>
-        
+   
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-lg border p-6 shadow-sm">
-            <h3 className="text-lg font-semibold">Content</h3>
-            <p className="mt-2 text-3xl font-bold">{user._count.content}</p>
-          </div>
+        <main className="flex-1 overflow-auto p-6">
+          <Outlet />
+        </main>
           {/* Add more stat cards as needed */}
-        </div>
-        
-        <div>
-          <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
-          <div className="flex gap-4">
-            <Button asChild>
-              <Link to="content/new">Create New Content</Link>
-            </Button>
-            {/* Add more action buttons as needed */}
-          </div>
         </div>
       </div>
     )

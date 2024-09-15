@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
-import { Form, Link, useSubmit } from '@remix-run/react';
-import { useRef } from 'react';
-import { Button } from '#app/components/ui/button';
-import { SearchBar } from '#app/components/search-bar';
-import { ThemeSwitch, useTheme } from '#app/routes/resources+/theme-switch';
-import { useOptionalUser, useUser } from '#app/utils/user';
-import { Icon } from '#app/components/ui/icon';
-import { Menu, MenuItem, HoveredLink } from './navbar-global-md';
-import { type Theme } from '#app/utils/theme.server';
-import { NavbarSm } from './navbar-global-sm';
-import Logo from '#app/components/logo'
 
+import { Link  } from '@remix-run/react';
+import React, { useState } from 'react';
+import Logo from '#app/components/logo'
+import { ThemeSwitch } from '#app/routes/resources+/theme-switch';
+import { type Theme } from '#app/utils/theme.server';
+import { useOptionalUser } from '#app/utils/user';
+import { Menu, MenuItem, HoveredLink } from './navbar-global-md';
+import { NavbarSm } from './navbar-global-sm';
 
   const MobileMenuItem = ({ to, children }: { to: string; children: React.ReactNode }) => (
     <Link
@@ -32,19 +28,21 @@ import Logo from '#app/components/logo'
         { to: "/admin", label: "ellemment UX" },
       ]},
       { to: "/admin/", label: "Develop" },
-      { to: user ? `/users/${user.username}` : "/login", label: "Account" },
-      { to: "/admin/docs", label: "Store" },
+      { to: user ? `/account` : "/login", label: "Account" },
     ];
   
     return (
       <header className="bg-background">
-        <div className="container mx-auto max-w-5xl px-4">
+        <div className="container mx-auto max-w-7xl px-4">
           <nav className="flex justify-between items-center h-16">
+          <div className='flex flex-1 items-center gap-2'>
           <Logo /> 
+          <ThemeSwitch userPreference={userPreference} />
+          </div>
             
             {/* Desktop menu */}
             <div className="hidden md:block">
-              <Menu setActive={setActive} className="justify-self-center">
+              <Menu setActive={setActive} className="">
                 {menuItems.map((item) => (
                   <MenuItem
                     key={item.label}
@@ -68,7 +66,6 @@ import Logo from '#app/components/logo'
             </div>
             
             <div className="flex items-center space-x-2">
-              <ThemeSwitch userPreference={userPreference} />
               {/* Mobile menu */}
               <div className="md:hidden">
                 <NavbarSm>

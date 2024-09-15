@@ -1,3 +1,5 @@
+// app/routes/account+/_settings+/settings.two-factor.verify.tsx
+
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
@@ -24,8 +26,8 @@ import { prisma } from '#app/utils/db.server.ts'
 import { getDomainUrl, useIsPending } from '#app/utils/misc.tsx'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { getTOTPAuthUri } from '#app/utils/totp.server.ts'
-import { type BreadcrumbHandle } from './profile.tsx'
-import { twoFAVerificationType } from './profile.two-factor.tsx'
+import { type BreadcrumbHandle } from './settings.tsx'
+import { twoFAVerificationType } from './settings.two-factor.tsx'
 
 export const handle: BreadcrumbHandle & SEOHandle = {
 	breadcrumb: <Icon name="check">Verify</Icon>,
@@ -60,7 +62,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		},
 	})
 	if (!verification) {
-		return redirect('/settings/profile/two-factor')
+		return redirect('/account/settings/two-factor')
 	}
 	const user = await prisma.user.findUniqueOrThrow({
 		where: { id: userId },
@@ -113,7 +115,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			await prisma.verification.deleteMany({
 				where: { type: twoFAVerifyVerificationType, target: userId },
 			})
-			return redirect('/settings/profile/two-factor')
+			return redirect('/account/settings/two-factor')
 		}
 		case 'verify': {
 			await prisma.verification.update({
@@ -122,7 +124,7 @@ export async function action({ request }: ActionFunctionArgs) {
 				},
 				data: { type: twoFAVerificationType },
 			})
-			return redirectWithToast('/settings/profile/two-factor', {
+			return redirectWithToast('/account/settings/two-factor', {
 				type: 'success',
 				title: 'Enabled',
 				description: 'Two-factor authentication has been enabled.',

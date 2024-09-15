@@ -55,11 +55,20 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const timeAgo = formatDistanceToNow(date)
 
   const { isOwner } = await checkOwnerStatus(request, content.ownerId)
+  const owner = await prisma.user.findFirst({
+    select: {
+      id: true,
+      name: true,
+      username: true,
+    },
+    where: { username: params.username },
+  })
 
   // This will throw a redirect if the user doesn't have access
   await requireAdminAccess(request, content.ownerId)
 
   return json({
+    owner,
     content,
     timeAgo,
     isOwner,
@@ -112,8 +121,8 @@ export default function ContentRoute() {
   const canDelete = isAdmin || (isOwner && isAdmin)
 
   return (
-    <div className="absolute inset-0 flex flex-col px-10">
-      <h2 className="mb-2 pt-12 text-h2 lg:mb-6">{content.title}</h2>
+    <div className="flex flex-col px-10">
+      <h2 className="mb-2 text-h2 lg:mb-6">{content.title}</h2>
       <div className={`${canEdit || canDelete ? 'pb-24' : 'pb-12'} overflow-y-auto`}>
         <ul className="flex flex-wrap gap-5 py-5">
           {content.images.map((image) => (
@@ -133,10 +142,10 @@ export default function ContentRoute() {
         </p>
       </div>
       {(canEdit || canDelete) && (
-        <div className={floatingToolbarClassName}>
+        <>
           <span className="text-sm text-foreground/90 max-[524px]:hidden">
             <Icon name="clock" className="scale-125">
-              {timeAgo} ago
+              {timeAgo} ago by {data.owner?.name ?? 'Unknown'}
             </Icon>
           </span>
           <div className="grid flex-1 grid-cols-2 justify-end gap-2 min-[525px]:flex md:gap-4">
@@ -154,12 +163,11 @@ export default function ContentRoute() {
               </Button>
             )}
           </div>
-        </div>
+        </>
       )}
     </div>
   )
 }
-
 export function DeleteContent({ id }: { id: string }) {
   const actionData = useActionData<typeof action>()
   const isPending = useIsPending()

@@ -102,74 +102,74 @@ import {
 	}
   
 	return (
-	  <div className="absolute inset-0">
-		<FormProvider context={form.context}>
-		  <Form
-			method="POST"
-			className="flex h-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-10 pb-28 pt-12"
-			{...getFormProps(form)}
-			encType="multipart/form-data"
-		  >
-			<button type="submit" className="hidden" />
-			{content ? <input type="hidden" name="id" value={content.id} /> : null}
-			<input type="hidden" name="isAdmin" value={isAdmin.toString()} />
-			<input type="hidden" name="isOwner" value={isOwner.toString()} />
-			<div className="flex flex-col gap-1">
-			  <Field
-				labelProps={{ children: 'Title' }}
-				inputProps={{
-				  autoFocus: true,
-				  ...getInputProps(fields.title, { type: 'text' }),
-				}}
-				errors={fields.title.errors}
-			  />
-			  <TextareaField
-				labelProps={{ children: 'Content' }}
-				textareaProps={{
-				  ...getTextareaProps(fields.content),
-				}}
-				errors={fields.content.errors}
-			  />
-			  <div>
-				<Label>Images</Label>
-				<ul className="flex flex-col gap-4">
-				  {imageList.map((image, index) => (
-					<li
-					  key={image.key}
-					  className="relative border-b-2 border-muted-foreground"
+	  <FormProvider context={form.context}>
+		<Form
+		  method="POST"
+		  className="flex h-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-10 pb-28 pt-12"
+		  {...getFormProps(form)}
+		  encType="multipart/form-data"
+		>
+		  <button type="submit" className="hidden" />
+		  {content ? <input type="hidden" name="id" value={content.id} /> : null}
+		  <input type="hidden" name="isAdmin" value={isAdmin.toString()} />
+		  <input type="hidden" name="isOwner" value={isOwner.toString()} />
+		  <div className="flex flex-col gap-1">
+			<Field
+			  labelProps={{ children: 'Title' }}
+			  inputProps={{
+				autoFocus: true,
+				...getInputProps(fields.title, { type: 'text' }),
+			  }}
+			  errors={fields.title.errors}
+			/>
+			<TextareaField
+			  labelProps={{ children: 'Content' }}
+			  textareaProps={{
+				...getTextareaProps(fields.content),
+			  }}
+			  errors={fields.content.errors}
+			/>
+			<div>
+			  <Label>Images</Label>
+			  <ul className="flex flex-col gap-4">
+				{imageList.map((image, index) => (
+				  <li
+					key={image.key}
+					className="relative border-b-2 border-muted-foreground"
+				  >
+					<button
+					  className="absolute right-0 top-0 text-foreground-destructive"
+					  {...form.remove.getButtonProps({
+						name: fields.images.name,
+						index,
+					  })}
 					>
-					  <button
-						className="absolute right-0 top-0 text-foreground-destructive"
-						{...form.remove.getButtonProps({
-						  name: fields.images.name,
-						  index,
-						})}
-					  >
-						<span aria-hidden>
-						  <Icon name="cross-1" />
-						</span>{' '}
-						<span className="sr-only">
-						  Remove image {index + 1}
-						</span>
-					  </button>
-					  <ImageChooser meta={image} />
-					</li>
-				  ))}
-				</ul>
-			  </div>
-			  <Button
-				className="mt-3"
-				{...form.insert.getButtonProps({ name: fields.images.name })}
-			  >
-				<span aria-hidden>
-				  <Icon name="plus">Image</Icon>
-				</span>{' '}
-				<span className="sr-only">Add image</span>
-			  </Button>
+					  <span aria-hidden>
+						<Icon name="cross-1" />
+					  </span>{' '}
+					  <span className="sr-only">
+						Remove image {index + 1}
+					  </span>
+					</button>
+					<ImageChooser meta={image} />
+				  </li>
+				))}
+			  </ul>
 			</div>
-			<ErrorList id={form.errorId} errors={form.errors} />
-		  </Form>
-		  <div className={floatingToolbarClassName}>
+			<Button
+			  className="mt-3"
+			  {...form.insert.getButtonProps({ name: fields.images.name })}
+			>
+			  <span aria-hidden>
+				<Icon name="plus">Image</Icon>
+			  </span>{' '}
+			  <span className="sr-only">Add image</span>
+			</Button>
+		  </div>
+		  <ErrorList id={form.errorId} errors={form.errors} />
+		  
+		  {/* Move the reset and submit buttons inside the form */}
+		  <div className="flex justify-end gap-4 mt-6">
 			<Button variant="destructive" {...form.reset.getButtonProps()}>
 			  Reset
 			</Button>
@@ -182,8 +182,8 @@ import {
 			  Submit
 			</StatusButton>
 		  </div>
-		</FormProvider>
-	  </div>
+		</Form>
+	  </FormProvider>
 	)
   }
   
