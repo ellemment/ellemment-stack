@@ -49,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 function SettingsSection({ title, children }: { title: string; children: React.ReactNode }) {
 	return (
 		<div>	
-			<h2 className="mb-4 text-lg font-bold">{title}</h2>
+			<h2 className="mb-4 text-sm text-muted-foreground font-bold">{title}</h2>
 			<div className="rounded-lg bg-card border p-4">
 				<div className="flex flex-col gap-4">{children}</div>
 			</div>
@@ -129,15 +129,15 @@ export default function SettingsIndex() {
 				</Link>
 			</SettingsSection>
 
-			<SettingsSection title="Log Out">
+			<div className='rounded-lg bg-card border p-4'>
 				<Form action="/logout" method="POST">
 					<Button type="submit" variant="link" size="sm">
 						<Icon name="exit" className="mr-2">
-							Logout
+							Sign Out...
 						</Icon>
 					</Button>
 				</Form>
-			</SettingsSection>
+			</div>
 		</div>
 	)
 }

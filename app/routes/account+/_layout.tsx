@@ -177,7 +177,7 @@ export default function AccountLayout() {
             </Button>
           </div>
         </aside>
-        <main className="flex-grow bg-card border rounded-lg p-6">
+        <main className="flex-grow bg-card md:border md:p-4 rounded-lg">
           <Outlet />
         </main>
       </div>
