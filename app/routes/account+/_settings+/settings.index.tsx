@@ -7,7 +7,6 @@ import { Button } from '#app/components/ui/button.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { getUserImgSrc } from '#app/utils/misc.tsx'
 import { twoFAVerificationType } from './settings.two-factor.tsx'
 
 export const handle: SEOHandle = {
@@ -49,7 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 function SettingsSection({ title, children }: { title: string; children: React.ReactNode }) {
 	return (
 		<div>	
-			<h2 className="mb-4 text-lg font-bold">{title}</h2>
+			<h2 className="mb-4 text-sm text-muted-foreground font-bold">{title}</h2>
 			<div className="rounded-lg bg-card border p-4">
 				<div className="flex flex-col gap-4">{children}</div>
 			</div>
@@ -59,24 +58,13 @@ function SettingsSection({ title, children }: { title: string; children: React.R
 
 export default function SettingsIndex() {
 	const data = useLoaderData<typeof loader>()
-	const userDisplayName = data.user.name ?? data.user.username
+
 
 	return (
 		<div className="flex flex-col gap-6 md:gap-8">
-			<div className="flex items-center rounded-lg p-4 border bg-card">
-				<div className="relative w-16 md:w-24">
-					<img
-						src={getUserImgSrc(data.user.image?.id)}
-						alt={userDisplayName}
-						className="h-16 w-16 md:h-24 md:w-24 rounded-full object-cover"
-					/>
-				</div>
-				<div className="mt-4 flex flex-col items-start pl-4">
-					<h1 className="text-center text-2xl font-bold">{userDisplayName}</h1>
-					<p className="mt-2 text-start text-muted-foreground">
-						{data.user.username}
-					</p>
-
+			<div className="flex items-center rounded-lg">
+				<div className="mt-4 flex flex-col items-start">
+					<h1 className="text-center text-2xl font-bold">Settings</h1>
 				</div>
 			</div>
 			<SettingsSection title="Account">
@@ -129,15 +117,15 @@ export default function SettingsIndex() {
 				</Link>
 			</SettingsSection>
 
-			<SettingsSection title="Log Out">
+			<div className='rounded-lg bg-card border p-4'>
 				<Form action="/logout" method="POST">
 					<Button type="submit" variant="link" size="sm">
 						<Icon name="exit" className="mr-2">
-							Logout
+							Sign Out...
 						</Icon>
 					</Button>
 				</Form>
-			</SettingsSection>
+			</div>
 		</div>
 	)
 }
