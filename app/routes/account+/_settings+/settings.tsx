@@ -5,7 +5,6 @@ import { type SEOHandle } from '@nasa-gcn/remix-seo'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Outlet } from '@remix-run/react'
 import { z } from 'zod'
-import { Spacer } from '#app/components/spacer.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
@@ -32,12 +31,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function EditUserProfile() {
 	return (
-		<div className="m-auto mb-24 mt-16 max-w-3xl">
-			<div className="container">
-				
-			</div>
-			<Spacer size="xs" />
-			<main className="mx-auto px-6 py-8 md:container md:rounded-3xl">
+		<div className="m-auto"> 
+			<main className="">
 				<Outlet />
 			</main>
 		</div>

@@ -40,59 +40,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function ProfileRoute() {
   const data = useLoaderData<typeof loader>()
-  const { user, isLoggedInUser, isAdminAndOwner } = data
+  const { user, isLoggedInUser } = data
   const userDisplayName = user.name ?? user.username
 
   return (
-    <div className="container mb-48 mt-36 flex flex-col items-center justify-center">
-      <Spacer size="4xs" />
-      <div className="container flex flex-col items-center rounded-3xl bg-muted p-12">
-        <div className="relative w-52">
-          <div className="absolute -top-40">
-            <div className="relative">
-              <img
-                src={getUserImgSrc(user.image?.id)}
-                alt={userDisplayName}
-                className="h-52 w-52 rounded-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-        <Spacer size="sm" />
-        <div className="flex flex-col items-center">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <h1 className="text-center text-h2">{userDisplayName}</h1>
-          </div>
-          <p className="mt-2 text-center text-muted-foreground">
-            Joined {data.userJoinedDisplay}
-          </p>
-          {isLoggedInUser ? (
-            <Form action="/logout" method="POST" className="mt-3">
-              <Button type="submit" variant="link" size="pill">
-                <Icon name="exit" className="scale-125 max-md:scale-150">
-                  Logout
-                </Icon>
-              </Button>
-            </Form>
-          ) : null}
-          <div className="mt-10 flex gap-4">
-            {isLoggedInUser ? (
-              <Button asChild>
-                <Link to={`/account/settings`} prefetch="intent">
-                  Settings
-                </Link>
-              </Button>
-            ) : null}
-            {isAdminAndOwner ? (
-              <Button asChild>
-                <Link to="/admin" prefetch="intent">
-                  Dashboard
-                </Link>
-              </Button>
-            ) : null}
-          </div>
-        </div>
-      </div>
+    <div className="flex flex-col gap-6 md:gap-8">
+      <Link to="settings" className="block">
+    	<div className="flex items-center rounded-lg p-4 border bg-card">
+				<div className="relative w-16 md:w-24">
+					<img
+						src={getUserImgSrc(data.user.image?.id)}
+						alt={userDisplayName}
+						className="h-16 w-16 md:h-24 md:w-24 rounded-full object-cover"
+					/>
+				</div>
+				<div className="mt-4 flex flex-col items-start pl-4">
+					<h1 className="text-center text-2xl font-bold">{userDisplayName}</h1>
+					<p className="mt-2 text-start text-muted-foreground">
+						{data.user.username}
+					</p>
+				</div>
+			</div>
+      </Link>
     </div>
   )
 }
