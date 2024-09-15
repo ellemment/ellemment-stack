@@ -48,10 +48,10 @@ export default function ContentIndexRoute() {
 
 export const meta: MetaFunction<
   typeof loader,
-  { 'routes/admin+/content+/$username_+/content': typeof contentLoader }
+  { 'routes/account+/$username+/_content+/content': typeof contentLoader }
 > = ({ data, params, matches }) => {
   const contentMatch = matches.find(
-    (m) => m.id === 'routes/admin+/content+/$username_+/content'
+    (m) => m.id === 'routes/account+/$username+/_content+/content'
   )
   const owner = data?.owner as Owner | undefined
   const contentMatchOwner = contentMatch?.data?.owner as Owner | undefined

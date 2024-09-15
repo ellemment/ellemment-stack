@@ -107,7 +107,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   await prisma.content.delete({ where: { id: content.id } })
 
-  return redirectWithToast(`/admin/${content.owner.username}/content`, {
+  return redirectWithToast(`/account/${content.owner.username}/content`, {
     type: 'success',
     title: 'Success',
     description: 'Your content has been deleted.',
@@ -199,10 +199,10 @@ export function DeleteContent({ id }: { id: string }) {
 
 export const meta: MetaFunction<
   typeof loader,
-  { 'routes/admin+/content+/$username_+/content': typeof contentLoader }
+  { 'routes/account+/$username+/_content+/content': typeof contentLoader }
 > = ({ data, params, matches }) => {
   const contentMatch = matches.find(
-    (m) => m.id === 'routes/admin+/content+/$username_+/content',
+    (m) => m.id === 'routes/account+/$username+/_content+/content',
   )
   const displayName = contentMatch?.data?.owner.name ?? params.username
   const contentTitle = data?.content.title ?? 'Content'
