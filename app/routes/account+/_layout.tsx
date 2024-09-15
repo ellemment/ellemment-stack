@@ -76,7 +76,8 @@ export default function AccountLayout() {
   const location = useLocation()
   const isSettingsPage = location.pathname.includes('/settings')
   const isContentPage = location.pathname.includes('/content/')
-  const hideSidebarOnMobile = isSettingsPage || isContentPage
+  const isIndexPage = location.pathname === '/account'
+  const hideSidebarOnMobile = isSettingsPage || isContentPage || !isIndexPage
 
   return (
     <div className="mx-auto max-w-6xl p-4">
@@ -102,13 +103,13 @@ export default function AccountLayout() {
                 className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Icon name="avatar" className="mr-2 h-4 w-4" />
-               Account Settings
+                Account Settings
               </Link>
             </div>
           </div>
           {isAdmin && <ContentSection username={user.username} contents={user.content} />}
         </aside>
-        <main className={`flex-grow bg-card md:border md:p-4 rounded-lg ${hideSidebarOnMobile ? 'w-full' : ''}`}>
+        <main className={`flex-grow bg-card md:border md:p-4 rounded-lg ${hideSidebarOnMobile ? 'w-full' : 'hidden md:block'}`}>
           <Outlet />
         </main>
       </div>
