@@ -76,30 +76,40 @@ export default function AccountLayout() {
   const location = useLocation()
   const isSettingsPage = location.pathname.includes('/settings')
   const isContentPage = location.pathname.includes('/content/')
-  const hideSidebarOnMobile = isSettingsPage || isContentPage
+  const isIndexPage = location.pathname === '/account'
+  const hideSidebarOnMobile = isSettingsPage || isContentPage || !isIndexPage
 
   return (
     <div className="mx-auto max-w-6xl p-4">
       <div className="flex flex-col md:flex-row md:gap-4">
-        <aside className={`w-full md:min-w-80 md:w-96 mb-4 md:mb-0 ${hideSidebarOnMobile ? 'hidden md:block' : ''}`}>
-          <Link to="/account/settings" className="block">
-            <div className="bg-muted rounded-lg p-4 hover:bg-muted/80 transition-colors">
+        <aside className={`w-full md:min-w-80 md:w-80 lg:min-w-96 lg:w-96 mb-4 md:mb-0 ${hideSidebarOnMobile ? 'hidden md:block' : ''}`}>
+          <div className="bg-muted rounded-lg p-4">
+            <Link to="/account" className="block">
               <div className="flex items-center space-x-4">
                 <img
                   src={getUserImgSrc(user.image?.id)}
                   alt={user.name ?? user.username}
-                  className="h-16 w-16 rounded-full object-cover"
+                  className="h-14 w-14 rounded-full object-cover"
                 />
                 <div>
                   <h2 className="font-semibold">{user.name ?? user.username}</h2>
                   <p className="text-sm text-muted-foreground">{user.email}</p>
                 </div>
               </div>
+            </Link>
+            <div className="mt-4 pt-4 p-2 border-t border-muted-foreground/20">
+              <Link 
+                to="/account/settings" 
+                className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Icon name="avatar" className="mr-2 h-4 w-4" />
+                Account Settings
+              </Link>
             </div>
-          </Link>
+          </div>
           {isAdmin && <ContentSection username={user.username} contents={user.content} />}
         </aside>
-        <main className={`flex-grow bg-card md:border md:p-4 rounded-lg ${hideSidebarOnMobile ? 'w-full' : ''}`}>
+        <main className={`flex-grow bg-card md:border md:p-4 rounded-lg ${hideSidebarOnMobile ? 'w-full' : 'hidden md:block'}`}>
           <Outlet />
         </main>
       </div>
