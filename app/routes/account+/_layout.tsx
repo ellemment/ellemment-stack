@@ -1,7 +1,7 @@
 // app/routes/account+/_layout.tsx
 
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { Outlet, NavLink, useLoaderData } from '@remix-run/react';
+import { Outlet, Link, NavLink, useLoaderData } from '@remix-run/react';
 import { Button } from '#app/components/ui/button.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
 import { checkAdminStatus } from '#app/utils/adminstatus.ts'
@@ -145,22 +145,23 @@ export default function AccountLayout() {
     <div className="mx-auto max-w-6xl p-4">
       <div className="flex flex-col md:flex-row md:gap-4">
         <aside className="w-full md:w-72 mb-4 md:mb-0">
-          <div className="bg-muted rounded-lg p-4 mb-4">
-            <div className="flex items-center space-x-4 mb-4">
-              <img
-                src={getUserImgSrc(user.image?.id)}
-                alt={user.name ?? user.username}
-                className="h-16 w-16 rounded-full object-cover"
-              />
-              <div>
-                <h2 className="font-semibold">{user.name ?? user.username}</h2>
-                <p className="text-sm text-muted-foreground">{user.email}</p>
+          <Link to="/account" className="block">
+            <div className="bg-muted rounded-lg p-4 mb-4 hover:bg-muted/80 transition-colors">
+              <div className="flex items-center space-x-4 mb-4">
+                <img
+                  src={getUserImgSrc(user.image?.id)}
+                  alt={user.name ?? user.username}
+                  className="h-16 w-16 rounded-full object-cover"
+                />
+                <div>
+                  <h2 className="font-semibold">{user.name ?? user.username}</h2>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                </div>
               </div>
             </div>
-          </div>
-
+          </Link>
           {isAdmin && <ContentSection username={user.username} contents={user.content} />}
-  
+
           <nav className="bg-muted mt-4 rounded-lg p-4">
             {navSections.map((section) => (
               <NavSection key={section.title} section={section} />
@@ -176,7 +177,7 @@ export default function AccountLayout() {
             </Button>
           </div>
         </aside>
-        <main className="flex-grow bg-muted rounded-lg p-6">
+        <main className="flex-grow bg-card border rounded-lg p-6">
           <Outlet />
         </main>
       </div>

@@ -40,7 +40,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function ProfileRoute() {
   const data = useLoaderData<typeof loader>()
-  const { user, isLoggedInUser, isAdminAndOwner } = data
+  const { user, isLoggedInUser } = data
   const userDisplayName = user.name ?? user.username
 
   return (
@@ -65,35 +65,10 @@ export default function ProfileRoute() {
           </div>
           <p className="mt-2 text-center text-muted-foreground">
             Joined {data.userJoinedDisplay}
-          </p>
-          {isLoggedInUser ? (
-            <Form action="/logout" method="POST" className="mt-3">
-              <Button type="submit" variant="link" size="pill">
-                <Icon name="exit" className="scale-125 max-md:scale-150">
-                  Logout
-                </Icon>
-              </Button>
-            </Form>
-          ) : null}
-          <div className="mt-10 flex gap-4">
-            {isLoggedInUser ? (
-              <Button asChild>
-                <Link to={`/account/settings`} prefetch="intent">
-                  Settings
-                </Link>
-              </Button>
-            ) : null}
-            {isAdminAndOwner ? (
-              <Button asChild>
-                <Link to="/admin" prefetch="intent">
-                  Dashboard
-                </Link>
-              </Button>
-            ) : null}
+          </p> 
           </div>
         </div>
       </div>
-    </div>
   )
 }
 
