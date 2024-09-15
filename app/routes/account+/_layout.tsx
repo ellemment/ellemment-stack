@@ -1,16 +1,15 @@
 // app/routes/account+/_layout.tsx
 
-
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Outlet, NavLink, useLoaderData } from '@remix-run/react';
 import { Button } from '#app/components/ui/button.tsx'
-import { Icon } from '#app/components/ui/icon.tsx';
+import { Icon } from '#app/components/ui/icon.tsx'
+import { checkAdminStatus } from '#app/utils/adminstatus.ts'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { getUserImgSrc } from '#app/utils/misc.tsx'
 
-
-type IconName = 'avatar' | 'pencil-1' | 'camera' | 'envelope-closed' | 'lock-closed' | 'lock-open-1' | 'dots-horizontal' | 'laptop' | 'link-2' | 'download' | 'trash' | 'exit';
+type IconName = 'avatar' | 'pencil-1' | 'camera' | 'envelope-closed' | 'lock-closed' | 'lock-open-1' | 'dots-horizontal' | 'laptop' | 'link-2' | 'download' | 'trash' | 'exit' | 'file-text' | 'plus';
 
 type NavItem = {
   to: string;
@@ -21,6 +20,11 @@ type NavItem = {
 type NavSection = {
   title: string;
   items: NavItem[];
+};
+
+type Content = {
+  id: string;
+  title: string;
 };
 
 const navSections: NavSection[] = [
@@ -80,8 +84,39 @@ function NavSection({ section }: { section: NavSection }) {
   );
 }
 
+function ContentSection({ username, contents }: { username: string, contents: Content[] }) {
+  return (
+    <div className="mt-6 p-4 bg-muted rounded-lg">
+      <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Content</h2>
+      <Button asChild variant="outline" className="w-full mb-4">
+        <NavLink to={`${username}/content/new`} className="flex items-center justify-center">
+          <Icon name="plus" className="mr-2 h-4 w-4" />
+          <span className="text-sm">New Content</span>
+        </NavLink>
+      </Button>
+      <ul className="space-y-1">
+        {contents.map((content) => (
+          <li key={content.id}>
+            <NavLink
+              to={`${username}/content/${content.id}`}
+              className={({ isActive }) =>
+                `flex items-center p-2 rounded-lg ${isActive ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/80'
+                }`
+              }
+            >
+              <Icon name="file-text" className="mr-2 h-4 w-4" />
+              <span className="text-sm">{content.title}</span>
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await requireUserId(request)
+  const { isAdmin } = await checkAdminStatus(request)
   const user = await prisma.user.findUniqueOrThrow({
     where: { id: userId },
     select: {
@@ -91,14 +126,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
       email: true,
       image: { select: { id: true } },
       createdAt: true,
+      content: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
     },
   })
-  return json({ user })
+  return json({ user, isAdmin })
 }
 
 export default function AccountLayout() {
   const data = useLoaderData<typeof loader>()
-  const { user } = data
+  const { user, isAdmin } = data
 
   return (
     <div className="mx-auto max-w-6xl p-4">
@@ -117,11 +158,15 @@ export default function AccountLayout() {
               </div>
             </div>
           </div>
-          <nav className="bg-muted rounded-lg p-4">
+
+          {isAdmin && <ContentSection username={user.username} contents={user.content} />}
+  
+          <nav className="bg-muted mt-4 rounded-lg p-4">
             {navSections.map((section) => (
               <NavSection key={section.title} section={section} />
             ))}
           </nav>
+
           <div className="mt-4 p-4 bg-muted rounded-lg">
             <Button asChild variant="ghost" className="w-full justify-start">
               <NavLink to="/logout" className="flex items-center">

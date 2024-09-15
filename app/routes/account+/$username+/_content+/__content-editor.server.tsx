@@ -147,7 +147,7 @@ export async function action({ request }: ActionFunctionArgs) {
   })
 
   return redirect(
-    `/admin/${updatedContent.owner.username}/content/${updatedContent.id}`,
+    `/account/${updatedContent.owner.username}/content/${updatedContent.id}`,
   )
 }
 
