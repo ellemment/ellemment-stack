@@ -1,3 +1,5 @@
+// app/routes/account+/$username+/_content+/__content-editor.server.tsx
+
 import { parseWithZod } from '@conform-to/zod'
 import { createId as cuid } from '@paralleldrive/cuid2'
 import {
@@ -7,14 +9,13 @@ import {
   redirect,
   type ActionFunctionArgs,
 } from '@remix-run/node'
-import { z } from 'zod'
 import { checkAdminStatus, checkOwnerStatus } from '#app/utils/adminstatus.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import {
   MAX_UPLOAD_SIZE,
   ContentEditorSchema,
   type ImageFieldset,
-} from './__content-editor'
+} from './utils/contentEditorSchema'
 
 function imageHasFile(
   image: ImageFieldset,
@@ -36,6 +37,8 @@ export async function action({ request }: ActionFunctionArgs) {
     createMemoryUploadHandler({ maxPartSize: MAX_UPLOAD_SIZE }),
   )
 
+  const action = formData.get('_action')
+
   const submission = await parseWithZod(formData, {
     schema: ContentEditorSchema.superRefine(async (data, ctx) => {
       if (!data.id) return // This is a new content creation
@@ -45,14 +48,14 @@ export async function action({ request }: ActionFunctionArgs) {
       })
       if (!content) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Content not found',
         })
       } else {
         const { isOwner } = await checkOwnerStatus(request, content.ownerId)
         if (!isAdmin && !isOwner) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: 'You do not have permission to edit this content',
           })
         }
@@ -123,18 +126,22 @@ export async function action({ request }: ActionFunctionArgs) {
     }
   }
 
+  const isPublished = action === 'publish'
+
   const updatedContent = await prisma.content.upsert({
-    select: { id: true, owner: { select: { username: true } } },
+    select: { id: true, ownerId: true },
     where: { id: contentId ?? '__new_content__' },
     create: {
       ownerId: userId,
       title,
-      content,
+      content, // Save HTML content as-is
       images: { create: newImages },
+      status: isPublished ? 'published' : 'draft',
     },
     update: {
       title,
-      content,
+      content, // Save HTML content as-is
+      status: isPublished ? 'published' : 'draft',
       images: {
         deleteMany: { id: { notIn: imageUpdates.map((i) => i.id) } },
         updateMany: imageUpdates.map((updates) => ({
@@ -146,10 +153,24 @@ export async function action({ request }: ActionFunctionArgs) {
     },
   })
 
+  if (action === 'saveDraft') {
+    return json({ draftSaved: true, contentId: updatedContent.id })
+  }
+
+  const owner = await prisma.user.findUnique({
+    where: { id: updatedContent.ownerId },
+    select: { username: true },
+  })
+
+  if (!owner) {
+    throw new Error('Owner not found')
+  }
+
   return redirect(
-    `/account/${updatedContent.owner.username}/content/${updatedContent.id}`,
+    `/account/${owner.username}/content/${updatedContent.id}`,
   )
 }
+
 
 async function getContentOwnerId(contentId: string): Promise<string | null> {
   const content = await prisma.content.findUnique({

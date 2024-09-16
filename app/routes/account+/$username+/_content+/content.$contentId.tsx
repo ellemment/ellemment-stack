@@ -1,4 +1,4 @@
-// app/routes/admin+/content+/$username_+/content.$contentId.tsx
+// app/routes/account+/$username+/_content+/content.$contentId.tsx
 
 import { getFormProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
@@ -16,9 +16,9 @@ import {
   type MetaFunction,
 } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
+import DOMPurify from 'dompurify'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-import { floatingToolbarClassName } from '#app/components/floating-toolbar.tsx'
 import { ErrorList } from '#app/components/forms.tsx'
 import { Button } from '#app/components/ui/button.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
@@ -28,6 +28,7 @@ import { prisma } from '#app/utils/db.server.ts'
 import { getContentImgSrc, useIsPending } from '#app/utils/misc.tsx'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { type loader as contentLoader } from './content.tsx'
+
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { isAdmin } = await checkAdminStatus(request)
@@ -116,9 +117,17 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ContentRoute() {
   const data = useLoaderData<typeof loader>()
+
+  if (!data || !data.content) {
+    return <div>Error loading content. Please try again.</div>
+  }
+
   const { content, timeAgo, isOwner, isAdmin } = data
   const canEdit = isAdmin || (isOwner && isAdmin)
   const canDelete = isAdmin || (isOwner && isAdmin)
+
+  // Sanitize the HTML content
+  const sanitizedContent = DOMPurify.sanitize(content.content)
 
   return (
     <div className="flex flex-col px-10">
@@ -137,9 +146,10 @@ export default function ContentRoute() {
             </li>
           ))}
         </ul>
-        <p className="whitespace-break-spaces text-sm md:text-lg">
-          {content.content}
-        </p>
+        <div 
+          className="whitespace-break-spaces text-sm md:text-lg"
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+        />
       </div>
       {(canEdit || canDelete) && (
         <>
@@ -168,6 +178,7 @@ export default function ContentRoute() {
     </div>
   )
 }
+
 export function DeleteContent({ id }: { id: string }) {
   const actionData = useActionData<typeof action>()
   const isPending = useIsPending()

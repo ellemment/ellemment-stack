@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link } from '@remix-run/react';
+import React from 'react';
 
 const Logo: React.FC = () => {
     return (
