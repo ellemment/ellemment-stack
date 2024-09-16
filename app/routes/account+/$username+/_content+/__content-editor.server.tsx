@@ -125,6 +125,9 @@ export async function action({ request }: ActionFunctionArgs) {
     }
   }
 
+
+  // app/routes/account+/$username+/_content+/__content-editor.server.tsx
+
   const updatedContent = await prisma.content.upsert({
     select: { id: true, owner: { select: { username: true } } },
     where: { id: contentId ?? '__new_content__' },
@@ -147,6 +150,25 @@ export async function action({ request }: ActionFunctionArgs) {
       },
     },
   })
+
+  // Handle image upload
+  const uploadedImage = formData.get('image') as File | null
+  if (uploadedImage) {
+    const imageBuffer = await uploadedImage.arrayBuffer()
+    const newImage = {
+      contentId: updatedContent.id,
+      altText: '',
+      contentType: uploadedImage.type,
+      blob: Buffer.from(imageBuffer),
+    }
+    await prisma.contentImage.create({
+      data: newImage,
+    })
+  }
+
+  if (formData.get('_action') === 'autoSave') {
+    return json({ success: true, contentId: updatedContent.id })
+  }
 
   return redirect(
     `/account/${updatedContent.owner.username}/content/${updatedContent.id}`,
