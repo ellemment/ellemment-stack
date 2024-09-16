@@ -189,6 +189,7 @@ function App() {
 	const showHeader = (() => {
 	  if (
 		location.pathname.startsWith('/admin') ||
+		location.pathname.startsWith('/account') ||
 		location.pathname.startsWith('/login')
 	  ) {
 		return false;
