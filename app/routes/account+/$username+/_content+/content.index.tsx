@@ -1,3 +1,5 @@
+// app/routes/account+/$username+/_content+/content.index.tsx
+
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, type MetaFunction } from '@remix-run/react'
 import { checkAdminStatus, requireAdminAccess } from '#app/utils/adminstatus.ts'

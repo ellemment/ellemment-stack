@@ -17,7 +17,6 @@ import {
   import { useState } from 'react'
   import { z } from 'zod'
   import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-  import { floatingToolbarClassName } from '#app/components/floating-toolbar.tsx'
   import { ErrorList, Field, TextareaField } from '#app/components/forms.tsx'
   import { Button } from '#app/components/ui/button.tsx'
   import { Icon } from '#app/components/ui/icon.tsx'
