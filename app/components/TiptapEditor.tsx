@@ -148,7 +148,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
         >
           Insert Image
         </Button>
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} className='w-full' />
         <input 
           type="file"
           ref={fileInputRef}
