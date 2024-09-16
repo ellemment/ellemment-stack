@@ -1,12 +1,12 @@
-import { cn } from "#app/ellemment-ui/lib/utils";
-import React from "react";
-import { BentoGrid, BentoGridItem } from "#app/components/landing-utility/bento-grid";
 import {
   IconClipboardCopy,
   IconFileBroken,
   IconSignature,
   IconTableColumn,
 } from "@tabler/icons-react";
+import React from "react";
+import { BentoGrid, BentoGridItem } from "#app/components/landing-utility/bento-grid";
+import { cn } from "#app/ellemment-ui/lib/utils";
 
 export default function Discover() {
   return (

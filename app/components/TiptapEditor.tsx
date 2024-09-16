@@ -1,29 +1,38 @@
-// app/components/TiptapEditor.tsx
-
+import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import React from 'react'
+import React, { useRef, useCallback } from 'react'
 import { Button } from './ui/button'
 
 interface TiptapEditorProps {
+  title: string
   content: string
-  onChange: (content: string) => void
+  onTitleChange: (title: string) => void
+  onContentChange: (content: string) => void
+  onImageUpload: (file: File) => void
 }
 
-const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, onChange }) => {
+const TiptapEditor: React.FC<TiptapEditorProps> = ({ 
+  title, 
+  content, 
+  onTitleChange, 
+  onContentChange,
+  onImageUpload 
+}) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
+      Image,
       Placeholder.configure({
-        placeholder: 'Type "/" for commands...',
+        placeholder: 'Start writing your content here...',
       }),
     ],
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML())
+      onContentChange(editor.getHTML())
     },
     editorProps: {
       attributes: {
@@ -32,87 +41,123 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, onChange }) => {
     },
   })
 
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    fileInputRef.current?.click()
+  }, [])
+
+  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      onImageUpload(file)
+      const url = URL.createObjectURL(file)
+      editor?.chain().focus().setImage({ src: url }).run()
+    }
+  }, [editor, onImageUpload])
+
   if (!editor) {
     return null
   }
 
+  const handleButtonClick = (action: () => boolean) => (e: React.MouseEvent) => {
+    e.preventDefault()
+    action()
+  }
+
   return (
-    <div className="tiptap-editor border rounded-md">
-      <div className="border-b p-2 flex flex-wrap gap-2">
-        <Button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={editor.isActive('heading', { level: 1 }) ? 'is-active bg-muted' : ''}
+    <div className="tiptap-editor">
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => onTitleChange(e.target.value)}
+        placeholder="Untitled"
+        className="w-full text-2xl font-bold mb-4 p-2 border bg-card rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <div className="border rounded-md">
+        <div className="border-b p-2 flex flex-wrap gap-2">
+          <Button
+            onClick={handleButtonClick(() => editor.chain().focus().toggleHeading({ level: 2 }).run())}
+            className={editor.isActive('heading', { level: 2 }) ? 'is-active bg-muted' : ''}
+            size="sm"
+            variant="outline"
+          >
+            H2
+          </Button>
+          <Button
+            onClick={handleButtonClick(() => editor.chain().focus().toggleBold().run())}
+            className={editor.isActive('bold') ? 'is-active bg-muted' : ''}
+            size="sm"
+            variant="outline"
+          >
+            Bold
+          </Button>
+          <Button 
+            onClick={handleButtonClick(() => editor.chain().focus().toggleItalic().run())}
+            className={editor.isActive('italic') ? 'is-active bg-muted' : ''}
+            size="sm"
+            variant="outline"
+          >
+            Italic
+          </Button>
+          <Button
+            onClick={handleButtonClick(() => editor.chain().focus().toggleUnderline().run())}  
+            className={editor.isActive('underline') ? 'is-active bg-muted' : ''}
+            size="sm"
+            variant="outline"
+          >
+            Underline
+          </Button>
+          <Button
+            onClick={handleButtonClick(() => editor.chain().focus().toggleBulletList().run())}
+            className={editor.isActive('bulletList') ? 'is-active bg-muted' : ''}
+            size="sm" 
+            variant="outline"
+          >
+            Bullet List
+          </Button>
+          <Button
+            onClick={handleButtonClick(() => editor.chain().focus().toggleOrderedList().run())}
+            className={editor.isActive('orderedList') ? 'is-active bg-muted' : ''}
+            size="sm"
+            variant="outline" 
+          >
+            Numbered List
+          </Button>
+          <Button
+            onClick={handleButtonClick(() => editor.chain().focus().toggleCodeBlock().run())} 
+            className={editor.isActive('codeBlock') ? 'is-active bg-muted' : ''}
+            size="sm"
+            variant="outline"
+          >
+            Code Block
+          </Button>
+          <Button
+            onClick={handleButtonClick(() => editor.chain().focus().toggleBlockquote().run())}
+            className={editor.isActive('blockquote') ? 'is-active bg-muted' : ''}
+            size="sm" 
+            variant="outline"
+          >
+            Quote
+          </Button>
+          <Button
+          onClick={handleImageUpload}
           size="sm"
-          variant="outline"
+          variant="outline"  
         >
-          H1
+          Insert Image
         </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={editor.isActive('heading', { level: 2 }) ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          H2
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive('bold') ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          Bold
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive('italic') ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          Italic
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={editor.isActive('underline') ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          Underline
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive('bulletList') ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          Bullet List
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive('orderedList') ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          Numbered List
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive('codeBlock') ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          Code Block
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive('blockquote') ? 'is-active bg-muted' : ''}
-          size="sm"
-          variant="outline"
-        >
-          Quote
-        </Button>
+        <EditorContent editor={editor} />
+        <input 
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileInput}
+          style={{ display: 'none' }}
+          accept="image/*"
+        />
+        </div>
       </div>
-      <EditorContent editor={editor} />
     </div>
   )
 }

@@ -1,8 +1,8 @@
 // app/ellemment-ui/components/navigation/navbar-md.tsx
 
-import React from "react";
-import { motion } from "framer-motion";
 import { Link } from "@remix-run/react";
+import { motion } from "framer-motion";
+import React from "react";
 
 const transition = {
   type: "spring",

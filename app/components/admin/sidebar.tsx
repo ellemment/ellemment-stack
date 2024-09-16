@@ -1,9 +1,9 @@
 "use client";
-import { cn } from '#app/utils/misc.tsx'
 import { Link } from '@remix-run/react';
-import React, { useState, createContext, useContext } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState, createContext, useContext } from "react";
+import { cn } from '#app/utils/misc.tsx'
 
 interface Links {
   label: string;
