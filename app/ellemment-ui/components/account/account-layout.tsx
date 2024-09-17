@@ -83,7 +83,7 @@ function ContentSection({ username, contents }: { username: string; contents: Co
   const isContentPage = location.pathname.includes('/content/');
 
   return (
-    <div className={`mt-4 p-4 ${isContentPage ? 'hidden md:block' : ''}`}>
+    <div className={`mt-4 p-4 rounded-lg  lg:ring-zinc-950/5 dark:lg:ring-white/10 ${isContentPage ? 'hidden md:block' : ''}`}>
       <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Content</h2>
       <Button asChild variant="outline" className="w-full mb-4">
         <NavLink to={`${username}/content/new`} className="flex items-center justify-center">
@@ -154,23 +154,23 @@ export function AccountLayout({
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <Avatar slot="icon" src="/img/beta.png" className='bg-gray-200'  />
-                <SidebarLabel>ellemment</SidebarLabel>
+                <SidebarLabel>Creemson Beta</SidebarLabel>
                 <ChevronDownIcon />
               </DropdownButton>
               <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
                 <DropdownItem href="#">
-                  <Avatar slot="icon" src="/img/beta.png" className='bg-gray-200' />
+                  <Avatar slot="icon" src="/img/beta.png" className='bg-green-500' />
                   <DropdownLabel>Betav1.0</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
                 <DropdownItem href="#">
                   <Avatar slot="icon" src="/img/beta.png" className='bg-gray-200'/>
-                  <DropdownLabel>Betav2.0</DropdownLabel>
+                  <DropdownLabel className='text-gray-500/50'>Betav2.0</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
                 <DropdownItem href="#">
                   <Avatar slot="icon" src="/img/beta.png" className='bg-gray-200' />
-                  <DropdownLabel>Betav3.0</DropdownLabel>
+                  <DropdownLabel className='text-gray-500/50'>Betav3.0</DropdownLabel>
                 </DropdownItem>
              
 
@@ -179,39 +179,12 @@ export function AccountLayout({
           </SidebarHeader>
 
           <SidebarBody>
-            <SidebarSection>
-              <SidebarItem current={location.pathname === '/account'}>
-                <Link to="/" className="flex items-center">
-                  <HomeIcon className='w-14 h-14 p-2' />
-                  <SidebarLabel>Account</SidebarLabel>
-                </Link>
-              </SidebarItem>
-              <SidebarItem current={location.pathname.startsWith('/account/settings')}>
-                <Link to="/account/settings" className="flex items-center">
-                  <Cog6ToothIcon className='w-14 h-14 p-2' />
-                  <SidebarLabel>Settings</SidebarLabel>
-                </Link>
-              </SidebarItem>
-            </SidebarSection>
-
             {isAdmin && (
               <SidebarSection>
                 <ContentSection username={user.username} contents={user.content} />
               </SidebarSection>
             )}
-
             <SidebarSpacer />
-
-            <SidebarSection>
-              <SidebarItem href="#">
-                <QuestionMarkCircleIcon />
-                <SidebarLabel>Support</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="#">
-                <SparklesIcon />
-                <SidebarLabel>Changelog</SidebarLabel>
-              </SidebarItem>
-            </SidebarSection>
           </SidebarBody>
 
           <SidebarFooter className="max-lg:hidden ">
@@ -236,9 +209,9 @@ export function AccountLayout({
         </Sidebar>
       }
     >
-      <div className="mx-auto max-w-6xl p-4">
+      <div className="mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row md:gap-4">
-          <main className={`flex-grow bg-card md:border md:p-4 rounded-lg ${hideSidebarOnMobile ? 'w-full' : 'hidden md:block'}`}>
+          <main className={`flex-grow md:px-4 rounded-lg ${hideSidebarOnMobile ? 'w-full' : 'hidden md:block'}`}>
             {children}
           </main>
         </div>

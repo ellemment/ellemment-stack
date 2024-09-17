@@ -1,15 +1,30 @@
-'use client'
 
+import { Link } from '@remix-run/react'
 import clsx from 'clsx'
-import   type React, { type type createContext, type type useContext, type type useState } from 'react'
-import { Link } from './link'
+import { createContext, useContext, type ReactNode } from 'react'
 
-const TableContext = createContext<{ bleed: boolean; dense: boolean; grid: boolean; striped: boolean }>({
+interface TableContextType {
+  bleed: boolean;
+  dense: boolean;
+  grid: boolean;
+  striped: boolean;
+}
+
+const TableContext = createContext<TableContextType>({
   bleed: false,
   dense: false,
   grid: false,
   striped: false,
 })
+
+interface TableProps extends React.HTMLAttributes<HTMLDivElement> {
+  bleed?: boolean;
+  dense?: boolean;
+  grid?: boolean;
+  striped?: boolean;
+  className?: string;
+  children: ReactNode;
+}
 
 export function Table({
   bleed = false,
@@ -19,9 +34,9 @@ export function Table({
   className,
   children,
   ...props
-}: { bleed?: boolean; dense?: boolean; grid?: boolean; striped?: boolean } & React.ComponentPropsWithoutRef<'div'>) {
+}: TableProps) {
   return (
-    <TableContext.Provider value={{ bleed, dense, grid, striped } as React.ContextType<typeof TableContext>}>
+    <TableContext.Provider value={{ bleed, dense, grid, striped }}>
       <div className="flow-root">
         <div {...props} className={clsx(className, '-mx-[--gutter] overflow-x-auto whitespace-nowrap')}>
           <div className={clsx('inline-block min-w-full align-middle', !bleed && 'sm:px-[--gutter]')}>
@@ -33,19 +48,36 @@ export function Table({
   )
 }
 
-export function TableHead({ className, ...props }: React.ComponentPropsWithoutRef<'thead'>) {
+interface TableHeadProps extends React.HTMLAttributes<HTMLTableSectionElement> {
+  className?: string;
+}
+
+export function TableHead({ className, ...props }: TableHeadProps) {
   return <thead {...props} className={clsx(className, 'text-zinc-500 dark:text-zinc-400')} />
 }
 
-export function TableBody(props: React.ComponentPropsWithoutRef<'tbody'>) {
+export function TableBody(props: React.HTMLAttributes<HTMLTableSectionElement>) {
   return <tbody {...props} />
 }
 
-const TableRowContext = createContext<{ href?: string; target?: string; title?: string }>({
+interface TableRowContextType {
+  href?: string;
+  target?: string;
+  title?: string;
+}
+
+const TableRowContext = createContext<TableRowContextType>({
   href: undefined,
   target: undefined,
   title: undefined,
 })
+
+interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  href?: string;
+  target?: string;
+  title?: string;
+  className?: string;
+}
 
 export function TableRow({
   href,
@@ -53,11 +85,11 @@ export function TableRow({
   title,
   className,
   ...props
-}: { href?: string; target?: string; title?: string } & React.ComponentPropsWithoutRef<'tr'>) {
-  let { striped } = useContext(TableContext)
+}: TableRowProps) {
+  const { striped } = useContext(TableContext)
 
   return (
-    <TableRowContext.Provider value={{ href, target, title } as React.ContextType<typeof TableRowContext>}>
+    <TableRowContext.Provider value={{ href, target, title }}>
       <tr
         {...props}
         className={clsx(
@@ -73,8 +105,12 @@ export function TableRow({
   )
 }
 
-export function TableHeader({ className, ...props }: React.ComponentPropsWithoutRef<'th'>) {
-  let { bleed, grid } = useContext(TableContext)
+interface TableHeaderProps extends React.ThHTMLAttributes<HTMLTableHeaderCellElement> {
+  className?: string;
+}
+
+export function TableHeader({ className, ...props }: TableHeaderProps) {
+  const { bleed, grid } = useContext(TableContext)
 
   return (
     <th
@@ -89,14 +125,17 @@ export function TableHeader({ className, ...props }: React.ComponentPropsWithout
   )
 }
 
-export function TableCell({ className, children, ...props }: React.ComponentPropsWithoutRef<'td'>) {
-  let { bleed, dense, grid, striped } = useContext(TableContext)
-  let { href, target, title } = useContext(TableRowContext)
-  let [cellRef, setCellRef] = useState<HTMLElement | null>(null)
+interface TableCellProps extends React.TdHTMLAttributes<HTMLTableDataCellElement> {
+  className?: string;
+  children: ReactNode;
+}
+
+export function TableCell({ className, children, ...props }: TableCellProps) {
+  const { bleed, dense, grid, striped } = useContext(TableContext)
+  const { href, target, title } = useContext(TableRowContext)
 
   return (
     <td
-      ref={href ? setCellRef : undefined}
       {...props}
       className={clsx(
         className,
@@ -110,10 +149,10 @@ export function TableCell({ className, children, ...props }: React.ComponentProp
       {href && (
         <Link
           data-row-link
-          href={href}
+          to={href}
           target={target}
           aria-label={title}
-          tabIndex={cellRef?.previousElementSibling === null ? 0 : -1}
+          tabIndex={0}
           className="absolute inset-0 focus:outline-none"
         />
       )}

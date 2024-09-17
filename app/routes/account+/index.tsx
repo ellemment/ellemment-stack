@@ -35,7 +35,7 @@ export default function ProfileRoute() {
   const { user } = data
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8">
+    <div className="flex flex-col gap-6 md:gap-8 bg-transparent">
       <div className="mt-4 flex flex-col items-start">
         <h1 className="text-center text-2xl font-bold">Spaces</h1>
         <p className="mt-2 text-start text-muted-foreground">{user.username}</p>

@@ -218,7 +218,7 @@ function App() {
 			<Outlet />
 		  </div>
   
-		  <footer className="container flex justify-between pb-5">
+		  <footer className="">
 		  </footer>
 		</div>
 		<EpicToaster closeButton position="top-center" theme={theme} />
