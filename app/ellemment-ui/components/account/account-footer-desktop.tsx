@@ -1,8 +1,7 @@
-// app/ellemment-ui/components/account/account-footer.tsx
+// app/ellemment-ui/components/account/account-footer-desktop.tsx
 
-
-import { Cog8ToothIcon } from '@heroicons/react/16/solid';
-import { Link } from '@remix-run/react';
+import { Link } from '@remix-run/react'
+import { Icon } from '#app/components/ui/icon'
 import { getUserImgSrc } from '#app/utils/misc';
 import { Avatar } from './avatar';
 import { SidebarDivider } from './sidebar';
@@ -15,13 +14,13 @@ interface User {
   image?: { id: string } | null;
 }
 
-interface AccountFooterProps {
+interface AccountFooterDesktopProps {
   user: User;
 }
 
-export function AccountFooter({ user }: AccountFooterProps) {
+export function AccountFooterDesktop({ user }: AccountFooterDesktopProps) {
   return (
-    <>
+    <div className="hidden lg:block">
       <span className="min-w-0">
         <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
           Beta Versions
@@ -41,9 +40,9 @@ export function AccountFooter({ user }: AccountFooterProps) {
           </span>
         </span>
         <Link to="/account/settings" className="ml-2">
-          <Cog8ToothIcon className="h-5 w-5 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200" />
+          <Icon name="settings" className="h-5 w-5 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200" />
         </Link>
       </Link>
-    </>
+    </div>
   );
 }

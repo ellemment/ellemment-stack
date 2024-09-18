@@ -1,4 +1,4 @@
-// app/ellemment-ui/components/account/account-panel.tsx
+//  app/ellemment-ui/components/account/account-panel-mobile.tsx
 
 import { NavLink, useLocation } from '@remix-run/react';
 import { Button } from '#app/components/ui/button';
@@ -9,17 +9,17 @@ type Content = {
   title: string;
 };
 
-interface AccountPanelProps {
+interface AccountPanelMobileProps {
   username: string;
   contents: Content[];
 }
 
-export function AccountPanel({ username, contents }: AccountPanelProps) {
+export function AccountPanelMobile({ username, contents }: AccountPanelMobileProps) {
   const location = useLocation();
   const isContentPage = location.pathname.includes('/content/');
 
   return (
-    <div className={`${isContentPage ? 'hidden md:block' : ''}`}>
+    <div className={`lg:hidden m-4 ${isContentPage ? 'hidden md:block' : ''}`}>
       <Button asChild variant="outline" className="w-full mb-4">
         <NavLink to={`${username}/content/new`} className="flex items-center justify-center">
           <Icon name="plus" className="mr-2 h-4 w-4" />
@@ -32,8 +32,7 @@ export function AccountPanel({ username, contents }: AccountPanelProps) {
             <NavLink
               to={`${username}/content/${content.id}`}
               className={({ isActive }) =>
-                `flex items-center p-2 rounded-lg ${isActive ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/80'
-                }`
+                `flex items-center p-2 rounded-lg ${isActive ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/80'}`
               }
             >
               <Icon name="file-text" className="mr-2 h-4 w-4" />
