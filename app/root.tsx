@@ -189,6 +189,7 @@ function App() {
 	const showHeader = (() => {
 	  if (
 		location.pathname.startsWith('/admin') ||
+		location.pathname.startsWith('/account') ||
 		location.pathname.startsWith('/login')
 	  ) {
 		return false;
@@ -217,7 +218,7 @@ function App() {
 			<Outlet />
 		  </div>
   
-		  <footer className="container flex justify-between pb-5">
+		  <footer className="">
 		  </footer>
 		</div>
 		<EpicToaster closeButton position="top-center" theme={theme} />

@@ -49,7 +49,7 @@ function SettingsSection({ title, children }: { title: string; children: React.R
 	return (
 		<div>	
 			<h2 className="mb-4 text-sm text-muted-foreground font-bold">{title}</h2>
-			<div className="rounded-lg bg-card border p-4">
+			<div className="rounded-lg border p-4">
 				<div className="flex flex-col gap-4">{children}</div>
 			</div>
 		</div>
@@ -61,7 +61,7 @@ export default function SettingsIndex() {
 
 
 	return (
-		<div className="flex flex-col gap-6 md:gap-8">
+		<div className="flex flex-col gap-6 md:gap-8 bg-transparent">
 			<div className="flex items-center rounded-lg">
 				<div className="mt-4 flex flex-col items-start">
 					<h1 className="text-center text-2xl font-bold">Settings</h1>
@@ -117,7 +117,7 @@ export default function SettingsIndex() {
 				</Link>
 			</SettingsSection>
 
-			<div className='rounded-lg bg-card border p-4'>
+			<div className='rounded-lg border p-4'>
 				<Form action="/logout" method="POST">
 					<Button type="submit" variant="link" size="sm">
 						<Icon name="exit" className="mr-2">
