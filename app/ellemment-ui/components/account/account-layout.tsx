@@ -1,77 +1,33 @@
 // app/ellemment-ui/components/account/account-layout.tsx
 
 import {
-  ArrowRightStartOnRectangleIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   Cog8ToothIcon,
-  LightBulbIcon,
-  ShieldCheckIcon,
-  UserCircleIcon,
+  MagnifyingGlassIcon,
+  MoonIcon,
+  Bars2Icon
 } from '@heroicons/react/16/solid';
-import {
-  Cog6ToothIcon,
-  HomeIcon,
-  QuestionMarkCircleIcon,
-  SparklesIcon,
-} from '@heroicons/react/20/solid';
+
 
 import { Link, NavLink, useLocation } from '@remix-run/react';
 import React from 'react';
 
 import { Button } from '#app/components/ui/button';
 import { Icon } from '#app/components/ui/icon';
+import { getUserImgSrc } from '#app/utils/misc';
 import { Avatar } from './avatar';
 
-import {
-  Dropdown,
-  DropdownButton,
-  DropdownDivider,
-  DropdownItem,
-  DropdownLabel,
-  DropdownMenu,
-} from './dropdown';
-import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from './navbar';
 import {
   Sidebar,
   SidebarBody,
   SidebarFooter,
   SidebarHeader,
-  SidebarHeading,
-  SidebarItem,
   SidebarLabel,
   SidebarSection,
   SidebarSpacer,
+  SidebarDivider
 } from './sidebar';
 import { SidebarLayout } from './sidebar-layout';
 
-
-
-
-function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' }) {
-  return (
-    <DropdownMenu className="min-w-64" anchor={anchor}>
-      <DropdownItem href="/account">
-        <UserCircleIcon />
-        <DropdownLabel>My account</DropdownLabel>
-      </DropdownItem>
-      <DropdownDivider />
-      <DropdownItem href="#">
-        <ShieldCheckIcon />
-        <DropdownLabel>Privacy policy</DropdownLabel>
-      </DropdownItem>
-      <DropdownItem href="#">
-        <LightBulbIcon />
-        <DropdownLabel>Share feedback</DropdownLabel>
-      </DropdownItem>
-      <DropdownDivider />
-      <DropdownItem href="/account/settings">
-        <Cog8ToothIcon />
-        <DropdownLabel>Settings</DropdownLabel>
-      </DropdownItem>
-    </DropdownMenu>
-  );
-}
 
 type Content = {
   id: string;
@@ -83,7 +39,7 @@ function ContentSection({ username, contents }: { username: string; contents: Co
   const isContentPage = location.pathname.includes('/content/');
 
   return (
-    <div className={`mt-4 p-4 rounded-lg  lg:ring-zinc-950/5 dark:lg:ring-white/10 ${isContentPage ? 'hidden md:block' : ''}`}>
+    <div className={`${isContentPage ? 'hidden md:block' : ''}`}>
       <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Content</h2>
       <Button asChild variant="outline" className="w-full mb-4">
         <NavLink to={`${username}/content/new`} className="flex items-center justify-center">
@@ -128,94 +84,76 @@ export function AccountLayout({
   children: React.ReactNode;
 }) {
   const location = useLocation();
-  const isSettingsPage = location.pathname.includes('/settings');
-  const isContentPage = location.pathname.includes('/content/');
-  const isIndexPage = location.pathname === '/account';
-  const hideSidebarOnMobile = isSettingsPage || isContentPage || !isIndexPage;
+  const isAccountPage = location.pathname === '/account';
+
+  const sidebarContent = (
+    <Sidebar>
+      <SidebarHeader>
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center">
+            <Link to="/account">
+              <SidebarLabel className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">ellemment</SidebarLabel>
+            </Link>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Link to="/account" className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
+              <MagnifyingGlassIcon className="h-5 w-5" />
+            </Link>
+            <Link to="/account" className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
+              <MoonIcon className="h-5 w-5" />
+            </Link>
+            <Link to="/account" className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
+              <Bars2Icon className="h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </SidebarHeader>
+
+      <SidebarBody>
+        {isAdmin && (
+          <SidebarSection>
+            <ContentSection username={user.username} contents={user.content} />
+          </SidebarSection>
+        )}
+        <SidebarSpacer />
+      </SidebarBody>
+
+      <SidebarFooter>
+        <span className="min-w-0">
+          <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
+            Spaces
+          </span>
+        </span>
+        <SidebarDivider />
+        <Link to="/account" className="flex items-center justify-between p-4">
+          <span className="flex min-w-0 items-center gap-3">
+            <Avatar src={getUserImgSrc(user.image?.id)} className="size-4" square alt={user.name || user.username} />
+            <span className="min-w-0">
+              <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
+                {user.name || user.username}
+              </span>
+              <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
+                {user.email}
+              </span>
+            </span>
+          </span>
+          <Link to="/account/settings" className="ml-2">
+            <Cog8ToothIcon className="h-5 w-5 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200" />
+          </Link>
+        </Link>
+      </SidebarFooter>
+    </Sidebar>
+  );
 
   return (
     <SidebarLayout
       navbar={
-        <Navbar>
-          <NavbarSpacer />
-          <NavbarSection>
-            <Dropdown>
-              <DropdownButton as={NavbarItem}>
-                <Avatar src="/users/erica.jpg" square />
-              </DropdownButton>
-              <AccountDropdownMenu anchor="bottom end" />
-            </Dropdown>
-          </NavbarSection>
-        </Navbar>
+        <Avatar src={getUserImgSrc(user.image?.id)} square />
       }
-      sidebar={
-        <Sidebar>
-          <SidebarHeader>
-            <Dropdown>
-              <DropdownButton as={SidebarItem}>
-                <Avatar slot="icon" src="/img/beta.png" className='bg-gray-200'  />
-                <SidebarLabel>Creemson Beta</SidebarLabel>
-                <ChevronDownIcon />
-              </DropdownButton>
-              <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
-                <DropdownItem href="#">
-                  <Avatar slot="icon" src="/img/beta.png" className='bg-green-500' />
-                  <DropdownLabel>Betav1.0</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="#">
-                  <Avatar slot="icon" src="/img/beta.png" className='bg-gray-200'/>
-                  <DropdownLabel className='text-gray-500/50'>Betav2.0</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="#">
-                  <Avatar slot="icon" src="/img/beta.png" className='bg-gray-200' />
-                  <DropdownLabel className='text-gray-500/50'>Betav3.0</DropdownLabel>
-                </DropdownItem>
-             
-
-              </DropdownMenu>
-            </Dropdown>
-          </SidebarHeader>
-
-          <SidebarBody>
-            {isAdmin && (
-              <SidebarSection>
-                <ContentSection username={user.username} contents={user.content} />
-              </SidebarSection>
-            )}
-            <SidebarSpacer />
-          </SidebarBody>
-
-          <SidebarFooter className="max-lg:hidden ">
-            <Dropdown>
-              <DropdownButton as={SidebarItem}>
-                <span className="flex min-w-0 items-center gap-3">
-                  <Avatar src={user.image ? `/users/${user.image.id}` : undefined} className="size-4" square alt="" />
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      {user.name || user.username}
-                    </span>
-                    <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      {user.email}
-                    </span>
-                  </span>
-                </span>
-                <ChevronUpIcon />
-              </DropdownButton>
-              <AccountDropdownMenu anchor="top start" />
-            </Dropdown>
-          </SidebarFooter>
-        </Sidebar>
-      }
+      sidebar={sidebarContent}
     >
-      <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col md:flex-row md:gap-4">
-          <main className={`flex-grow md:px-4 rounded-lg ${hideSidebarOnMobile ? 'w-full' : 'hidden md:block'}`}>
-            {children}
-          </main>
-        </div>
-      </div>
+      {!isAccountPage && children}
     </SidebarLayout>
   );
 }
