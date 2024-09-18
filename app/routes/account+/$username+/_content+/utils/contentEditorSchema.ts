@@ -1,3 +1,5 @@
+// app/routes/account+/$username+/_content+/utils/contentEditorSchema.ts
+
 import { z } from 'zod'
 
 export const titleMinLength = 1

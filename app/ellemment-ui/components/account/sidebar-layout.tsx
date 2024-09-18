@@ -1,15 +1,8 @@
 // app/ellemment-ui/components/account/sidebar-layout.tsx
 'use client'
-import {
-  MagnifyingGlassIcon,
-  MoonIcon,
-  Bars2Icon
-} from '@heroicons/react/16/solid';
-import { Link, useLocation } from '@remix-run/react';
+import { useLocation } from '@remix-run/react';
 import React from 'react'
-import {
-  SidebarLabel,
-} from './sidebar';
+import { AccountHeader } from './account-header';
 
 
 function MobileLayout({ children }: React.PropsWithChildren<{}>) {
@@ -30,35 +23,21 @@ export function SidebarLayout({
   return (
     <div className="relative isolate flex min-h-svh w-full max-lg:flex-col">
       {/* Sidebar on desktop */}
-      <div className="fixed inset-y-0 left-0 w-96 max-lg:hidden">{sidebar}</div>
+      <div className="fixed inset-y-0 left-0 w-96 max-lg:hidden">
+        {sidebar}
+      </div>
 
       {/* Mobile layout */}
       {isAccountPage ? (
-        <MobileLayout>{sidebar}</MobileLayout>
+        <MobileLayout>
+          {sidebar}
+        </MobileLayout>
       ) : (
         <>
           {/* Navbar on mobile */}
           <header className="lg:hidden">
-            <div className="flex items-center justify-between m-4 p-4">
-              <div className="flex items-center">
-                <Link to="/account">
-                  <SidebarLabel className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">ellemment</SidebarLabel>
-                </Link>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Link to="/account" className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
-                  <MagnifyingGlassIcon className="h-5 w-5" />
-                </Link>
-                <Link to="/account" className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
-                  <MoonIcon className="h-5 w-5" />
-                </Link>
-                <Link to="/account" className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
-                  <Bars2Icon className="h-5 w-5" />
-                </Link>
-              </div>
-            </div>
+            <AccountHeader className="m-4" />
           </header>
-
           {/* Content on mobile (non-account pages) */}
           <main className="flex-1 p-6 lg:hidden">
             <div className="mx-auto max-w-5xl">{children}</div>

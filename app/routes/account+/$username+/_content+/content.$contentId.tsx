@@ -16,7 +16,6 @@ import {
   type MetaFunction,
 } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
-import DOMPurify from 'dompurify'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { ErrorList } from '#app/components/forms.tsx'
@@ -28,6 +27,8 @@ import { prisma } from '#app/utils/db.server.ts'
 import { getContentImgSrc, useIsPending } from '#app/utils/misc.tsx'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { type loader as contentLoader } from './content.tsx'
+import { sanitizeHtml } from './utils/sanitizer.server.ts'
+
 
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -68,9 +69,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   // This will throw a redirect if the user doesn't have access
   await requireAdminAccess(request, content.ownerId)
 
+  // Sanitize the HTML content on the server
+  const sanitizedContent = await sanitizeHtml(content.content)
+
   return json({
     owner,
-    content,
+    content: { ...content, content: sanitizedContent },
     timeAgo,
     isOwner,
     isAdmin,
@@ -126,9 +130,6 @@ export default function ContentRoute() {
   const canEdit = isAdmin || (isOwner && isAdmin)
   const canDelete = isAdmin || (isOwner && isAdmin)
 
-  // Sanitize the HTML content
-  const sanitizedContent = DOMPurify.sanitize(content.content)
-
   return (
     <div className="flex flex-col px-10">
       <h2 className="mb-2 text-h2 lg:mb-6">{content.title}</h2>
@@ -148,7 +149,7 @@ export default function ContentRoute() {
         </ul>
         <div 
           className="whitespace-break-spaces text-sm md:text-lg"
-          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          dangerouslySetInnerHTML={{ __html: content.content }}
         />
       </div>
       {(canEdit || canDelete) && (

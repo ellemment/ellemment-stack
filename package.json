@@ -106,6 +106,7 @@
     "input-otp": "^1.2.4",
     "intl-parse-accept-language": "^1.0.0",
     "isbot": "^5.1.13",
+    "isomorphic-dompurify": "^2.15.0",
     "litefs-js": "^1.1.2",
     "lru-cache": "^11.0.0",
     "morgan": "^1.10.0",
