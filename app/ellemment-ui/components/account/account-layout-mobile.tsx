@@ -21,7 +21,7 @@ interface AccountLayoutMobileProps {
 
 export function AccountLayoutMobile({ user, children }: AccountLayoutMobileProps) {
   return (
-    <div className="lg:hidden flex flex-col min-h-screen">
+    <div className="lg:hidden flex flex-col ">
       <AccountHeaderMobile />
       <div className="flex-1">
         <AccountPanelMobile username={user.username} contents={user.content} />

@@ -138,7 +138,7 @@
     "@remix-run/dev": "2.10.3",
     "@remix-run/testing": "2.10.3",
     "@sentry/vite-plugin": "^2.21.1",
-    "@sly-cli/sly": "^1.13.0",
+    "@sly-cli/sly": "^1.14.0",
     "@testing-library/dom": "^10.3.2",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
