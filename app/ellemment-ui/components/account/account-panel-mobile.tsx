@@ -26,6 +26,7 @@ export function AccountPanelMobile({ username, contents }: AccountPanelMobilePro
           <span className="text-sm">Create</span>
         </NavLink>
       </Button>
+
       <ul className="space-y-1">
         {contents.map((content) => (
           <li key={content.id}>

@@ -58,8 +58,8 @@ export function AccountLayoutSidebar({
         {sidebarContent}
       </div>
       {/* Content */}
-      <main className="hidden lg:flex lg:flex-1 lg:flex-col lg:pb-2 lg:pl-96 lg:pr-2 lg:pt-2">
-        <div className="grow p-6 rounded-lg bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10">
+      <main className="hidden bg-zinc-100 lg:flex lg:flex-1 lg:flex-col lg:pb-2 lg:pl-96 lg:pr-2 lg:pt-2">
+        <div className="grow p-6 rounded-lg  bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10">
           <div className="mx-auto max-w-5xl">{children}</div>
         </div>
       </main>

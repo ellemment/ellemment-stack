@@ -19,13 +19,14 @@ export function AccountPanelDesktop({ username, contents }: AccountPanelDesktopP
   const isContentPage = location.pathname.includes('/content/');
 
   return (
-    <div className={`hidden lg:block ${isContentPage ? 'md:block' : ''}`}>
+    <div className={`hidden lg:block ${isContentPage ? 'lg:block' : ''}`}>
       <Button asChild variant="outline" className="w-full mb-4">
         <NavLink to={`${username}/content/new`} className="flex items-center justify-center">
           <Icon name="plus" className="mr-2 h-4 w-4" />
           <span className="text-sm">Create</span>
         </NavLink>
       </Button>
+      
       <ul className="space-y-1">
         {contents.map((content) => (
           <li key={content.id}>
