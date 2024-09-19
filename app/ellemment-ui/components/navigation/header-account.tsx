@@ -1,4 +1,4 @@
-// app/ellemment-ui/components/navigation/header-global.tsx
+// app/ellemment-ui/components/navigation/header-account.tsx
 
 import { Link } from '@remix-run/react';
 import Logo from '#app/components/logo';
@@ -7,12 +7,12 @@ import { ThemeSwitch } from '#app/routes/resources+/theme-switch';
 import { type Theme } from '#app/utils/theme.server';
 
 
-interface GlobalHeaderProps {
+interface AccountHeaderProps {
   userPreference: Theme | null;
   className?: string;
 }
 
-export function GlobalHeader({ userPreference, className = '' }: GlobalHeaderProps) {
+export function AccountHeader({ userPreference, className = '' }: AccountHeaderProps) {
 
 
   return (
@@ -45,4 +45,4 @@ export function GlobalHeader({ userPreference, className = '' }: GlobalHeaderPro
   );
 }
 
-GlobalHeader.Logo = Logo;
+AccountHeader.Logo = Logo;
