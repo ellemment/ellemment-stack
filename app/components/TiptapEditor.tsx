@@ -1,10 +1,9 @@
-// app/components/TiptapEditor.tsx
-
+import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import React from 'react'
+import React, { useRef, useCallback } from 'react'
 import { Button } from './ui/button'
 
 interface TiptapEditorProps {
@@ -12,18 +11,21 @@ interface TiptapEditorProps {
   content: string
   onTitleChange: (title: string) => void
   onContentChange: (content: string) => void
+  onImageUpload: (file: File) => void
 }
 
-const TiptapEditor: React.FC<TiptapEditorProps> = ({
-  title,
-  content,
-  onTitleChange,
-  onContentChange
+const TiptapEditor: React.FC<TiptapEditorProps> = ({ 
+  title, 
+  content, 
+  onTitleChange, 
+  onContentChange,
+  onImageUpload 
 }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
+      Image,
       Placeholder.configure({
         placeholder: 'Start writing your content here...',
       }),
@@ -38,6 +40,22 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
       },
     },
   })
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    fileInputRef.current?.click()
+  }, [])
+
+  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      onImageUpload(file)
+      const url = URL.createObjectURL(file)
+      editor?.chain().focus().setImage({ src: url }).run()
+    }
+  }, [editor, onImageUpload])
 
   if (!editor) {
     return null
@@ -67,7 +85,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
           >
             Bold
           </Button>
-          <Button
+          <Button 
             onClick={handleButtonClick(() => editor.chain().focus().toggleItalic().run())}
             className={editor.isActive('italic') ? 'is-active bg-muted' : ''}
             size="sm"
@@ -76,15 +94,29 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
             Italic
           </Button>
           <Button
-            onClick={handleButtonClick(() => editor.chain().focus().toggleUnderline().run())}
+            onClick={handleButtonClick(() => editor.chain().focus().toggleUnderline().run())}  
             className={editor.isActive('underline') ? 'is-active bg-muted' : ''}
             size="sm"
             variant="outline"
           >
             Underline
           </Button>
-        </div>
+          <Button
+          onClick={handleImageUpload}
+          size="sm"
+          variant="outline"  
+        >
+          Insert Image
+        </Button>
         <EditorContent editor={editor} className='w-full' />
+        <input 
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileInput}
+          style={{ display: 'none' }}
+          accept="image/*"
+        />
+        </div>
       </div>
     </div>
   )
