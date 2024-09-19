@@ -1,9 +1,9 @@
 // app/ellemment-ui/components/account/account-layout-sidebar.tsx
 
 import React from 'react';
-import { AccountFooterDesktop } from './account-footer-desktop'
-import { AccountHeaderDesktop } from './account-header-desktop'
-import { AccountPanelDesktop } from './account-panel-desktop'
+import { AccountFooter } from './account-footer'
+import { AccountHeader } from './account-header'
+import { AccountPanel } from './account-panel'
 import {
   Sidebar,
   SidebarBody,
@@ -37,16 +37,16 @@ export function AccountLayoutSidebar({
   const sidebarContent = (
     <Sidebar>
       <SidebarHeader>
-        <AccountHeaderDesktop />
+        <AccountHeader />
       </SidebarHeader>
       <SidebarBody>
         <SidebarSection>
-          <AccountPanelDesktop username={user.username} contents={user.content} />
+          <AccountPanel username={user.username} contents={user.content} />
         </SidebarSection>
         <SidebarSpacer />
       </SidebarBody>
       <SidebarFooter>
-        <AccountFooterDesktop user={user} />
+        <AccountFooter user={user} />
       </SidebarFooter>
     </Sidebar>
   );
@@ -58,7 +58,7 @@ export function AccountLayoutSidebar({
         {sidebarContent}
       </div>
       {/* Content */}
-      <main className="hidden bg-zinc-100 lg:flex lg:flex-1 lg:flex-col lg:pb-2 lg:pl-96 lg:pr-2 lg:pt-2">
+      <main className="hidden bg-zinc-100 dark:bg-inherit lg:flex lg:flex-1 lg:flex-col lg:pb-2 lg:pl-96 lg:pr-2 lg:pt-2">
         <div className="grow p-6 rounded-lg  bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10">
           <div className="mx-auto max-w-5xl">{children}</div>
         </div>

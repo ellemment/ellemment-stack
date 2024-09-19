@@ -1,5 +1,6 @@
 // app/ellemment-ui/components/account/account-layout.tsx
 
+// app/ellemment-ui/components/account/account-layout.tsx
 import React from 'react'
 import { AccountLayoutMobile } from './account-layout-mobile'
 import { AccountLayoutSidebar } from './account-layout-sidebar'
@@ -28,9 +29,14 @@ export function AccountLayout({
 }) {
   return (
     <>
-      <AccountLayoutSidebar user={user}>
-        {children}
-      </AccountLayoutSidebar>
+      {/* Desktop View */}
+      <div className="hidden lg:block">
+        <AccountLayoutSidebar user={user}>
+          {children}
+        </AccountLayoutSidebar>
+      </div>
+      
+      {/* Mobile View */}
       <AccountLayoutMobile user={user}>
         {children}
       </AccountLayoutMobile>
