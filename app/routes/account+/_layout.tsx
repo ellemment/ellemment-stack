@@ -33,10 +33,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function AccountLayoutRoute() {
   const data = useLoaderData<typeof loader>()
-  const { user, isAdmin } = data
+  const { user } = data
 
   return (
-    <AccountLayout user={user} isAdmin={isAdmin} >
+    <AccountLayout user={user}  >
       <Outlet />
     </AccountLayout>
   );
