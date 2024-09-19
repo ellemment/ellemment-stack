@@ -14,11 +14,11 @@ interface User {
   image?: { id: string } | null;
 }
 
-interface AccountFooterProps {
+interface AccountNavbarProps {
   user: User;
 }
 
-export function AccountFooter({ user }: AccountFooterProps) {
+export function AccountNavbar({ user }: AccountNavbarProps) {
   return (
       <div className="flex items-center justify-between p-4 m-4 rounded-lg max-lg:bg-white max-lg:shadow-sm max-lg:ring-1 max-lg:ring-zinc-950/5 max-lg:dark:bg-zinc-900 max-lg:dark:ring-white/10)}">
         <span className="flex min-w-0 items-center gap-3">

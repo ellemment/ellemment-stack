@@ -1,11 +1,10 @@
-// app/routes/account+/_layout.tsx
-
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { AccountLayout } from '#app/ellemment-ui/components/account/account-layout';
 import { checkAdminStatus } from '#app/utils/adminstatus.ts'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
+import { getTheme } from '#app/utils/theme.server.ts'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await requireUserId(request)
@@ -27,16 +26,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     },
   })
-
-  return json({ user, isAdmin })
+  const userPreference = getTheme(request)
+  return json({ user, isAdmin, userPreference })
 }
 
 export default function AccountLayoutRoute() {
   const data = useLoaderData<typeof loader>()
-  const { user } = data
-
+  const { user, userPreference } = data
   return (
-    <AccountLayout user={user}  >
+    <AccountLayout user={user} userPreference={userPreference}>
       <Outlet />
     </AccountLayout>
   );

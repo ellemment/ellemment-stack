@@ -1,8 +1,8 @@
-// app/ellemment-ui/components/account/account-layout.tsx
-
 import React from 'react'
-import { AccountFooter } from './account-footer'
-import { AccountHeader } from './account-header'
+import { type Theme, getTheme } from '#app/utils/theme.server.ts'
+import { AccountNavbar } from './account-navbar'
+import { AccountHeader } from '../navigation/header-account'
+import { GlobalHeader } from '../navigation/header-global'
 import { AccountPanel } from './account-panel'
 import {
   Sidebar,
@@ -30,13 +30,14 @@ interface User {
 interface AccountLayoutProps {
   user: User;
   children: React.ReactNode;
+  userPreference: Theme | null;
 }
 
-export function AccountLayout({ user,  children }: AccountLayoutProps) {
+export function AccountLayout({ user, children, userPreference }: AccountLayoutProps) {
   const sidebarContent = (
     <Sidebar>
       <SidebarHeader>
-        <AccountHeader />
+        <AccountHeader userPreference={userPreference} />
       </SidebarHeader>
       <SidebarBody>
         <SidebarSection>
@@ -45,7 +46,7 @@ export function AccountLayout({ user,  children }: AccountLayoutProps) {
         <SidebarSpacer />
       </SidebarBody>
       <SidebarFooter>
-        <AccountFooter user={user} />
+        <AccountNavbar user={user} />
       </SidebarFooter>
     </Sidebar>
   );
@@ -68,11 +69,11 @@ export function AccountLayout({ user,  children }: AccountLayoutProps) {
 
       {/* Mobile View */}
       <div className="lg:hidden flex flex-col min-h-screen">
-        <AccountHeader />
+        <GlobalHeader userPreference={userPreference} />
         <main className="flex-1 p-4">
           {children}
         </main>
-        <AccountFooter user={user} />
+        <AccountNavbar user={user} />
       </div>
     </>
   );
