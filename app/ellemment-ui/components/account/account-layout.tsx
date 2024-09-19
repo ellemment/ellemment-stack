@@ -1,8 +1,8 @@
 import React from 'react'
-import { type Theme, getTheme } from '#app/utils/theme.server.ts'
-import { AccountNavbar } from './account-navbar'
+import { type Theme } from '#app/utils/theme.server.ts'
 import { AccountHeader } from '../navigation/header-account'
 import { GlobalHeader } from '../navigation/header-global'
+import { AccountNavbar } from './account-navbar'
 import { AccountPanel } from './account-panel'
 import {
   Sidebar,

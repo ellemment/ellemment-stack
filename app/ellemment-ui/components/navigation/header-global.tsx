@@ -1,4 +1,4 @@
-// app/ellemment-ui/components/navigation/header-global.tsx
+
 
 import { Link } from '@remix-run/react';
 import Logo from '#app/components/logo';
@@ -24,7 +24,7 @@ export function GlobalHeader({ userPreference, className = '' }: GlobalHeaderPro
           </div>
           <div className="flex items-center space-x-2">
             <Link
-              to="/search"
+              to="/account"
               className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
             >
               <Icon name="search" className="h-5 w-5" />
