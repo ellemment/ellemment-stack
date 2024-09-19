@@ -2,7 +2,8 @@ import React from 'react'
 import { type Theme } from '#app/utils/theme.server.ts'
 import { AccountHeader } from '../navigation/header-account'
 import { GlobalHeader } from '../navigation/header-global'
-import { AccountNavbar } from './account-navbar'
+import { AccountNavbar } from '../navigation/navbar-account'
+import { GlobalNavbar } from '../navigation/navbar-global'
 import { AccountPanel } from './account-panel'
 import {
   Sidebar,
@@ -12,6 +13,7 @@ import {
   SidebarSection,
   SidebarSpacer,
 } from './sidebar'
+
 
 type Content = {
   id: string;
@@ -73,7 +75,7 @@ export function AccountLayout({ user, children, userPreference }: AccountLayoutP
         <main className="flex-1 p-4">
           {children}
         </main>
-        <AccountNavbar user={user} />
+        <GlobalNavbar user={user} />
       </div>
     </>
   );
