@@ -1,7 +1,6 @@
 // app/ellemment-ui/components/account/account-panel.tsx
 
-import { NavLink } from '@remix-run/react';
-import { Button } from '#app/components/ui/button';
+import { Link } from '@remix-run/react';
 import { Icon } from '#app/components/ui/icon';
 
 type Content = {
@@ -17,27 +16,23 @@ interface AccountPanelProps {
 export function AccountPanel({ username, contents }: AccountPanelProps) {
   return (
     <div className="m-4">
-      <Button asChild variant="outline" className="w-full mb-4">
-        <NavLink to={`/${username}/content/new`} className="flex items-center justify-center">
-          <Icon name="plus" className="mr-2 h-4 w-4" />
-          <span className="text-sm">Create</span>
-        </NavLink>
-      </Button>
-      
+      <Link
+        to={`/account/${username}/content/new`}
+        className="flex items-center justify-center w-full mb-4 p-2 bg-muted rounded hover:bg-blue-600"
+      >
+        <Icon name="plus" className="mr-2 h-4 w-4" />
+        <span className="text-sm">Create</span>
+      </Link>
       <ul className="space-y-1">
         {contents.map((content) => (
           <li key={content.id}>
-            <NavLink
-              to={`/${username}/content/${content.id}`}
-              className={({ isActive }) =>
-                `flex items-center p-2 rounded-lg ${
-                  isActive ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/80'
-                }`
-              }
+            <Link
+              to={`/account/${username}/content/${content.id}`}
+              className="flex items-center p-2 rounded-lg hover:bg-muted"
             >
               <Icon name="file-text" className="mr-2 h-4 w-4" />
               <span className="text-sm">{content.title}</span>
-            </NavLink>
+            </Link>
           </li>
         ))}
       </ul>

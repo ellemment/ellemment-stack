@@ -8,7 +8,6 @@ import { checkAdminStatus } from '#app/utils/adminstatus.ts'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await requireUserId(request, {
     redirectTo: '/login',
@@ -20,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       name: true,
       username: true,
       createdAt: true,
-      content: {  
+      content: {
         select: {
           id: true,
           title: true,
@@ -41,9 +40,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function ProfileRoute() {
   const data = useLoaderData<typeof loader>()
   const { user } = data
-
+  
   return (
-    <div className="flex flex-col gap-6 md:gap-8 lg:hidden">      
+    <div className="flex flex-col gap-6 md:gap-8 lg:hidden">
       <AccountPanel username={user.username} contents={user.content} />
     </div>
   )
