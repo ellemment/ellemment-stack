@@ -78,14 +78,6 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
       <div className="border rounded-md">
         <div className="border-b p-2 flex flex-wrap gap-2">
           <Button
-            onClick={handleButtonClick(() => editor.chain().focus().toggleHeading({ level: 2 }).run())}
-            className={editor.isActive('heading', { level: 2 }) ? 'is-active bg-muted' : ''}
-            size="sm"
-            variant="outline"
-          >
-            H2
-          </Button>
-          <Button
             onClick={handleButtonClick(() => editor.chain().focus().toggleBold().run())}
             className={editor.isActive('bold') ? 'is-active bg-muted' : ''}
             size="sm"
@@ -108,38 +100,6 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
             variant="outline"
           >
             Underline
-          </Button>
-          <Button
-            onClick={handleButtonClick(() => editor.chain().focus().toggleBulletList().run())}
-            className={editor.isActive('bulletList') ? 'is-active bg-muted' : ''}
-            size="sm" 
-            variant="outline"
-          >
-            Bullet List
-          </Button>
-          <Button
-            onClick={handleButtonClick(() => editor.chain().focus().toggleOrderedList().run())}
-            className={editor.isActive('orderedList') ? 'is-active bg-muted' : ''}
-            size="sm"
-            variant="outline" 
-          >
-            Numbered List
-          </Button>
-          <Button
-            onClick={handleButtonClick(() => editor.chain().focus().toggleCodeBlock().run())} 
-            className={editor.isActive('codeBlock') ? 'is-active bg-muted' : ''}
-            size="sm"
-            variant="outline"
-          >
-            Code Block
-          </Button>
-          <Button
-            onClick={handleButtonClick(() => editor.chain().focus().toggleBlockquote().run())}
-            className={editor.isActive('blockquote') ? 'is-active bg-muted' : ''}
-            size="sm" 
-            variant="outline"
-          >
-            Quote
           </Button>
           <Button
           onClick={handleImageUpload}

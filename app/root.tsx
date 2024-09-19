@@ -185,47 +185,41 @@ function App() {
 	const allowIndexing = data.ENV.ALLOW_INDEXING !== 'false';
 	useToast(data.toast);
 	const location = useLocation();
-  
+
 	const showHeader = (() => {
-	  if (
-		location.pathname.startsWith('/admin') ||
-		location.pathname.startsWith('/account') ||
-		location.pathname.startsWith('/login')
-	  ) {
-		return false;
-	  }
-	  // Hide header for exact "/formateco" route
-	  if (location.pathname === '/formateco') {
-		return false;
-	  }
-	  // Show header for all other routes
-	  return true;
+		if (
+			location.pathname.startsWith('/account') ||
+			location.pathname.startsWith('/login')
+		) {
+			return false;
+		}
+		return true;
 	})();
-  
+
 	return (
-	  <Document
-		nonce={nonce}
-		theme={theme}
-		allowIndexing={allowIndexing}
-		env={data.ENV}
-	  >
-		<div className="flex h-screen flex-col justify-between">
-		  {showHeader && (
-			<GlobalHeader userPreference={data.requestInfo.userPrefs.theme} />
-		  )}
-  
-		  <div className="flex-1">
-			<Outlet />
-		  </div>
-  
-		  <footer className="">
-		  </footer>
-		</div>
-		<EpicToaster closeButton position="top-center" theme={theme} />
-		<EpicProgress />
-	  </Document>
+		<Document
+			nonce={nonce}
+			theme={theme}
+			allowIndexing={allowIndexing}
+			env={data.ENV}
+		>
+			<div className="flex h-screen flex-col justify-between">
+				{showHeader && (
+					<GlobalHeader userPreference={data.requestInfo.userPrefs.theme} />
+				)}
+
+				<div className="flex-1">
+					<Outlet />
+				</div>
+
+				<footer className="">
+				</footer>
+			</div>
+			<EpicToaster closeButton position="top-center" theme={theme} />
+			<EpicProgress />
+		</Document>
 	);
-  }
+}
 
 function AppWithProviders() {
 	const data = useLoaderData<typeof loader>()
