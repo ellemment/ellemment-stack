@@ -21,7 +21,7 @@ export function SidebarHeader({ className, ...props }: React.ComponentPropsWitho
       className={clsx(
         className,
         'flex flex-col rounded-lg m-4 [&>[data-slot=section]+[data-slot=section]]:mt-2.5',
-        'max-lg:bg-white max-lg:shadow-sm max-lg:ring-1 max-lg:ring-zinc-950/5 max-lg:dark:bg-zinc-900 max-lg:dark:ring-white/10'
+        'bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10'
       )}
     />
   )
@@ -57,7 +57,7 @@ export function SidebarSection({ className, ...props }: React.ComponentPropsWith
 
   return (
     <LayoutGroup id={id}>
-      <div {...props} data-slot="section" className={clsx(className, 'flex flex-col gap-0.5 p-4 rounded-xl max-lg:bg-white max-lg:shadow-sm max-lg:ring-1 max-lg:ring-zinc-950/5 max-lg:dark:bg-zinc-900 max-lg:dark:ring-white/10')} />
+      <div {...props} data-slot="section" className={clsx(className, 'flex flex-col gap-0.5 rounded-xl bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10')} />
     </LayoutGroup>
   )
 }

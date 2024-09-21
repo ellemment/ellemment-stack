@@ -10,7 +10,7 @@ import { cn } from "#app/ellemment-ui/lib/utils";
 
 export default function Discover() {
   return (
-    <BentoGrid className="container mx-auto max-w-5xl px-4 md:auto-rows-[20rem]">
+    <BentoGrid className="container mx-auto max-w-7xl px-4 md:auto-rows-[20rem]">
       {items.map((item, i) => (
         <BentoGridItem
           key={i}

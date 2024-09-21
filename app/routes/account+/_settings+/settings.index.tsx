@@ -62,11 +62,7 @@ export default function SettingsIndex() {
 
 	return (
 		<div className="flex flex-col gap-6 md:gap-8 bg-transparent">
-			<div className="flex items-center rounded-lg">
-				<div className="mt-4 flex flex-col items-start">
-					<h1 className="text-center text-2xl font-bold">Settings</h1>
-				</div>
-			</div>
+		
 			<SettingsSection title="Account">
 				<Link to="username">
 					<Icon name="avatar">Change username</Icon>
@@ -100,9 +96,6 @@ export default function SettingsIndex() {
 				<Link to="your-sessions">
 					<Icon name="laptop">Manage your sessions</Icon>
 				</Link>
-			</SettingsSection>
-
-			<SettingsSection title="Connections">
 				<Link to="connections">
 					<Icon name="link-2">Manage connections</Icon>
 				</Link>
