@@ -69,7 +69,7 @@ function DirectionAwareTabs({
     <div className="flex flex-col items-center w-full">
       <div
         className={cn(
-          "flex space-x-1 border rounded-full cursor-pointer bg-neutral-600 p-1 shadow-inner-shadow",
+          "flex space-x-1 border rounded-full cursor-pointer bg-neutral-200 p-1 shadow-inner-shadow",
           className,
           rounded
         )}
@@ -79,10 +79,10 @@ function DirectionAwareTabs({
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
             className={cn(
-              "relative rounded-full px-4 py-2 text-xs sm:text-sm font-medium transition focus-visible:outline-1 focus-visible:ring-1 focus-visible:outline-none flex gap-2 items-center",
+              "relative rounded-full px-4 py-2 text-xs lg:text-sm font-medium transition focus-visible:outline-1 focus-visible:ring-1 focus-visible:outline-none flex gap-2 items-center",
               activeTab === tab.id
                 ? "text-inherit"
-                : "hover:text-neutral-300/60 text-neutral-200/80",
+                : "hover:text-neutral-300/60 text-neutral-900/80 dark:text-neutral-200",
               "w-1/2"
             )}
             style={{ WebkitTapHighlightColor: "transparent" }}

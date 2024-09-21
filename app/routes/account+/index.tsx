@@ -40,14 +40,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function ProfileRoute() {
-  
+
   const data = useLoaderData<typeof loader>()
   const { user } = data
   const isAuthenticated = !!user;
-  
+
   return (
     <div className="flex flex-col gap-6 md:gap-8 lg:hidden">
-        <CreateButton username={user.username} />
+      <CreateButton username={user.username} />
       <AccountPanel username={user.username} contents={user.content} />
       {isAuthenticated && <AccountSettings />}
     </div>

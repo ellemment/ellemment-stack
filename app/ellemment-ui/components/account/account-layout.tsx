@@ -12,7 +12,6 @@ import { AccountSettings } from './account-settings'
 import {
   Sidebar,
   SidebarBody,
-  SidebarFooter,
   SidebarHeader,
   SidebarSection,
   SidebarSpacer,
@@ -50,28 +49,24 @@ export function AccountLayout({ user, children, userPreference }: AccountLayoutP
       <SidebarBody>
         {isAuthenticated && (
           <>
+            <div className='h-14'></div>
             <SidebarSection>
               <CreateButton username={user.username} />
             </SidebarSection>
-          
+
             <SidebarSection>
               <AccountPanel username={user.username} contents={user.content} />
             </SidebarSection>
-
             <SidebarSpacer />
-
             <SidebarSection>
               <AccountSettings />
             </SidebarSection>
-
           </>
         )}
       </SidebarBody>
-      <SidebarFooter>
-      <AccountNavbar isAuthenticated={isAuthenticated} />
-      </SidebarFooter>
     </Sidebar>
   );
+
 
   return (
     <>
@@ -83,14 +78,20 @@ export function AccountLayout({ user, children, userPreference }: AccountLayoutP
         </div>
         {/* Content */}
         <main className="hidden bg-zinc-100 dark:bg-inherit lg:flex lg:flex-1 lg:flex-col lg:pb-2 lg:pl-96 lg:pr-2 lg:pt-2">
-          <div className="grow p-6 rounded-lg bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10">
-            <div className="mx-auto max-w-5xl">{children}</div>
+          <div className="grow p-6 rounded-lg bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10 flex flex-col">
+            <div className="flex-grow mx-auto max-w-5xl w-full">
+              {children}
+            </div>
+            <div className="mt-auto flex justify-center pt-4">
+              <AccountNavbar isAuthenticated={isAuthenticated} />
+            </div>
           </div>
         </main>
       </div>
       {/* Mobile View */}
       <div className="lg:hidden flex flex-col min-h-screen">
         <GlobalHeader userPreference={userPreference} />
+        <div className='h-14'></div>
         <main className="flex-1 p-4 pb-20">
           {children}
         </main>

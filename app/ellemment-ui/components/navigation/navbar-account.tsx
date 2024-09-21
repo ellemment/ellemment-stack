@@ -13,7 +13,7 @@ interface AccountNavbarProps {
 export function AccountNavbar({ isAuthenticated }: AccountNavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   const tabs = [
     {
       id: 0,
@@ -26,16 +26,16 @@ export function AccountNavbar({ isAuthenticated }: AccountNavbarProps) {
       content: null,
     },
   ];
-
+  
   const activeTabIndex = location.pathname === "/" ? 0 : 1;
-
+  
   const handleTabChange = (newTabId: number) => {
     navigate(newTabId === 0 ? "/" : isAuthenticated ? "/account" : "/login");
   };
-
+  
   return (
-    <div className="flex justify-center w-full pointer-events-none">
-      <nav className="w-full pointer-events-auto">
+    <div className="w-full mx-auto mt-4">
+      <nav className="w-full">
         <DirectionAwareTabs
           tabs={tabs}
           className="bg-background shadow-xl"

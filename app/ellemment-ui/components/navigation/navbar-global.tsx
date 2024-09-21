@@ -31,8 +31,8 @@ export function GlobalNavbar({ isAuthenticated }: GlobalNavbarProps) {
   };
 
   return (
-    <div className="fixed bottom-4 left-0 right-0 flex justify-center w-full z-50 pointer-events-none">
-      <nav className="w-full max-w-md pointer-events-auto">
+    <div className="fixed bottom-4 lg:bottom-8 left-0 right-0 flex justify-center w-full z-50 pointer-events-none">
+      <nav className="w-full  pointer-events-auto">
         <DirectionAwareTabs
           tabs={tabs}
           className="bg-background shadow-xl"
