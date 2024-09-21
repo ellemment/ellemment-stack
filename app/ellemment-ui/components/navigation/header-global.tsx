@@ -3,7 +3,6 @@
 import { Link } from '@remix-run/react';
 import Logo from '#app/components/logo';
 import { Icon } from '#app/components/ui/icon';
-import { ThemeSwitch } from '#app/routes/resources+/theme-switch';
 import { type Theme } from '#app/utils/theme.server';
 
 
@@ -12,8 +11,7 @@ interface GlobalHeaderProps {
   className?: string;
 }
 
-export function GlobalHeader({ userPreference, className = '' }: GlobalHeaderProps) {
-
+export function GlobalHeader({  className = '' }: GlobalHeaderProps) {
 
   return (
     <header className={`bg-background ${className}`}>
@@ -29,7 +27,6 @@ export function GlobalHeader({ userPreference, className = '' }: GlobalHeaderPro
             >
               <Icon name="search" className="h-5 w-5" />
             </Link>
-            <ThemeSwitch userPreference={userPreference} />
             <button
               className="p-1 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
               onClick={() => {

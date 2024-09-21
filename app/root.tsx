@@ -24,6 +24,7 @@ import { EpicProgress } from './components/progress-bar.tsx'
 import { useToast } from './components/toaster.tsx'
 import { href as iconsHref } from './components/ui/icon.tsx'
 import { EpicToaster } from './components/ui/sonner.tsx'
+import { GlobalNavbar } from './ellemment-ui/components/navigation/navbar-global.tsx'
 import { useTheme } from './routes/resources+/theme-switch.tsx'
 import tailwindStyleSheetUrl from './styles/tailwind.css?url'
 import { getUserId, logout } from './utils/auth.server.ts'
@@ -36,6 +37,7 @@ import { useNonce } from './utils/nonce-provider.ts'
 import { type Theme, getTheme } from './utils/theme.server.ts'
 import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
+
 
 
 export const links: LinksFunction = () => {
@@ -186,15 +188,8 @@ function App() {
 	useToast(data.toast);
 	const location = useLocation();
 
-	const showHeader = (() => {
-		if (
-			location.pathname.startsWith('/account') ||
-			location.pathname.startsWith('/login')
-		) {
-			return false;
-		}
-		return true;
-	})();
+	const showHeader = !location.pathname.startsWith('/account') && !location.pathname.startsWith('/login');
+	const showNavbar = !location.pathname.startsWith('/account') && !location.pathname.startsWith('/login');
 
 	return (
 		<Document
@@ -212,7 +207,12 @@ function App() {
 					<Outlet />
 				</div>
 
+				{showNavbar && (
+					<GlobalNavbar isAuthenticated={!!data.user} />
+				)}
+
 				<footer className="">
+					{/* Footer content if needed */}
 				</footer>
 			</div>
 			<EpicToaster closeButton position="top-center" theme={theme} />

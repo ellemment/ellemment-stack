@@ -16,7 +16,7 @@ export function AccountHeader({ userPreference, className = '' }: AccountHeaderP
 
 
   return (
-    <header className={`bg-background ${className}`}>
+    <header className={`${className}`}>
       <div className="container mx-auto max-w-6xl px-4">
         <nav className="flex justify-between items-center h-16">
           <div className="flex items-center">

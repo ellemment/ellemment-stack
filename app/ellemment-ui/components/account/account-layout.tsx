@@ -1,10 +1,14 @@
+// app/ellemment-ui/components/account/account-layout.tsx
+
 import React from 'react'
 import { type Theme } from '#app/utils/theme.server.ts'
 import { AccountHeader } from '../navigation/header-account'
 import { GlobalHeader } from '../navigation/header-global'
 import { AccountNavbar } from '../navigation/navbar-account'
 import { GlobalNavbar } from '../navigation/navbar-global'
+import { CreateButton } from './account-create'
 import { AccountPanel } from './account-panel'
+import { AccountSettings } from './account-settings'
 import {
   Sidebar,
   SidebarBody,
@@ -30,25 +34,41 @@ interface User {
 }
 
 interface AccountLayoutProps {
-  user: User;
+  user: User | null;
   children: React.ReactNode;
   userPreference: Theme | null;
 }
 
 export function AccountLayout({ user, children, userPreference }: AccountLayoutProps) {
+  const isAuthenticated = !!user;
+
   const sidebarContent = (
     <Sidebar>
       <SidebarHeader>
         <AccountHeader userPreference={userPreference} />
       </SidebarHeader>
       <SidebarBody>
-        <SidebarSection>
-          <AccountPanel username={user.username} contents={user.content} />
-        </SidebarSection>
-        <SidebarSpacer />
+        {isAuthenticated && (
+          <>
+            <SidebarSection>
+              <CreateButton username={user.username} />
+            </SidebarSection>
+          
+            <SidebarSection>
+              <AccountPanel username={user.username} contents={user.content} />
+            </SidebarSection>
+
+            <SidebarSpacer />
+
+            <SidebarSection>
+              <AccountSettings />
+            </SidebarSection>
+
+          </>
+        )}
       </SidebarBody>
       <SidebarFooter>
-        <AccountNavbar user={user} />
+      <AccountNavbar isAuthenticated={isAuthenticated} />
       </SidebarFooter>
     </Sidebar>
   );
@@ -68,14 +88,13 @@ export function AccountLayout({ user, children, userPreference }: AccountLayoutP
           </div>
         </main>
       </div>
-
       {/* Mobile View */}
       <div className="lg:hidden flex flex-col min-h-screen">
         <GlobalHeader userPreference={userPreference} />
-        <main className="flex-1 p-4">
+        <main className="flex-1 p-4 pb-20">
           {children}
         </main>
-        <GlobalNavbar user={user} />
+        <GlobalNavbar isAuthenticated={isAuthenticated} />
       </div>
     </>
   );
