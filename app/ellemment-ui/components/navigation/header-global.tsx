@@ -69,7 +69,7 @@ export function GlobalHeader({  userPreference, className = ''}: GlobalHeaderPro
         >
           <Container>
             <div className="flex items-center justify-between">
-              <Logo />
+              <span className='text-md font-semibold'>ellemment</span>
               <div className="flex items-center gap-x-4">
               <ThemeSwitch userPreference={userPreference} />
                 <button
