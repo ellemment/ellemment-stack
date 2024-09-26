@@ -165,7 +165,7 @@ function Document({
 				)}
 				<Links />
 			</head>
-			<body className="bg-background text-foreground">
+			<body className="bg-neutral-100 dark:bg-background text-foreground">
 				{children}
 				<script
 					nonce={nonce}
@@ -194,7 +194,7 @@ function App() {
 	return (
 		<Document
 			nonce={nonce}
-			theme={theme}
+			theme={theme === 'light' ? 'light' : 'dark'}
 			allowIndexing={allowIndexing}
 			env={data.ENV}
 		>
