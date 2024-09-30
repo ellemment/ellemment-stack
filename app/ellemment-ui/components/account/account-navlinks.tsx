@@ -38,9 +38,9 @@ const BetaVersion: React.FC<BetaVersionProps> = ({ version, isOpen, onOpenChange
       </CollapsibleTrigger>
     </div>
     <CollapsibleContent className="space-y-2 ml-6">
-      <NavLink to={`/account/beta/${version}/overview`} icon="tokens">Overview</NavLink>
-      <NavLink to={`/account/beta/${version}/application`} icon="shadow-inner">Application</NavLink>
-      <NavLink to={`/account/beta/${version}/changelog`} icon="share-1">Changelog</NavLink>
+      <NavLink to={`/account/beta`} icon="tokens">Overview</NavLink>
+      <NavLink to={`/account/beta`} icon="shadow-inner">Application</NavLink>
+      <NavLink to={`/account/beta`} icon="share-1">Changelog</NavLink>
     </CollapsibleContent>
   </Collapsible>
 );
