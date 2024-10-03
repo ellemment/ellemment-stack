@@ -6,7 +6,7 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarSection,
-} from './sidebar'
+} from '../../../components/account/sidebar'
 
 type Content = {
   id: string;

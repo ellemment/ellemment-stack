@@ -1,3 +1,5 @@
+// tailwind.config.ts
+
 import { type Config } from 'tailwindcss'
 import animatePlugin from 'tailwindcss-animate'
 import radixPlugin from 'tailwindcss-radix'
