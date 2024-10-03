@@ -24,7 +24,6 @@ import { EpicProgress } from './components/progress-bar.tsx'
 import { useToast } from './components/toaster.tsx'
 import { href as iconsHref } from './components/ui/icon.tsx'
 import { EpicToaster } from './components/ui/sonner.tsx'
-import { GlobalNavbar } from './ellemment-ui/components/navigation/navbar-global.tsx'
 import { useTheme } from './routes/resources+/theme-switch.tsx'
 import tailwindStyleSheetUrl from './styles/tailwind.css?url'
 import { getUserId, logout } from './utils/auth.server.ts'
@@ -189,7 +188,7 @@ function App() {
 	const location = useLocation();
 
 	const showHeader = !location.pathname.startsWith('/login');
-	const showNavbar = !location.pathname.startsWith('/login');
+
 
 	return (
 		<Document
@@ -207,9 +206,7 @@ function App() {
 					<Outlet />
 				</div>
 
-				{showNavbar && (
-					<GlobalNavbar isAuthenticated={!!data.user} />
-				)}
+			
 
 				<footer className="">
 					{/* Footer content if needed */}

@@ -3,8 +3,7 @@
 import { Link, useLocation } from '@remix-run/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
-import Logo from '#app/components/logo';
-import { NavLinks } from '#app/ellemment-ui/components/navigation/navlinks';
+import { NavLinks } from '#app/ellemment-ui/components/navigation/navbar-global';
 import { ThemeSwitch } from '#app/routes/resources+/theme-switch';
 import { type Theme } from '#app/utils/theme.server';
 
